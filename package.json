@@ -15,6 +15,7 @@
     "build:react": "webpack --config webpack/react.webpack.js",
     "package": "npm-run-all build package:dist",
     "package:dist": "electron-builder --dir",
+    "lint": "eslint --ext ts ./src ./electron",
     "test": "jest"
   },
   "keywords": [],
