@@ -1,6 +1,6 @@
 {
   "name": "Pancake",
-  "version": "1.0.0",
+  "version": "0.1.1",
   "description": "A Pull Request Dashboard on you Desktop",
   "main": "./dist/main.js",
   "scripts": {
@@ -14,9 +14,10 @@
     "build:electron": "webpack --config webpack/electron.webpack.js",
     "build:react": "webpack --config webpack/react.webpack.js",
     "package": "npm-run-all build package:dist",
-    "package:dist": "electron-builder --dir",
+    "package:dist": "CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder --dir",
     "lint": "eslint .",
-    "test": "jest"
+    "test": "jest",
+    "version:patch": ""
   },
   "keywords": [],
   "author": "Adam Hall <adamhalldesigns@gmail.com>",
@@ -67,7 +68,7 @@
     "styled-components": "^5.1.1"
   },
   "build": {
-    "appId": "your.id",
+    "appId": "com.electron.pancake",
     "mac": {
       "category": "public.app-category.video"
     },
@@ -76,6 +77,7 @@
     },
     "files": [
       "package.json",
+      "build/icon.*",
       "dist/**"
     ]
   }
