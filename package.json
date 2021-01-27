@@ -14,8 +14,8 @@
     "build:run": "npm-run-all build start:electron",
     "build:electron": "webpack --config webpack/electron.webpack.js --mode production",
     "build:react": "webpack --config webpack/react.webpack.js --mode production",
-    "package": "npm-run-all build package:dist",
-    "package:dist": "electron-builder --mac --publish always",
+    "prerelease": "yarn run build",
+    "release": "electron-builder --mac --linux",
     "lint": "eslint .",
     "test": "jest"
   },
