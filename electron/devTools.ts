@@ -1,7 +1,7 @@
 import installExtension, {
   REACT_DEVELOPER_TOOLS,
 } from 'electron-devtools-installer';
-import { ILogger } from './logger';
+import { ILogger } from './services/logger';
 
 export function setUpDevtools(logger: ILogger) {
   return (): void => {

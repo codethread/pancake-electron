@@ -33,9 +33,12 @@
     "@typescript-eslint/no-unused-vars": "off",
     "@typescript-eslint/no-unused-params": "off",
     "@typescript-eslint/no-use-before-define": "off",
-    "@typescript-eslint/explicit-function-return-type": ["error", {
-      "allowExpressions": true
-    }],
+    "@typescript-eslint/explicit-function-return-type": [
+      "error",
+      {
+        "allowExpressions": true
+      }
+    ],
     "@typescript-eslint/explicit-module-boundary-types": "error",
     "import/extensions": [
       "error",
@@ -48,15 +51,19 @@
   },
   "overrides": [
     {
-      "files": ["*.spec.ts", "*.spec.tsx"],
+      "files": [
+        "*.spec.ts",
+        "*.spec.tsx"
+      ],
       "rules": {
-	"@typescript-eslint/no-unsafe-call": "off"
+        "@typescript-eslint/no-unsafe-call": "off",
+        "@typescript-eslint/unbound-method": "off"
       }
     }
   ],
   "settings": {
     "import/resolver": {
-      "typescript": {} 
+      "typescript": {}
     },
     "react": {
       "version": "detect"

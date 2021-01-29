@@ -1,7 +1,7 @@
 import * as path from 'path';
 import * as url from 'url';
 import { BrowserWindow } from 'electron';
-import type { ILogger } from './logger';
+import type { ILogger } from './services/logger';
 
 export function createWindow(
   window: Electron.BrowserWindow | null,

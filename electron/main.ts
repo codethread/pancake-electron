@@ -1,13 +1,13 @@
 import { app } from 'electron';
 
-import { AppUpdater } from './updater';
-import { logger } from './logger';
+import { checkForUpdates } from './services/updater';
+import { logger } from './services/logger';
 import { createWindow } from './createWindow';
 import { setUpDevtools } from './devTools';
 
 let mainWindow: Electron.BrowserWindow | null;
 
-new AppUpdater(logger).init();
+checkForUpdates(logger);
 
 app
   .on('ready', () => createWindow(mainWindow, logger))
