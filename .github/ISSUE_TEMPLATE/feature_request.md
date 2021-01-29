@@ -2,7 +2,7 @@
 name: Feature request
 about: Suggest an idea for this project
 title: ''
-labels: enhancement, linux, macos, to refine, windows
+labels: enhancement, to refine
 assignees: AHDesigns
 
 ---
@@ -18,4 +18,4 @@ Add any other context or screenshots about the feature request here.
 
 **I have:**
 - [ ] checked the existing issues to ensure this feature has not been raised before
-- [ ] updated platform labels (remove all if feature is applicable to all platforms)
+- [ ] added the appropriate OS label (e.g `linux`) if this feature is OS specific
