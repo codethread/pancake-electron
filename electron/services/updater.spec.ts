@@ -1,13 +1,13 @@
-import { autoUpdater } from 'electron-updater';
+import { mocked } from 'ts-jest/utils';
+import { autoUpdater as _autoUpdater } from 'electron-updater';
 import { checkForUpdates } from './updater';
-import { logger } from './logger';
+import { logger as _logger } from './logger';
 
-jest.mock('electron-updater', () => ({
-  autoUpdater: {
-    logger: null,
-    checkForUpdatesAndNotify: jest.fn().mockResolvedValue(null),
-  },
-}));
+jest.mock('electron-updater');
+const autoUpdater = mocked(_autoUpdater, true);
+
+jest.mock('./logger');
+const logger = mocked(_logger);
 
 describe('updater', () => {
   beforeEach(() => {
@@ -24,17 +24,13 @@ describe('updater', () => {
 
   describe('when update errors', () => {
     const err = new Error('poop');
-    const spy = jest.fn();
 
     beforeAll(() => {
-      logger.errorWithContext = () => spy;
-      (autoUpdater.checkForUpdatesAndNotify as jest.Mock).mockRejectedValue(
-        err
-      );
+      autoUpdater.checkForUpdatesAndNotify.mockRejectedValue(err);
     });
 
     it('catches and logs error', () => {
-      expect(spy).toHaveBeenCalledWith(err);
+      expect(logger.errorWithContext('')).toHaveBeenCalledWith(err);
     });
   });
 });
