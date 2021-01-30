@@ -9,7 +9,7 @@ const autoUpdater = mocked(_autoUpdater, true);
 jest.mock('./logger');
 const logger = mocked(_logger);
 
-describe('updater', () => {
+describe('checkForUpdates', () => {
   beforeEach(() => {
     checkForUpdates(logger);
   });

@@ -1,9 +1,7 @@
 import { app } from 'electron';
 
-import { checkForUpdates } from './services/updater';
-import { logger } from './services/logger';
+import { checkForUpdates, logger, setUpDevtools } from './services';
 import { createWindow } from './createWindow';
-import { setUpDevtools } from './devTools';
 
 let mainWindow: Electron.BrowserWindow | null;
 
