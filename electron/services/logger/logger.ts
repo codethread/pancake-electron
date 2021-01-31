@@ -10,7 +10,8 @@ export const logger = _createLogger(log);
 export let _errorHandler: ReturnType<typeof errorHandler>;
 
 export function _createLogger(log: ElectronLog): ILogger {
-  log.transports.file.level = 'debug';
+  log.transports.file.level = 'info';
+  log.transports.console.level = 'silly';
 
   const logger: ILogger = {
     ...log,

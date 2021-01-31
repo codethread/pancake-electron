@@ -4,7 +4,7 @@
 module.exports = {
   clearMocks: true,
 
-  // collectCoverage: false,
+  collectCoverage: true,
   // collectCoverageFrom: undefined,
   // coverageDirectory: undefined,
   // coveragePathIgnorePatterns: [
@@ -16,7 +16,14 @@ module.exports = {
   //   "lcov",
   //   "clover"
   // ],
-  // coverageThreshold: undefined,
+  coverageThreshold: {
+    './electron/**/*.ts': {
+      branches: 100,
+      functions: 100,
+      lines: 100,
+      statements: 100,
+    },
+  },
 
   errorOnDeprecated: true,
 

@@ -1,12 +1,11 @@
-const validNodenvs = ['production', 'development', 'test'] as const;
-
-type Nodenv = typeof validNodenvs[number];
+import type { Nodenv } from './asserts';
+import { assertValidNodenv } from './asserts';
 
 type URLS = {
   readonly main: string;
 };
 
-const nodenv = initNodenv(process.env.NODE_ENV || '');
+const nodenv = sanitiseNodenv(process.env.NODE_ENV || '');
 const isDev = nodenv === 'development';
 const isProd = nodenv === 'production';
 const isTest = nodenv === 'test';
@@ -14,15 +13,10 @@ const urls: URLS = {
   main: 'http://localhost:4000',
 };
 
-export { isDev, isProd, isTest, urls };
+export { nodenv, isDev, isProd, isTest, urls };
 
-function initNodenv(nodenv: string): Nodenv {
-  assertValid(nodenv);
-  return nodenv;
-
-  function assertValid(env: string): asserts env is Nodenv {
-    if (!validNodenvs.includes(env as Nodenv)) {
-      throw new Error(`node_env of "${env}" is invalid`);
-    }
-  }
+function sanitiseNodenv(env: string): Nodenv {
+  const sanitisedNodenv = env.trim().toLocaleLowerCase();
+  assertValidNodenv(sanitisedNodenv);
+  return sanitisedNodenv;
 }

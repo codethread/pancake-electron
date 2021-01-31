@@ -1,1 +1,2 @@
-export { logger, ILogger } from './logger';
+export type { ILogger } from './logger';
+export { logger } from './logger';

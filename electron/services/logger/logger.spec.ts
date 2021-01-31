@@ -10,7 +10,8 @@ describe('logger', () => {
 
   it('sets transport correctly', () => {
     expect(logger).toBeDefined();
-    expect(log.transports.file?.level).toBe('debug');
+    expect(log.transports.file?.level).toBe('info');
+    expect(log.transports.console?.level).toBe('silly');
   });
 
   it('errorWithContext logs errors', () => {
