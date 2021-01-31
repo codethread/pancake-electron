@@ -3,7 +3,6 @@ import { autoUpdater as _autoUpdater } from 'electron-updater';
 import { checkForUpdates } from './updater';
 import { logger as _logger } from './logger';
 
-jest.mock('electron-updater');
 const autoUpdater = mocked(_autoUpdater, true);
 
 jest.mock('./logger');

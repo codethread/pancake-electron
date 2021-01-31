@@ -4,25 +4,21 @@ import _installExtension, {
 import { mocked } from 'ts-jest/utils';
 import { setUpDevtools } from './devTools';
 import { logger } from './logger';
+import * as _constants from '../utils/constants';
 
 jest.mock('./logger');
-jest.mock('electron-devtools-installer');
+jest.mock('../utils/constants');
+const constants = mocked(_constants, true);
 const installExtension = mocked(_installExtension);
-
-const nodenv = process.env.NODE_ENV;
 
 describe('Devtools service', () => {
   beforeEach(() => {
     setUpDevtools(logger)();
   });
 
-  afterAll(() => {
-    process.env.NODE_ENV = nodenv;
-  });
-
   describe('when in development', () => {
     beforeAll(() => {
-      process.env.NODE_ENV = 'development';
+      constants.isDev = true;
     });
 
     it('it installs extensions', () => {
@@ -50,7 +46,7 @@ describe('Devtools service', () => {
 
   describe('when not in development', () => {
     beforeAll(() => {
-      process.env.NODE_ENV = 'production';
+      constants.isDev = false;
     });
 
     it('does not install extensions', () => {

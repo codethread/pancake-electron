@@ -1,7 +1,8 @@
 import * as path from 'path';
 import * as url from 'url';
 import { BrowserWindow } from 'electron';
-import type { ILogger } from './services/logger';
+import type { ILogger } from './services';
+import { isDev, urls } from './utils/constants';
 
 export function createWindow(
   window: Electron.BrowserWindow | null,
@@ -16,9 +17,9 @@ export function createWindow(
     },
   });
 
-  if (process.env.NODE_ENV === 'development') {
+  if (isDev) {
     window
-      .loadURL('http://localhost:4000')
+      .loadURL(urls.main)
       .catch(logger.errorWithContext('loading dev window'));
   } else {
     window

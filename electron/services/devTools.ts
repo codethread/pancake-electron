@@ -1,11 +1,12 @@
 import installExtension, {
   REACT_DEVELOPER_TOOLS,
 } from 'electron-devtools-installer';
-import { ILogger } from './logger';
+import type { ILogger } from '.';
+import { isDev } from '../utils/constants';
 
 export function setUpDevtools(logger: ILogger) {
   return (): void => {
-    if (process.env.NODE_ENV === 'development') {
+    if (isDev) {
       installExtension(REACT_DEVELOPER_TOOLS)
         .then((name) => {
           logger.info(`Added Extension: "${name}"`);
