@@ -51,3 +51,26 @@ no app version",
   },
 ]
 `;
+
+exports[`_errorHandler when the user choses to report the error and no stack trace is provided opens a github issue 1`] = `
+Array [
+  "https://github.com/AHDesigns/pancake-electron/issues/new",
+  Object {
+    "body": "**Describe the bug**
+Describe as best you can when the error occured, with steps leading up to it if possible.
+
+**Screenshots**
+If possible, add screenshots to help explain your problem.
+
+**Error Report:**
+
+No stacktrace
+
+OS: no OS detected
+no electron version
+no app version",
+    "labels": "to refine, bug",
+    "title": "Error report",
+  },
+]
+`;

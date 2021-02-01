@@ -32,7 +32,6 @@ export const errorHandler: (
           );
         return;
       }
-
       if (result.response === 2) {
         app.quit();
       }

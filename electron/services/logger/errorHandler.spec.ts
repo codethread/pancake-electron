@@ -114,6 +114,27 @@ describe('_errorHandler', () => {
       });
     });
 
+    describe('and no stack trace is provided', () => {
+      beforeAll(() => {
+        versions = undefined;
+        error.stack = undefined;
+      });
+
+      it('opens a github issue', () => {
+        expect(submitIssue).toHaveBeenCalledWith(
+          'https://github.com/AHDesigns/pancake-electron/issues/new',
+          /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+          {
+            title: expect.any(String),
+            body: expect.stringContaining('No stacktrace'),
+            labels: 'to refine, bug',
+          }
+          /* eslint-enable @typescript-eslint/no-unsafe-assignment */
+        );
+        expect(submitIssue.mock.calls[0]).toMatchSnapshot();
+      });
+    });
+
     describe('when submit issue fails', () => {
       const err = new Error('poop');
       beforeAll(() => {
