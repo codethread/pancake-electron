@@ -1,10 +1,23 @@
 import React from 'react';
-import { render } from '@testing-library/react';
-import Button from './index';
+import { render, fireEvent } from '@testing-library/react';
+import { Button } from '.';
 
 test('button should renders', () => {
-  const { getByText } = render(<Button>ButtonContent</Button>);
+  const spy = jest.fn();
+  const { getByText } = render(
+    <Button
+      onClick={() => {
+        spy('call');
+      }}
+    >
+      ButtonContent
+    </Button>
+  );
 
-  expect(getByText('ButtonContent')).toBeTruthy();
-  expect(getByText('ButtonContent')).toHaveAttribute('type', 'button');
+  const btn = getByText('ButtonContent');
+  expect(btn).toBeTruthy();
+  expect(btn).toHaveAttribute('type', 'button');
+
+  fireEvent.click(btn);
+  expect(spy).toHaveBeenCalledWith('call');
 });

@@ -1,15 +1,15 @@
-import React, { FC, useContext, useEffect } from 'react';
-import { StoreContext } from '../../contexts';
+import React, { FC, useEffect } from 'react';
+import { useStore } from '../../contexts';
 import { Button } from '../Button';
 
 export const Header: FC = () => {
   const {
     store,
-    fetch: { logout },
-  } = useContext(StoreContext);
+    fetch: { logout, getUser },
+  } = useStore();
 
   useEffect(() => {
-    // dispatch(ipcEvents.GET_USER);
+    if (store.loggedIn) getUser().catch(console.error);
   }, [store.loggedIn]);
 
   return (
@@ -18,7 +18,7 @@ export const Header: FC = () => {
       <div>Menu</div>
       {store.loggedIn && (
         <div>
-          <p>User name...</p>
+          <p>{store.user?.viewer.name}</p>
           <Button
             onClick={() => {
               // reset('ghToken').catch(console.error);

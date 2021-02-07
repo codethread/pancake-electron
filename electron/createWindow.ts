@@ -17,6 +17,8 @@ export function createWindow(
     },
   });
 
+  window.webContents.openDevTools();
+
   if (isDev) {
     window
       .loadURL(urls.main)

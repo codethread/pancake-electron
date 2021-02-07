@@ -1,13 +1,13 @@
 import { shell } from 'electron';
-import React, { FC, useContext, useState } from 'react';
+import React, { FC, useState } from 'react';
 import { Button } from '../';
-import { StoreContext } from '../../contexts';
+import { useStore } from '../../contexts';
 import githubScopes from './github-scopes.png';
 
 export const SignInForm: FC = () => {
   const {
     fetch: { login },
-  } = useContext(StoreContext);
+  } = useStore();
   const [token, setToken] = useState('');
 
   return (

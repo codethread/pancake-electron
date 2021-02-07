@@ -1,4 +1,4 @@
-import React, { FC, useContext, useEffect } from 'react';
+import React, { FC } from 'react';
 import { Header, SignInForm } from '../components';
 
 export const NewUser: FC = () => {
