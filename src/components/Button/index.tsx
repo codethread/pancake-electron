@@ -1,16 +1,13 @@
 import React from 'react';
 
-const Button: React.FC = ({ children }) => {
+type Click =
+  | ((e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void)
+  | undefined;
+
+export const Button: React.FC<{ onClick: Click }> = ({ children, onClick }) => {
   return (
-    <button
-      type="button"
-      onClick={() => {
-        console.log('clicked');
-      }}
-    >
+    <button type="button" onClick={onClick}>
       {children}
     </button>
   );
 };
-
-export default Button;
