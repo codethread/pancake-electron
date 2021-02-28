@@ -6,6 +6,8 @@ import { GlobalStyle } from './styles/GlobalStyle';
 
 import { StoreProvider } from './contexts';
 import { Routes } from './pages/routes';
+import { ThemeProvider } from 'styled-components';
+import { theme } from './styles/theme';
 
 const mainElement = document.createElement('div');
 mainElement.setAttribute('id', 'root');
@@ -13,10 +15,12 @@ document.body.appendChild(mainElement);
 
 const App: FC = () => {
   return (
-    <StoreProvider>
-      <GlobalStyle />
-      <Routes />
-    </StoreProvider>
+    <ThemeProvider theme={theme}>
+      <StoreProvider>
+        <GlobalStyle />
+        <Routes />
+      </StoreProvider>
+    </ThemeProvider>
   );
 };
 

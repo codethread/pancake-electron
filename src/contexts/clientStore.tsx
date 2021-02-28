@@ -2,21 +2,34 @@ import React, {
   createContext,
   Dispatch,
   FC,
+  SetStateAction,
   useContext,
   useEffect,
-  useReducer,
+  useState,
 } from 'react';
 import { ipcRenderer } from 'electron';
 import { ipcEvents } from '../../shared/ipcEvents';
 import { SharedConfig, sharedConfig } from '../../shared/sharedConfig';
 
-const err = new Error('store not initialised');
-const defaultContext = {
+interface Fetchers {
+  login(_: string): Promise<void>;
+  logout(): Promise<void>;
+  getUser(): Promise<void>;
+}
+interface Context {
+  store: SharedConfig;
+  fetch: Fetchers;
+}
+
+const tempFn = async (): Promise<void> =>
+  Promise.reject(new Error('store not initialised'));
+
+const defaultContext: Context = {
   store: sharedConfig,
   fetch: {
-    login: async (_: string): Promise<void> => Promise.reject(err),
-    logout: async (): Promise<void> => Promise.reject(err),
-    getUser: async (): Promise<void> => Promise.reject(err),
+    login: tempFn,
+    logout: tempFn,
+    getUser: tempFn,
   },
 };
 
@@ -25,22 +38,16 @@ const StoreContext = createContext(defaultContext);
 export const useStore = (): typeof defaultContext => useContext(StoreContext);
 
 export const StoreProvider: FC = ({ children }) => {
-  const [store, dispatch] = useReducer(reducer, sharedConfig);
+  const [store, updateStore] = useState(sharedConfig);
 
   useEffect(() => {
-    (async (): Promise<void> => {
-      const res = (await ipcRenderer.invoke(ipcEvents.SS_READ)) as unknown;
-      assertConfig(res);
-      dispatch({ type: 'reload', data: res });
-    })().catch((err) => {
-      console.error(err);
-    });
+    readStore(updateStore).catch(console.error);
   }, []);
 
   useEffect(() => {
-    ipcRenderer.on(ipcEvents.SS_UPDATE, (_, sharedStore: unknown) => {
-      assertConfig(sharedStore);
-      dispatch({ type: 'reload', data: sharedStore });
+    ipcRenderer.on(ipcEvents.SS_UPDATE, (_, updatedStore: unknown) => {
+      assertConfig(updatedStore);
+      updateStore(updatedStore);
     });
   }, []);
 
@@ -49,9 +56,9 @@ export const StoreProvider: FC = ({ children }) => {
       value={{
         store,
         fetch: {
-          login: login(dispatch),
-          logout: logout(dispatch),
-          getUser: getUser(dispatch),
+          login: login(updateStore),
+          logout: logout(updateStore),
+          getUser: getUser(updateStore),
         },
       }}
     >
@@ -60,44 +67,34 @@ export const StoreProvider: FC = ({ children }) => {
   );
 };
 
-function login(dispatch: Dispatch<Action>) {
+type Update = Dispatch<SetStateAction<SharedConfig>>;
+
+async function readStore(dispatch: Update): Promise<void> {
+  const res = (await ipcRenderer.invoke(ipcEvents.SS_READ)) as unknown;
+  assertConfig(res);
+  dispatch(res);
+}
+
+function login(dispatch: Update) {
   return async function (token: string): Promise<void> {
     await ipcRenderer.invoke(ipcEvents.LOGIN, token);
-    dispatch({ type: 'login' });
+    dispatch((store) => ({ ...store, loggedIn: true }));
   };
 }
 
-function logout(dispatch: Dispatch<Action>) {
+function logout(dispatch: Update) {
   return async function (): Promise<void> {
     await ipcRenderer.invoke(ipcEvents.LOGOUT);
-    dispatch({ type: 'logout' });
+    dispatch((store) => ({ ...store, loggedIn: false }));
   };
 }
 
-function getUser(dispatch: Dispatch<Action>) {
+function getUser(dispatch: Update) {
   return async function (): Promise<void> {
     const res = (await ipcRenderer.invoke(ipcEvents.GET_USER)) as unknown;
     assertConfig(res);
-    dispatch({ type: 'reload', data: res });
+    dispatch(res);
   };
-}
-
-type Action =
-  | { type: 'login' }
-  | { type: 'logout' }
-  | { type: 'reload'; data: SharedConfig };
-
-function reducer(state: SharedConfig, action: Action): SharedConfig {
-  switch (action.type) {
-    case 'login':
-      return { ...state, loggedIn: true };
-    case 'logout':
-      return { ...state, loggedIn: false };
-    case 'reload':
-      return { ...state, ...action.data };
-    default:
-      return state;
-  }
 }
 
 function assertConfig(_: unknown): asserts _ is SharedConfig {

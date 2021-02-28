@@ -11,7 +11,7 @@ export function createWindow(
   window = new BrowserWindow({
     width: 1100,
     height: 700,
-    backgroundColor: '#191622',
+    backgroundColor: '#2C3531',
     webPreferences: {
       nodeIntegration: true,
     },

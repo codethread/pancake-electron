@@ -1,29 +1,29 @@
 // For a detailed explanation regarding each configuration property, visit:
 // https://jestjs.io/docs/en/configuration.html
 
+const client = './src/**/*.ts?(x)';
+const server = './electron/**/*.ts';
+const shared = './shared/**/*.ts';
+const all = [client, server, shared];
+const escapeHatch = ['!**/github.ts'];
+
 module.exports = {
   clearMocks: true,
 
   collectCoverage: true,
-  // collectCoverageFrom: undefined,
-  // coverageDirectory: undefined,
-  // coveragePathIgnorePatterns: [
-  //   "/node_modules/"
-  // ],
-  // coverageReporters: [
-  //   "json",
-  //   "text",
-  //   "lcov",
-  //   "clover"
-  // ],
-  coverageThreshold: {
-    './electron/**/*.ts': {
-      branches: 100,
-      functions: 100,
-      lines: 100,
-      statements: 100,
-    },
-  },
+  collectCoverageFrom: all.concat(escapeHatch),
+  coverageThreshold: all.reduce(
+    (coverage, name) => ({
+      ...coverage,
+      [name]: {
+        branches: 100,
+        functions: 100,
+        lines: 100,
+        statements: 100,
+      },
+    }),
+    {}
+  ),
 
   errorOnDeprecated: true,
 
