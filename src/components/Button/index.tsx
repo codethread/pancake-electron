@@ -3,7 +3,8 @@ import styled from 'styled-components';
 
 type Click = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 
-interface IButton {
+export interface IButton {
+  primary?: boolean;
   onClick?: Click;
 }
 
