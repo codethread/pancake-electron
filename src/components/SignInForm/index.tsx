@@ -1,7 +1,7 @@
-import { shell } from 'electron';
+// import { shell } from 'electron';
 import React, { FC, useState } from 'react';
 import { Button } from '../';
-import { useStore } from '../../contexts';
+import { useStore } from '../../hooks';
 import githubScopes from '../../../designAssets/github-scopes-dark.png';
 import styled from 'styled-components';
 import { Box, H2, H3, Img, P, Input } from '../Atoms';
@@ -46,9 +46,9 @@ export const SignInForm: FC = () => {
         </P>
         <Button
           onClick={() => {
-            shell
-              .openExternal('https://github.com/settings/tokens/new')
-              .catch(console.error);
+            // shell
+            //   .openExternal('https://github.com/settings/tokens/new')
+            //   .catch(console.error);
           }}
         >
           Sign In

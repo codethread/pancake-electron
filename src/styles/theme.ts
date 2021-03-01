@@ -7,6 +7,7 @@ const body: IFont = {
   fontSize: '1rem',
   fontWeight: 400,
   lineHeight: 1.5,
+  marginBottom: 2,
 };
 
 export const theme: DefaultTheme = {
@@ -79,9 +80,11 @@ export const theme: DefaultTheme = {
     h2: generateFontVariant({
       fontSize: '1.6rem',
       fontWeight: 700,
+      marginBottom: 1.2,
     }),
     h3: generateFontVariant({
       fontWeight: 400,
+      marginBottom: 1.8,
     }),
     h4: generateFontVariant(),
     h5: generateFontVariant({

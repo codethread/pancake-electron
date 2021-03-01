@@ -1,41 +1,14 @@
 import React, {
-  createContext,
   Dispatch,
   FC,
   SetStateAction,
-  useContext,
   useEffect,
   useState,
 } from 'react';
+import { SharedConfig, sharedConfig } from '../../../shared/sharedConfig';
 import { ipcRenderer } from 'electron';
-import { ipcEvents } from '../../shared/ipcEvents';
-import { SharedConfig, sharedConfig } from '../../shared/sharedConfig';
-
-interface Fetchers {
-  login(_: string): Promise<void>;
-  logout(): Promise<void>;
-  getUser(): Promise<void>;
-}
-interface Context {
-  store: SharedConfig;
-  fetch: Fetchers;
-}
-
-const tempFn = async (): Promise<void> =>
-  Promise.reject(new Error('store not initialised'));
-
-const defaultContext: Context = {
-  store: sharedConfig,
-  fetch: {
-    login: tempFn,
-    logout: tempFn,
-    getUser: tempFn,
-  },
-};
-
-const StoreContext = createContext(defaultContext);
-
-export const useStore = (): typeof defaultContext => useContext(StoreContext);
+import { ipcEvents } from '../../../shared/ipcEvents';
+import { StoreContext } from './Context';
 
 export const StoreProvider: FC = ({ children }) => {
   const [store, updateStore] = useState(sharedConfig);

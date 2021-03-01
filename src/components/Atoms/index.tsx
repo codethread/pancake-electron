@@ -18,17 +18,27 @@ export const Box = styled.div<BoxProps>`
   align-content: center;
 `;
 
-export const P = styled.p`
+interface TextProps {
+  align?: 'left' | 'right' | 'center' | 'justify';
+}
+
+export const P = styled.p<TextProps>`
   ${(props) => ({ ...props.theme.typography.body })};
-  color: ${(props) => props.theme.palette.text};
+  line-height: ${({ theme }) => theme.typography.body.lineHeight}rem;
+  margin-bottom: ${({ theme }) => theme.typography.body.marginBottom}rem;
+  text-align: ${(props) => props.align || 'inherit'};
+  color: ${(props) => props.theme.palette.white};
 `;
 
 export const H2 = styled(P)`
   ${(props) => ({ ...props.theme.typography.h2 })};
-  margin-bottom: ${({ theme }) => theme.spacing.normal}px;
+  line-height: ${({ theme }) => theme.typography.h2.lineHeight}rem;
+  margin-bottom: ${({ theme }) => theme.typography.h2.marginBottom}rem;
 `;
 
 export const H3 = styled(P)`
   ${(props) => ({ ...props.theme.typography.h3 })};
-  margin-bottom: ${({ theme }) => theme.spacing.large}px;
+  line-height: ${({ theme }) => theme.typography.h3.lineHeight}rem;
+  margin-bottom: ${({ theme }) => theme.typography.h3.marginBottom}rem;
+  color: ${({ theme }) => theme.palette.grey};
 `;

@@ -6,6 +6,7 @@ interface IFont {
   fontSize: string;
   fontWeight: number;
   lineHeight: number;
+  marginBottom: number;
 }
 
 declare module 'styled-components' {

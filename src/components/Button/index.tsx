@@ -20,7 +20,7 @@ const Base = styled.button.attrs((props) => ({
   ${({ theme }) => ({ ...theme.typography.h5 })};
 
   min-width: 150px;
-
+  margin-bottom: ${({ theme }) => theme.spacing.large}px;
   height: 40px;
   border-radius: 20px;
   box-shadow: 0 1px 6px rgba(0, 0, 0, 0.25);

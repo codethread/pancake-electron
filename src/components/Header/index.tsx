@@ -1,5 +1,5 @@
 import React, { FC, useEffect } from 'react';
-import { useStore } from '../../contexts';
+import { useStore } from '../../hooks';
 import { Button } from '../Button';
 import { Box } from '../Atoms';
 import styled from 'styled-components';

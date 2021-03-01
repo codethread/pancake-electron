@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { useStore } from '../contexts';
+import { useStore } from '../hooks';
 import { NewUser } from './NewUser';
 import { PrDashboard } from './PrDashboard';
 

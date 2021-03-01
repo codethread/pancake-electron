@@ -4,7 +4,7 @@ import React, { FC } from 'react';
 import { render } from 'react-dom';
 import { GlobalStyle } from './styles/GlobalStyle';
 
-import { StoreProvider } from './contexts';
+import { StoreProvider } from './contexts/providers';
 import { Routes } from './pages/routes';
 import { ThemeProvider } from 'styled-components';
 import { theme } from './styles/theme';
