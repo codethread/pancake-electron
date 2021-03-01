@@ -17,13 +17,32 @@ const Template: Story<IButton> = (args) => (
   <Button {...args}>Button text</Button>
 );
 
+export const Primary = Template.bind({});
+
+export const PrimaryDisabled = Template.bind({});
+PrimaryDisabled.args = {
+  disabled: true,
+};
+
+export const Secondary = Template.bind({});
+Secondary.args = {
+  variant: 'secondary',
+};
+
+export const SecondaryDisabled = Template.bind({});
+SecondaryDisabled.args = {
+  variant: 'secondary',
+  disabled: true,
+};
+
 export const Clickable = Template.bind({});
 Clickable.args = {
-  primary: true,
   onClick: () => {
     action('clicked');
   },
 };
 
 export const Submit = Template.bind({});
-Submit.args = {};
+Submit.args = {
+  variant: 'secondary',
+};

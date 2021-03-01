@@ -1,11 +1,6 @@
 // styled.d.ts
 import 'styled-components';
 
-interface IPalette {
-  main: string;
-  contrastText: string;
-}
-
 interface IFont {
   fontFamily: string;
   fontSize: string;
@@ -23,13 +18,19 @@ declare module 'styled-components' {
       lg: number;
     };
     palette: {
-      black: string;
       white: string;
-      text: string;
-      primary: IPalette;
-      secondary: IPalette;
+      grey: string;
+      background: string;
+      disabled: string;
+      accent: string;
+      red: string;
+      green: string;
+      glass: string;
       gradients: {
-        button: (degrees?: number) => string;
+        rainbow: (degrees?: number) => string;
+        secondary: string;
+        vibrant: (degrees?: number) => string;
+        glassEdge: (degrees?: number) => string;
         masthead: (degrees?: number) => string;
         background: (degrees?: number) => string;
       };

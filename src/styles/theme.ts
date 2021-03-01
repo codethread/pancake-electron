@@ -18,32 +18,39 @@ export const theme: DefaultTheme = {
     lg: 1280,
   },
   palette: {
-    black: '#222831',
-    white: '#F8F7F8',
-    text: '#A2B8B4',
-    primary: {
-      main: '#726a95',
-      contrastText: '#ffffff',
-    },
-    secondary: {
-      main: '#709fb0',
-      contrastText: '#ffffff',
-    },
+    white: '#E1E1E1',
+    grey: '#A2B8B4',
+    disabled: '#AAAAAA',
+    accent: '#379DCD',
+    background: '#222831',
+    red: '#EB5757',
+    green: '#6FCF97',
+    glass: 'rgba(39, 72, 80, 0.48)',
     gradients: {
-      button: () => `linear-gradient(
-        100deg,
-        rgb(255,149,149) 2.49%,
-        rgb(66,160,138) 88.61%
-      )`,
+      rainbow: () =>
+        `linear-gradient(91.71deg, rgba(236, 82, 119, 0.75) 2.59%, rgba(136, 126, 201, 0.75) 43.05%, rgba(48, 252, 204, 0.75) 95.08%)`,
+      secondary: `linear-gradient(91.71deg, rgba(15, 131, 104, 0.75) 2.59%, rgba(75, 58, 180, 0.75) 95.08%)`,
       background: (deg = 70) => `linear-gradient(
         ${deg}deg,
         #000000 15.78%,
         #243431 83.92%
       )`,
       masthead: (deg = 180) => `linear-gradient(
-      ${deg}deg,
-      rgb(66, 161, 139) 0%,
-      rgb(239, 214, 148) 100%
+        ${deg}deg,
+        rgb(66, 161, 139) 0%,
+        rgb(239, 214, 148) 100%
+      )`,
+      glassEdge: (deg = 150) => `linear-gradient(
+        ${deg}deg,
+        #FFFBFB 1.59%,
+        rgba(163, 204, 207, 0) 43.54%,
+        rgba(163, 204, 207, 0) 51.79%,
+        #429BA0 98.7%
+      )`,
+      vibrant: (deg = 180) => `linear-gradient(
+        ${deg}deg,
+        #FC77EE 0%,
+        #FC7777 100%
       )`,
     },
   },

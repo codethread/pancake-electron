@@ -63,6 +63,6 @@ export const GlobalStyle = createGlobalStyle`
     font-family: ${(props) => props.theme.typography.body.fontFamily};
     font-size: ${(props) => props.theme.typography.body.fontSize};
     font-weight: ${(props) => props.theme.typography.body.fontWeight};
-    color: ${(props) => props.theme.palette.text};
+    color: ${(props) => props.theme.palette.white};
   }
 `;
