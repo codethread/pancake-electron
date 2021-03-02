@@ -4,18 +4,10 @@ import * as url from 'url';
 import installExtension, {
   REACT_DEVELOPER_TOOLS,
 } from 'electron-devtools-installer';
-import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
+import { AppUpdater } from './AppUpdater';
 
 let mainWindow: Electron.BrowserWindow | null;
-
-class AppUpdater {
-  constructor() {
-    log.transports.file.level = 'debug';
-    autoUpdater.logger = log;
-    autoUpdater.checkForUpdatesAndNotify().catch((err) => log.error(err));
-  }
-}
 
 const updater = new AppUpdater();
 
@@ -25,7 +17,10 @@ function createWindow(): void {
     height: 700,
     backgroundColor: '#191622',
     webPreferences: {
-      nodeIntegration: true,
+      nodeIntegration: false,
+      contextIsolation: true,
+      enableRemoteModule: false,
+      preload: path.join(__dirname, './preload.js'),
     },
   });
 

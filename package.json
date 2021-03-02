@@ -2,18 +2,18 @@
   "name": "Pancake",
   "version": "0.0.1",
   "description": "A Pull Request Dashboard on your Desktop",
-  "main": "./dist/main.js",
+  "main": "./build/main.js",
   "scripts": {
-    "dev": "npm-run-all -p dev:react dev:electron",
+    "dev": "run-p dev:*",
     "lint": "eslint .",
     "test": "jest",
-    "build": "npm-run-all build:electron build:react",
+    "build": "run-p build:*",
     "start": "electron .",
-    "build:electron": "webpack --config webpack/electron.webpack.js --mode production",
-    "build:react": "webpack --config webpack/react.webpack.js --mode production",
-    "dev:electron": "wait-on http-get://localhost:4000/ && cross-env NODE_ENV=development webpack --config webpack/electron.webpack.js --mode development && yarn start",
-    "dev:react": "cross-env NODE_ENV=development webpack-dev-server --config webpack/react.webpack.js --mode development",
-    "prerelease": "yarn run build",
+    "build:electron": "webpack --config tooling/electron.webpack.js --mode production",
+    "build:react": "webpack --config tooling/react.webpack.js --mode production",
+    "dev:electron": "wait-on http-get://localhost:4000/ && cross-env NODE_ENV=development webpack --config tooling/electron.webpack.js --mode development && yarn start",
+    "dev:react": "cross-env NODE_ENV=development webpack-dev-server --config tooling/react.webpack.js --mode development",
+    "prerelease": "yarn run publish",
     "release": "electron-builder --mac --linux",
     "postinstall": "electron-builder install-app-deps"
   },
@@ -21,22 +21,23 @@
   "author": "Adam Hall <adamhalldesigns@gmail.com>",
   "license": "MIT",
   "devDependencies": {
-    "@babel/core": "^7.9.0",
-    "@babel/preset-env": "^7.9.5",
-    "@babel/preset-react": "^7.9.4",
-    "@babel/preset-typescript": "^7.9.0",
+    "@babel/core": "7.13.8",
+    "@babel/plugin-proposal-optional-chaining": "7.13.8",
+    "@babel/preset-env": "7.13.9",
+    "@babel/preset-react": "7.12.13",
+    "@babel/preset-typescript": "7.13.0",
     "@testing-library/jest-dom": "^5.11.0",
     "@testing-library/react": "^10.4.3",
     "@types/electron-devtools-installer": "^2.2.0",
     "@types/jest": "^26.0.3",
-    "@types/react": "^16.9.34",
-    "@types/react-dom": "^16.9.6",
+    "@types/react": "17.0.2",
+    "@types/react-dom": "17.0.1",
     "@types/styled-components": "^5.1.0",
     "@typescript-eslint/eslint-plugin": "^3.4.0",
     "@typescript-eslint/parser": "^3.4.0",
-    "babel-loader": "^8.1.0",
-    "cross-env": "^7.0.2",
-    "electron": "^8.2.2",
+    "babel-loader": "8.2.2",
+    "cross-env": "7.0.3",
+    "electron": "11.3.0",
     "electron-builder": "^22.7.0",
     "electron-builder-notarize": "^1.2.0",
     "electron-devtools-installer": "^3.1.0",
@@ -50,13 +51,13 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-react": "^7.20.1",
     "eslint-plugin-standard": "^4.0.1",
-    "html-webpack-plugin": "^4.2.0",
+    "html-webpack-plugin": "4.5.2",
     "jest": "^26.1.0",
-    "npm-run-all": "^4.1.5",
+    "npm-run-all": "4.1.5",
     "prettier": "^2.0.5",
     "ts-jest": "^26.1.1",
-    "typescript": "^3.9.5",
-    "wait-on": "^5.0.1",
+    "typescript": "4.2.2",
+    "wait-on": "5.2.1",
     "webpack": "^4.42.1",
     "webpack-cli": "^3.3.11",
     "webpack-dev-server": "^3.10.3"
@@ -64,8 +65,8 @@
   "dependencies": {
     "electron-log": "^4.3.1",
     "electron-updater": "^4.3.5",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
+    "react": "17.0.1",
+    "react-dom": "17.0.1",
     "styled-components": "^5.1.1"
   },
   "build": {
@@ -76,17 +77,17 @@
     },
     "mac": {
       "category": "public.app-category.developer-tools",
-      "entitlements": "./build/entitlements.mac.plist",
-      "entitlementsInherit": "./build/entitlements.mac.plist",
+      "entitlements": "./publishingTools/entitlements.mac.plist",
+      "entitlementsInherit": "./publishingTools/entitlements.mac.plist",
       "hardenedRuntime": true
     },
     "directories": {
-      "output": "packages"
+      "output": "dist"
     },
     "files": [
       "package.json",
-      "build/icon.*",
-      "dist/**"
+      "publishingTools/icon.*",
+      "build/**"
     ]
   }
 }
