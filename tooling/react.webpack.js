@@ -53,5 +53,12 @@ module.exports = (_, options = {}) => ({
     filename: 'js/[name].js',
     publicPath: './',
   },
-  plugins: [new HtmlWebpackPlugin()],
+  plugins: [
+    new HtmlWebpackPlugin({
+      title: 'Pancake',
+      meta: {
+        viewport: 'width=device-width, initial-scale=1.0',
+      },
+    }),
+  ],
 });
