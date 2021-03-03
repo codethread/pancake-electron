@@ -1,4 +1,3 @@
-// preload.js
 import { contextBridge, shell } from 'electron';
 import { IEApi } from '@shared/eApi';
 
