@@ -9,6 +9,8 @@
     "esModuleInterop": true,
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
+    "skipLibCheck": true,
+    "strictPropertyInitialization": true,
     "baseUrl": ".",
     "types": ["jest"],
     "paths": {
@@ -16,6 +18,16 @@
         "shared/*"
       ]
     },
-    "jsx": "react"
-  }
+    "jsx": "react",
+  },
+  "include": [
+    "./.eslintrc.js",
+    "./jest.config.js",
+    "tooling",
+    "client",
+    "electron",
+    "shared",
+    "tooling"
+  ],
+  "exclude": ["node_modules"]
 }
