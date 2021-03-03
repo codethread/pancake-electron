@@ -5,11 +5,9 @@ import installExtension, {
   REACT_DEVELOPER_TOOLS,
 } from 'electron-devtools-installer';
 import log from 'electron-log';
-import { AppUpdater } from './AppUpdater';
+import { checkForUpdates } from './AppUpdater';
 
-let mainWindow: Electron.BrowserWindow | null;
-
-const updater = new AppUpdater();
+let mainWindow: BrowserWindow | null;
 
 function createWindow(): void {
   mainWindow = new BrowserWindow({
@@ -39,7 +37,7 @@ function createWindow(): void {
   }
 
   mainWindow.webContents.on('did-finish-load', () => {
-    mainWindow.setTitle('Pancake');
+    mainWindow?.setTitle('Pancake');
   });
 
   mainWindow.on('closed', () => {
@@ -48,7 +46,10 @@ function createWindow(): void {
 }
 
 app
-  .on('ready', createWindow)
+  .on('ready', () => {
+    checkForUpdates();
+    createWindow();
+  })
   .whenReady()
   .then(() => {
     if (process.env.NODE_ENV === 'development') {
