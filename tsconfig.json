@@ -1,15 +1,5 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "module": "commonjs",
-    "lib": [
-      "dom",
-      "es2015",
-      "es2016",
-      "es2017"
-    ],
-    "jsx": "react",
-    "sourceMap": true,
     "strict": true ,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
@@ -17,11 +7,15 @@
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "esModuleInterop": true,
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
     "baseUrl": ".",
+    "types": ["jest"],
     "paths": {
       "@shared/*": [
         "shared/*"
       ]
-    }
+    },
+    "jsx": "react"
   }
 }
