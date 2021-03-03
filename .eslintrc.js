@@ -63,7 +63,13 @@ module.exports = {
       version: 'detect',
     },
   },
-  ignorePatterns: ['node_modules', 'dist', 'build', 'publishingTools', '*/.js'],
+  ignorePatterns: [
+    'node_modules',
+    'dist',
+    'build',
+    'publishingTools',
+    'coverage',
+  ],
   overrides: [
     {
       files: ['tooling/**', '.eslintrc.js', 'jest.config.js'],
@@ -102,7 +108,9 @@ module.exports = {
       },
     },
     {
-      files: ['*.spec.ts', '*.spec.tsx'],
+      files: ['*.spec.{js,ts}', '*.spec.tsx'],
+      plugins: ['testing-library', 'jest-dom'],
+      extends: ['plugin:testing-library/react', 'plugin:jest-dom/recommended'],
       env: {
         jest: true,
         node: true,
@@ -115,6 +123,12 @@ module.exports = {
             devDependencies: true,
           },
         ],
+      },
+    },
+    {
+      files: ['*.js'],
+      rules: {
+        '@typescript-eslint/no-unsafe-assignment': 'off',
       },
     },
   ],

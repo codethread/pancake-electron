@@ -8,7 +8,9 @@ module.exports = (_, options = {}) => ({
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
     mainFields: ['main', 'module', 'browser'],
-    alias: shared,
+    alias: {
+      ...shared,
+    },
   },
   entry: path.resolve(rootPath, 'client', 'App.tsx'),
   target: 'web',

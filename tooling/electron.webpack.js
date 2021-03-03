@@ -8,7 +8,9 @@ const common = {
   target: 'electron-main',
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
-    alias: shared,
+    alias: {
+      ...shared,
+    },
   },
   node: {
     __dirname: false,
