@@ -8,13 +8,11 @@ const mainElement = document.createElement('div');
 mainElement.setAttribute('id', 'root');
 document.body.appendChild(mainElement);
 
-const App: FC = () => {
-  return (
-    <>
-      <GlobalStyle />
-      <Greetings />
-    </>
-  );
-};
+const App: FC = () => (
+  <>
+    <GlobalStyle />
+    <Greetings />
+  </>
+);
 
 render(<App />, mainElement);
