@@ -27,7 +27,7 @@
     "client",
     "electron",
     "shared",
-    "tooling"
+    "e2e"
   ],
   "exclude": ["node_modules"]
 }
