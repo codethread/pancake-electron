@@ -20,6 +20,7 @@ COPY client ./client
 COPY electron ./electron
 COPY shared ./shared
 COPY tooling ./tooling
+COPY e2e ./e2e
 
 RUN yarn build
 

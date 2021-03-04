@@ -27,4 +27,5 @@ module.exports = {
   clearMocks: true,
 
   setupFilesAfterEnv: ['./tooling/setupTests.ts'],
+  modulePathIgnorePatterns: ['e2e'],
 };
