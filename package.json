@@ -8,7 +8,7 @@
     "lint": "eslint .",
     "test": "jest",
     "e2e": "jest e2e --modulePathIgnorePatterns=''",
-    "docker-e2e": "docker build . -f Dockerfile -t pancake && docker run pancake:latest",
+    "docker-e2e": "docker build . -f Dockerfile -t pancake",
     "build": "run-p build:*",
     "start": "electron .",
     "build:electron": "webpack --config tooling/electron.webpack.js --mode production",

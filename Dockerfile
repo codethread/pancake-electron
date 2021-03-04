@@ -24,4 +24,4 @@ COPY e2e ./e2e
 
 RUN yarn build
 
-CMD NODE_ENV=production xvfb-run --auto-servernum --server-args='-screen 0, 1600x900x24' yarn e2e
+RUN NODE_ENV=production xvfb-run --auto-servernum --server-args='-screen 0, 1600x900x24' yarn e2e
