@@ -5,7 +5,6 @@ describe('stubbed integration tests', () => {
   const app = new Application({
     path: 'node_modules/.bin/electron',
     args: [join(__dirname, '../..'), '--no-sandbox'],
-    // env: { NODE_ENV: 'production' },
   });
 
   beforeEach(async () => {
