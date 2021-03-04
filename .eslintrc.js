@@ -117,6 +117,7 @@ module.exports = {
       },
       rules: {
         // '@typescript-eslint/no-unsafe-call': 'off',
+        '@typescript-eslint/unbound-method': 'off',
         'import/no-extraneous-dependencies': [
           'error',
           {
