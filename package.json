@@ -15,7 +15,8 @@
     "build:react": "webpack --config tooling/react.webpack.js --mode production",
     "dev:electron": "wait-on http-get://localhost:4000/ && cross-env NODE_ENV=development webpack --config tooling/electron.webpack.js --mode development && yarn start",
     "dev:react": "cross-env NODE_ENV=development webpack-dev-server --config tooling/react.webpack.js --mode development",
-    "prerelease": "yarn run publish",
+    "checks": "npm-run-all build --parallel lint test e2e",
+    "prerelease": "yarn checks",
     "release": "electron-builder --mac --linux",
     "postinstall": "electron-builder install-app-deps"
   },
@@ -39,6 +40,7 @@
     "@typescript-eslint/parser": "4.16.1",
     "babel-loader": "8.2.2",
     "cross-env": "7.0.3",
+    "electron": "11.3.0",
     "electron-builder": "^22.7.0",
     "electron-builder-notarize": "^1.2.0",
     "eslint": "^7.2.0",
@@ -64,7 +66,6 @@
     "webpack-dev-server": "3.11.2"
   },
   "dependencies": {
-    "electron": "11.3.0",
     "electron-devtools-installer": "3.1.1",
     "electron-log": "4.3.2",
     "electron-updater": "4.3.8",
