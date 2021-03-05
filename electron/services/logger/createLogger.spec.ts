@@ -1,21 +1,68 @@
-import _log from 'electron-log';
+import _log, { LevelOption } from 'electron-log';
 import { mocked } from 'ts-jest/utils';
+import { Nodenv } from '@shared/asserts';
+import * as _constants from '@shared/constants';
 import { createLogger, ILogger, loggerErrorHandler } from './createLogger';
 
 jest.mock('electron-log');
+jest.mock('@shared/constants');
 const log = mocked(_log, true);
+const constants = mocked(_constants, true);
 
 describe('createLogger', () => {
   const error = new Error('poop');
   let logger: ILogger;
 
+  beforeAll(() => {
+    constants.nodenv = 'test';
+  });
+
   beforeEach(() => {
     logger = createLogger(_log);
   });
 
-  it('sets transport correctly', () => {
-    expect(log.transports.file.level).toBe('info');
-    expect(log.transports.console.level).toBe('silly');
+  interface Collection {
+    nodenv: Nodenv;
+    fileLevel: LevelOption;
+    consoleLevel: LevelOption;
+  }
+  const logLevels: Collection[] = [
+    { nodenv: 'development', fileLevel: false, consoleLevel: 'silly' },
+    { nodenv: 'test', fileLevel: false, consoleLevel: 'silly' },
+    { nodenv: 'production', fileLevel: 'info', consoleLevel: false },
+  ];
+
+  logLevels.forEach(({ nodenv, consoleLevel, fileLevel }) => {
+    describe(`when nodenv is ${nodenv}`, () => {
+      beforeAll(() => {
+        constants.nodenv = nodenv;
+      });
+
+      it('sets transports correctly', () => {
+        expect(log.transports.file.level).toBe(fileLevel);
+        expect(log.transports.console.level).toBe(consoleLevel);
+      });
+
+      afterAll(() => {
+        constants.nodenv = 'test';
+      });
+    });
+  });
+
+  describe('when in integration mode', () => {
+    beforeAll(() => {
+      constants.nodenv = 'production';
+      constants.isIntegration = true;
+    });
+
+    it('sets transports correctly', () => {
+      expect(log.transports.console.level).toBe('info');
+    });
+
+    afterAll(() => {
+      constants.nodenv = 'test';
+      constants.isIntegration = false;
+    });
   });
 
   it('errorWithContext logs errors', () => {
@@ -37,8 +84,8 @@ describe('createLogger', () => {
       expect.objectContaining({
         integration: false,
         env: 'test',
-        file: expect.any(String),
-        console: expect.any(String),
+        file: false,
+        console: 'silly',
       })
       /* eslint-enable @typescript-eslint/no-unsafe-assignment */
     );

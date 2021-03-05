@@ -1,25 +1,7 @@
-import { Application } from 'spectron';
-import { join } from 'path';
+/* eslint-disable @typescript-eslint/await-thenable,@typescript-eslint/no-unsafe-call */
+import { app } from './init';
 
 describe('stubbed integration tests', () => {
-  const app = new Application({
-    path: 'node_modules/.bin/electron',
-    args: [
-      // this points to the project root to find the package.json
-      // the `main` entry is then used
-      join(__dirname, '../..'),
-      // this seems to be required to run in headless mode
-      // have raised #36 to investigate
-      '--no-sandbox',
-    ],
-    requireName: 'electronRequire',
-    env: {
-      // enables certain features such as nodeIntegration to allow spectron to
-      // hook into the running electron process
-      INTEGRATION: true,
-    },
-  });
-
   beforeEach(async () => {
     if (app.isRunning()) {
       await app.restart();
@@ -36,9 +18,28 @@ describe('stubbed integration tests', () => {
     }
   });
 
-  it('opens an app with a window', async () => {
+  it('opens an app with a visible window', async () => {
     const title = await app.client.getTitle();
+
     expect(title).toBe('Pancake');
+    expect(await app.browserWindow.isVisible()).toBe(true);
+    expect(await app.browserWindow.isClosable()).toBe(true);
+    // @ts-expect-error this is in the types - not sure what happened
+    expect(await app.browserWindow.isDevToolsOpened()).toBe(false);
+  });
+
+  it('logs the start up', async () => {
+    const logs = await app.client.getMainProcessLogs();
+    const log = logs.find((l) => l.includes('Logger initialised')) ?? '';
+    const [, payload] = log.split('initialised');
+    expect(JSON.parse(payload)).toStrictEqual(
+      expect.objectContaining({
+        env: 'production',
+        integration: true,
+        file: 'info',
+        console: 'info',
+      })
+    );
   });
 
   it('bridge event from client is logged by electron', async () => {
