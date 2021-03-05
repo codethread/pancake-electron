@@ -25,7 +25,7 @@ export function createWindow(logger: ILogger): BrowserWindow {
         contextIsolation: true,
       };
 
-  logger.info(secureEnvs);
+  logger.debug(secureEnvs);
 
   const mainWindow = new BrowserWindow({
     width: 1100,
@@ -43,7 +43,7 @@ export function createWindow(logger: ILogger): BrowserWindow {
 
     mainWindow
       .loadURL('http://localhost:4000')
-      .catch((err) => logger.error(err));
+      .catch(logger.errorWithContext('loading window from dev server'));
   } else {
     mainWindow
       .loadURL(
@@ -53,7 +53,7 @@ export function createWindow(logger: ILogger): BrowserWindow {
           slashes: true,
         })
       )
-      .catch((err) => logger.error(err));
+      .catch(logger.errorWithContext('loading window from file'));
   }
 
   mainWindow.webContents.on('did-finish-load', () => {

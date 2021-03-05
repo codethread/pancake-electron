@@ -3,8 +3,8 @@ import _installExtension, {
 } from 'electron-devtools-installer';
 import { mocked } from 'ts-jest/utils';
 import * as _constants from '@shared/constants';
-import { setUpDevtools } from '.';
 import { logger } from '../logger';
+import { setUpDevtools } from './devTools';
 
 jest.mock('../logger');
 jest.mock('@shared/constants');

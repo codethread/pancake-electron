@@ -1,10 +1,10 @@
 import { Nodenv } from './asserts';
 
-const nodenv = process.env.NODE_ENV;
+const originalNodenv = process.env.NODE_ENV;
 
 describe('constants', () => {
   afterAll(() => {
-    process.env.NODE_ENV = nodenv;
+    process.env.NODE_ENV = originalNodenv;
   });
 
   describe('nodenv', () => {

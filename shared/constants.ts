@@ -5,7 +5,7 @@ interface URLS {
   readonly main: string;
 }
 
-const nodenv = sanitiseNodenv(process.env.NODE_ENV ?? 'production');
+const nodenv = sanitiseNodenv(process.env.NODE_ENV);
 
 /**
  * Development mode
@@ -37,7 +37,8 @@ const urls: URLS = {
 
 export { nodenv, isDev, isProd, isTest, isIntegration, urls };
 
-function sanitiseNodenv(env: string): Nodenv {
+function sanitiseNodenv(env?: string): Nodenv {
+  if (!env) throw new Error('NODE_ENV is not defined');
   const sanitisedNodenv = env.trim().toLocaleLowerCase();
   assertValidNodenv(sanitisedNodenv);
   return sanitisedNodenv;

@@ -1,7 +1,7 @@
 import { mocked } from 'ts-jest/utils';
 import { autoUpdater as _autoUpdater } from 'electron-updater';
-import { checkForUpdates } from '.';
 import { logger as _logger } from '../logger';
+import { checkForUpdates } from './updater';
 
 const autoUpdater = mocked(_autoUpdater, true);
 

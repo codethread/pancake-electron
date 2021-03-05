@@ -30,6 +30,8 @@ describe('createLogger', () => {
     { nodenv: 'development', fileLevel: false, consoleLevel: 'silly' },
     { nodenv: 'test', fileLevel: false, consoleLevel: 'silly' },
     { nodenv: 'production', fileLevel: 'info', consoleLevel: false },
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+    { nodenv: 'impossible' as Nodenv, fileLevel: 'info', consoleLevel: 'info' },
   ];
 
   logLevels.forEach(({ nodenv, consoleLevel, fileLevel }) => {
@@ -80,14 +82,7 @@ describe('createLogger', () => {
   it('logs the initialised state', () => {
     expect(log.info).toHaveBeenCalledWith(
       expect.any(String),
-      /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-      expect.objectContaining({
-        integration: false,
-        env: 'test',
-        file: false,
-        console: 'silly',
-      })
-      /* eslint-enable @typescript-eslint/no-unsafe-assignment */
+      expect.any(String)
     );
   });
 });
