@@ -1,4 +1,5 @@
 import { ElectronLog } from 'electron-log';
+import { isIntegration, nodenv } from '@shared/constants';
 import { errorHandler } from './errorHandler';
 
 // eslint-disable-next-line import/no-mutable-exports
@@ -28,6 +29,13 @@ export function createLogger(log: ElectronLog): ILogger {
   log.catchErrors({
     showDialog: false,
     onError: loggerErrorHandler,
+  });
+
+  logger.info('Logger initialised', {
+    env: nodenv,
+    integration: isIntegration,
+    file: log.transports.file.level,
+    console: log.transports.console.level,
   });
 
   return logger;

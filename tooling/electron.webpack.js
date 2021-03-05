@@ -52,6 +52,7 @@ const main = {
 
 const preload = {
   ...common,
+  devtool: false,
   entry: path.resolve(rootPath, 'electron', 'preload.ts'),
   output: {
     path: path.resolve(rootPath, 'build'),

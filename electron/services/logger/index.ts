@@ -1,2 +1,2 @@
+export type { ILogger } from './createLogger';
 export { logger } from './logger';
-export { ILogger } from './createLogger';

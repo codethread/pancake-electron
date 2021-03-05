@@ -29,4 +29,18 @@ describe('createLogger', () => {
       onError: loggerErrorHandler,
     });
   });
+
+  it('logs the initialised state', () => {
+    expect(log.info).toHaveBeenCalledWith(
+      expect.any(String),
+      /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+      expect.objectContaining({
+        integration: false,
+        env: 'test',
+        file: expect.any(String),
+        console: expect.any(String),
+      })
+      /* eslint-enable @typescript-eslint/no-unsafe-assignment */
+    );
+  });
 });

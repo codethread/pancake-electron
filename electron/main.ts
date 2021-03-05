@@ -1,65 +1,38 @@
-import { app, BrowserWindow } from 'electron';
-import * as path from 'path';
-import * as url from 'url';
-import installExtension, {
-  REACT_DEVELOPER_TOOLS,
-} from 'electron-devtools-installer';
-import log from 'electron-log';
-import { checkForUpdates } from './AppUpdater';
+import { app, BrowserWindow, ipcMain } from 'electron';
+import { logger, checkForUpdates, setUpDevtools } from './services';
+import { createWindow } from './createWindow';
 
 let mainWindow: BrowserWindow | null;
 
-function createWindow(): void {
-  mainWindow = new BrowserWindow({
-    width: 1100,
-    height: 700,
-    backgroundColor: '#191622',
-    webPreferences: {
-      nodeIntegration: false,
-      contextIsolation: true,
-      enableRemoteModule: false,
-      preload: path.join(__dirname, './preload.js'),
-    },
-  });
+checkForUpdates(logger);
 
-  if (process.env.NODE_ENV === 'development') {
-    mainWindow.loadURL('http://localhost:4000').catch((err) => log.error(err));
-  } else {
-    mainWindow
-      .loadURL(
-        url.format({
-          pathname: path.join(__dirname, 'renderer/index.html'),
-          protocol: 'file:',
-          slashes: true,
-        })
-      )
-      .catch((err) => log.error(err));
-  }
+// ipcMain.on('unexpectedError', (_, err) => {
+//   if (err instanceof Error) {
+//     const { message, stack } = err;
+//     logger.error('unexpectedError', { message, stack });
+//   } else {
+//     logger.error('unexpectedError', JSON.stringify(err));
+//   }
+// });
 
-  mainWindow.webContents.on('did-finish-load', () => {
-    mainWindow?.setTitle('Pancake');
-  });
-
-  mainWindow.on('closed', () => {
-    mainWindow = null;
-  });
-}
+ipcMain.on('bridge', (_, msg) => {
+  logger.info('bridge message', msg);
+});
 
 app
   .on('ready', () => {
-    checkForUpdates();
-    createWindow();
+    mainWindow = createWindow(logger);
+
+    mainWindow.on('closed', closeWindow);
   })
   .whenReady()
-  .then(() => {
-    if (process.env.NODE_ENV === 'development') {
-      installExtension(REACT_DEVELOPER_TOOLS)
-        .then((name) => log.info(`Added Extension:  ${name}`))
-        .catch((err) => log.info('An error occurred: ', err));
-    }
-
-    log.info('app loaded');
-  })
-  .catch((err) => log.error(err));
+  .then(setUpDevtools(logger))
+  .catch(logger.errorWithContext('main window creation'));
 
 app.allowRendererProcessReuse = true;
+
+function closeWindow(): void {
+  mainWindow = null;
+  logger.info('User closed window');
+  app.quit();
+}

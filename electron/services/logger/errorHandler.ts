@@ -1,6 +1,6 @@
 import { app, dialog } from 'electron';
 import { CatchErrorsOptions } from 'electron-log';
-import { ILogger } from '.';
+import type { ILogger } from './createLogger';
 
 export const errorHandler: (
   logger: ILogger

@@ -12,7 +12,7 @@ const Greetings: React.FC = () => (
     <Text>
       An Electron boilerplate including TypeScript, React, Jest and ESLint.
     </Text>
-    <Button>I am the button</Button>
+    <Button>Test Button</Button>
   </Container>
 );
 

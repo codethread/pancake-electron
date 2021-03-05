@@ -1,7 +1,7 @@
-import { IEApi } from '@shared/eApi';
+import { IBridge } from '@shared/IBridge';
 
 declare global {
   interface Window {
-    eApi: IEApi;
+    bridge: IBridge;
   }
 }

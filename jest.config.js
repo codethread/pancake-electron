@@ -1,5 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 /** @type {import('ts-jest/dist/types').InitialOptionsTsJest} */
+
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 
 const client = './client/**/*.ts?(x)';
 const server = './electron/**/*.ts';
@@ -28,4 +29,7 @@ module.exports = {
 
   setupFilesAfterEnv: ['./tooling/setupTests.ts'],
   modulePathIgnorePatterns: ['e2e'],
+  moduleNameMapper: {
+    '^@shared(.*)$': '<rootDir>/shared/$1',
+  },
 };

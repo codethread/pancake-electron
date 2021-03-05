@@ -4,7 +4,7 @@ const Button: React.FC = ({ children }) => (
   <button
     type="button"
     onClick={() => {
-      window.eApi.openGithub();
+      window.bridge.test();
     }}
   >
     {children}
