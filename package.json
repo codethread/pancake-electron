@@ -16,7 +16,6 @@
     "dev:electron": "wait-on http-get://localhost:4000/ && cross-env NODE_ENV=development webpack --config tooling/electron.webpack.js --mode development && yarn start",
     "dev:react": "cross-env NODE_ENV=development webpack-dev-server --config tooling/react.webpack.js --mode development",
     "checks": "npm-run-all build --parallel lint test e2e",
-    "prerelease": "yarn checks",
     "release": "electron-builder --mac --linux",
     "postinstall": "electron-builder install-app-deps"
   },
@@ -86,7 +85,8 @@
       "hardenedRuntime": true
     },
     "directories": {
-      "output": "dist"
+      "output": "dist",
+      "buildResources": "publishingTools"
     },
     "files": [
       "package.json",
