@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { contextBridge, ipcRenderer } from 'electron';
 import type { IBridge } from '@shared/IBridge';
 import { isIntegration } from '@shared/constants';

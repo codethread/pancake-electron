@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { BrowserWindow } from 'electron';
 import path from 'path';
 import url from 'url';
