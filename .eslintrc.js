@@ -22,6 +22,7 @@ module.exports = {
   },
   plugins: ['prettier', '@typescript-eslint'],
   rules: {
+    'no-console': 'error',
     'react/prop-types': 'off',
     'import/prefer-default-export': 'off',
     '@typescript-eslint/no-unused-vars': 'off',
@@ -108,7 +109,7 @@ module.exports = {
       },
     },
     {
-      files: ['*.spec.{js,ts}', '*.spec.tsx'],
+      files: ['*.spec.{js,ts}', '*.spec.tsx', 'e2e/**'],
       plugins: ['testing-library', 'jest-dom'],
       extends: ['plugin:testing-library/react', 'plugin:jest-dom/recommended'],
       env: {
@@ -117,6 +118,7 @@ module.exports = {
       },
       rules: {
         // '@typescript-eslint/no-unsafe-call': 'off',
+        '@typescript-eslint/unbound-method': 'off',
         'import/no-extraneous-dependencies': [
           'error',
           {
