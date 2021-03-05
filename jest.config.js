@@ -5,7 +5,7 @@
 const client = './client/**/*.ts?(x)';
 const server = './electron/**/*.ts';
 const shared = './shared/**/*.ts';
-const all = [client, server, shared];
+const all = [server, shared];
 const escapeHatch = [
   '!**/index.ts?(x)',
   '!./electron/main.ts',

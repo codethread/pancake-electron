@@ -11,7 +11,7 @@ describe('errorHandler', () => {
   error.stack = 'error stack for poop';
   const defaultVersions = { os: 'mac', electron: '1', app: 'pancake' };
   let versions: typeof defaultVersions | undefined;
-  const submitIssue = jest.fn();
+  let submitIssue: jest.Mock | undefined = jest.fn();
 
   beforeEach(() => {
     const appliedErrorHandler = errorHandler(logger);
@@ -43,7 +43,7 @@ describe('errorHandler', () => {
     });
   });
 
-  describe('when the user choses to quit', () => {
+  describe('when the user chooses to quit', () => {
     beforeAll(() => {
       dialog.showMessageBox.mockResolvedValue({
         response: 2,
@@ -61,7 +61,7 @@ describe('errorHandler', () => {
     });
   });
 
-  describe('when the user choses to report the error', () => {
+  describe('when the user chooses to report the error', () => {
     beforeAll(() => {
       dialog.showMessageBox.mockResolvedValue({
         response: 1,
@@ -90,7 +90,7 @@ describe('errorHandler', () => {
           }
           /* eslint-enable @typescript-eslint/no-unsafe-assignment */
         );
-        expect(submitIssue.mock.calls[0]).toMatchSnapshot();
+        expect(submitIssue?.mock.calls[0]).toMatchSnapshot();
       });
     });
 
@@ -110,7 +110,7 @@ describe('errorHandler', () => {
           }
           /* eslint-enable @typescript-eslint/no-unsafe-assignment */
         );
-        expect(submitIssue.mock.calls[0]).toMatchSnapshot();
+        expect(submitIssue?.mock.calls[0]).toMatchSnapshot();
       });
     });
 
@@ -131,7 +131,22 @@ describe('errorHandler', () => {
           }
           /* eslint-enable @typescript-eslint/no-unsafe-assignment */
         );
-        expect(submitIssue.mock.calls[0]).toMatchSnapshot();
+        expect(submitIssue?.mock.calls[0]).toMatchSnapshot();
+      });
+    });
+
+    describe('when no submit function is provided', () => {
+      beforeAll(() => {
+        submitIssue = undefined;
+      });
+
+      it('does nothing', () => {
+        expect(app.quit).not.toHaveBeenCalled();
+        expect(logger.errorWithContext('')).not.toHaveBeenCalled();
+      });
+
+      afterAll(() => {
+        submitIssue = jest.fn();
       });
     });
 

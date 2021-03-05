@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`errorHandler when the user choses to report the error and all details are provided by electron opens a github issue 1`] = `
+exports[`errorHandler when the user chooses to report the error and all details are provided by electron opens a github issue 1`] = `
 Array [
   "https://github.com/AHDesigns/pancake-electron/issues/new",
   Object {
@@ -22,7 +22,7 @@ pancake",
 ]
 `;
 
-exports[`errorHandler when the user choses to report the error and no details are provided by electron opens a github issue 1`] = `
+exports[`errorHandler when the user chooses to report the error and no details are provided by electron opens a github issue 1`] = `
 Array [
   "https://github.com/AHDesigns/pancake-electron/issues/new",
   Object {
@@ -44,7 +44,7 @@ no app version",
 ]
 `;
 
-exports[`errorHandler when the user choses to report the error and no stack trace is provided opens a github issue 1`] = `
+exports[`errorHandler when the user chooses to report the error and no stack trace is provided opens a github issue 1`] = `
 Array [
   "https://github.com/AHDesigns/pancake-electron/issues/new",
   Object {
