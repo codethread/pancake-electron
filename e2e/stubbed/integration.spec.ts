@@ -45,5 +45,9 @@ describe('stubbed integration tests', () => {
   it('bridge event from client is logged by electron', async () => {
     const button = await app.client.$('button=Test Button');
     expect(await button.getText()).toBe('Test Button');
+    await button.click();
+    const logs = await app.client.getMainProcessLogs();
+    const [clickLog] = logs.reverse();
+    expect(clickLog).toContain('test message');
   });
 });
