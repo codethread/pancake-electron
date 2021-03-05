@@ -29,7 +29,7 @@ const isTest = nodenv === 'test';
  * are disabled to allow Spectron to interact with the electron process during
  * e2e tests.
  */
-const isIntegration = isProd && process.env.E2E_TESTS === 'true';
+const isIntegration = isProd && process.env.INTEGRATION === 'true';
 
 const urls: URLS = {
   main: 'http://localhost:4000',

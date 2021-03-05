@@ -16,7 +16,7 @@ describe('stubbed integration tests', () => {
     env: {
       // enables certain features such as nodeIntegration to allow spectron to
       // hook into the running electron process
-      E2E_TESTS: true,
+      INTEGRATION: true,
     },
   });
 

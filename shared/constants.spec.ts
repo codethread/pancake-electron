@@ -1,6 +1,12 @@
 import { Nodenv } from './asserts';
 
+const nodenv = process.env.NODE_ENV;
+
 describe('constants', () => {
+  afterAll(() => {
+    process.env.NODE_ENV = nodenv;
+  });
+
   describe('nodenv', () => {
     const validNodenvs = [
       'test',

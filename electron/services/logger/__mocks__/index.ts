@@ -1,5 +1,7 @@
 import type { ILogger } from '..';
 
+jest.mock('electron-log');
+
 const { logger } = jest.genMockFromModule<{ logger: ILogger }>('..');
 
 const spy = jest.fn();
