@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { app, BrowserWindow, ipcMain } from 'electron';
 import { logger, checkForUpdates, setUpDevtools } from './services';
 import { createWindow } from './createWindow';
