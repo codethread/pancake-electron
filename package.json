@@ -1,6 +1,6 @@
 {
   "name": "pancake",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "A Pull Request Dashboard on your Desktop",
   "main": "./build/main.js",
   "scripts": {
