@@ -1,22 +1,24 @@
 {
-  "name": "Pancake",
-  "version": "0.0.1",
+  "name": "pancake",
+  "version": "0.0.0",
   "description": "A Pull Request Dashboard on your Desktop",
   "main": "./build/main.js",
   "scripts": {
-    "dev": "run-p dev:*",
+    "clean": "git clean -dfx && yarn install",
+    "dev": "FORCE_COLOR=1 run-p --print-label dev:*",
     "lint": "eslint .",
     "test": "jest",
     "e2e": "jest e2e --modulePathIgnorePatterns='' --no-coverage",
     "docker-e2e": "docker build . -f Dockerfile -t pancake",
-    "build": "run-p build:*",
+    "build": "FORCE_COLOR=1 run-p --print-label build:*",
     "start": "electron .",
     "build:electron": "webpack --config tooling/electron.webpack.js --mode production",
     "build:react": "webpack --config tooling/react.webpack.js --mode production",
     "dev:electron": "wait-on http-get://localhost:4000/ && cross-env NODE_ENV=development webpack --config tooling/electron.webpack.js --mode development && yarn start",
     "dev:react": "cross-env NODE_ENV=development webpack-dev-server --config tooling/react.webpack.js --mode development",
-    "checks": "npm-run-all build --parallel lint test e2e",
-    "release": "electron-builder --mac --linux",
+    "checks": "FORCE_COLOR=1 npm-run-all --print-label --parallel lint test --serial build e2e",
+    "prerelease": "npm-run-all clean checks",
+    "release": "electron-builder --mac",
     "postinstall": "electron-builder install-app-deps"
   },
   "keywords": [],
@@ -40,7 +42,7 @@
     "babel-loader": "8.2.2",
     "cross-env": "7.0.3",
     "electron": "11.3.0",
-    "electron-builder": "22.10.5",
+    "electron-builder": "22.7.0",
     "electron-builder-notarize": "1.2.0",
     "eslint": "^7.2.0",
     "eslint-config-airbnb-typescript": "12.3.1",
@@ -67,13 +69,14 @@
   "dependencies": {
     "electron-devtools-installer": "3.1.1",
     "electron-log": "4.3.2",
-    "electron-updater": "4.3.8",
+    "electron-updater": "4.3.5",
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "styled-components": "^5.1.1"
   },
   "build": {
     "appId": "com.electron.pancake",
+    "productName": "Pancake",
     "afterSign": "electron-builder-notarize",
     "linux": {
       "category": "Utility"

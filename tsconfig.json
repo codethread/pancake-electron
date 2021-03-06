@@ -11,6 +11,7 @@
     "allowUnusedLabels": false,
     "skipLibCheck": true,
     "strictPropertyInitialization": true,
+    "resolveJsonModule": true,
     "baseUrl": ".",
     "types": ["jest"],
     "paths": {

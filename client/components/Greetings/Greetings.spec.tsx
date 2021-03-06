@@ -1,15 +1,14 @@
 import React from 'react';
 import { render } from '@testing-library/react';
+import pj from 'package.json';
 
 import Greetings from './index';
 
 test('Greetings should renders', () => {
   const { getByText, getByAltText } = render(<Greetings />);
 
-  expect(
-    getByText(
-      'An Electron boilerplate including TypeScript, React, Jest and ESLint.'
-    )
-  ).toBeTruthy();
+  const greeting = getByText('Welcome to version', { exact: false });
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+  expect(greeting).toHaveTextContent(new RegExp(pj.version));
   expect(getByAltText('ReactJS logo')).toBeTruthy();
 });
