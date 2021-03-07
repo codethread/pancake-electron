@@ -13,4 +13,4 @@ jobs:
           image: backstopjs/backstopjs:5.1.0
           options: -it --mount type=bind,source=${{ github.workspace }},target=/src
           run: |
-            test "--config=tooling/backstop/json" "--moby"
+            test "--config=tooling/backstop/json"
