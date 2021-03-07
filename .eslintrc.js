@@ -138,6 +138,7 @@ module.exports = {
       files: ['*.js'],
       rules: {
         '@typescript-eslint/no-unsafe-assignment': 'off',
+        '@typescript-eslint/explicit-function-return-type': 'off',
       },
     },
   ],

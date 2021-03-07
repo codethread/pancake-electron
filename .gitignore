@@ -2,6 +2,6 @@ node_modules
 dist
 build
 coverage
-backstop_data/html_report/
-backstop_data/ci_report
-backstop_data/bitmaps_test
+tooling/backstop_data/html_report/
+tooling/backstop_data/ci_report
+tooling/backstop_data/bitmaps_test
