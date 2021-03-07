@@ -2,7 +2,7 @@ import React from 'react';
 import pj from 'package.json';
 
 import { Container, Image, Text } from './styles';
-import Button from '../Button';
+import { Button } from '../Button';
 
 const Greetings: React.FC = () => (
   <Container>

@@ -27,23 +27,24 @@ Run the electron app and client locally
 yarn dev
 ```
 
+Run storybook for developing UI components
+```bash
+yarn storybook
+```
+
 Some other useful commands
 
 | command | description |
 | --- | --- |
-| `yarn lint` | use eslint to check source code for the repo for errors |
+| `yarn clean` | [**aggresive**] remove all files not recognised by git, then install all dependencies |
+| `yarn lint` | use eslint to check source code in the repo for errors |
 | `yarn test` | use [ts-jest](https://kulshekhar.github.io/ts-jest/) to run the project's unit tests. This will also compile via [typescript](https://www.typescriptlang.org/) to check for type errors as part of ts-jest|
 | `yarn e2e` | run spectron tests located in the e2e folder. **run `yarn build` before running**|
+| `yarn build` | build the project for production and e2e testing (no the same as the release script) |
+| `yarn checks` | runs the full checklist of lint, test, build and e2e ||
 | `yarn docker-e2e` | runs the e2e tests via a Dockerfile in a headless state - this is how CI will run these tests |
+| `yarn release` | see [releasing wiki](https://github.com/AHDesigns/pancake-electron/wiki/Releasing) for information
 
-
-
-## Packaging
-To generate a project package run `package`
-
-```bash
-yarn release
-```
 
 ## License
 

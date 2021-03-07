@@ -28,7 +28,8 @@
     "client",
     "electron",
     "shared",
-    "e2e"
+    "e2e",
+    ".storybook"
   ],
   "exclude": ["node_modules"]
 }
