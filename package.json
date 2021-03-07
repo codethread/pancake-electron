@@ -19,7 +19,9 @@
     "checks": "FORCE_COLOR=1 npm-run-all --print-label --parallel lint test --serial build e2e",
     "prerelease": "npm-run-all clean checks",
     "release": "electron-builder --mac",
-    "postinstall": "electron-builder install-app-deps"
+    "postinstall": "electron-builder install-app-deps",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "keywords": [],
   "author": "Adam Hall <adamhalldesigns@gmail.com>",
@@ -30,6 +32,10 @@
     "@babel/preset-env": "7.13.9",
     "@babel/preset-react": "7.12.13",
     "@babel/preset-typescript": "7.13.0",
+    "@storybook/addon-actions": "^6.1.21",
+    "@storybook/addon-essentials": "^6.1.21",
+    "@storybook/addon-links": "^6.1.21",
+    "@storybook/react": "^6.1.21",
     "@testing-library/jest-dom": "5.11.9",
     "@testing-library/react": "11.2.5",
     "@types/electron-devtools-installer": "2.2.0",

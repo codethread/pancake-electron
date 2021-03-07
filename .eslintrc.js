@@ -128,6 +128,13 @@ module.exports = {
       },
     },
     {
+      files: ['*.stories.@(js|jsx|ts|tsx)'],
+      rules: {
+        '@typescript-eslint/consistent-type-assertions': 'off',
+        'import/no-extraneous-dependencies': 'off',
+      },
+    },
+    {
       files: ['*.js'],
       rules: {
         '@typescript-eslint/no-unsafe-assignment': 'off',
