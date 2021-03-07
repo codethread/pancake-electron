@@ -70,6 +70,9 @@ module.exports = {
     'build',
     'publishingTools',
     'coverage',
+    'tooling/backstop_data/html_report/',
+    'tooling/backstop_data/ci_report',
+    'tooling/backstop_data/bitmaps_test',
   ],
   overrides: [
     {
@@ -138,6 +141,7 @@ module.exports = {
       files: ['*.js'],
       rules: {
         '@typescript-eslint/no-unsafe-assignment': 'off',
+        '@typescript-eslint/explicit-function-return-type': 'off',
       },
     },
   ],
