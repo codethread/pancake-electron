@@ -14,7 +14,7 @@ export default {
 } as Meta;
 
 const Template: Story<IButton> = ({ onClick }) => (
-  <Button onClick={onClick}>Button text</Button>
+  <Button onClick={onClick}>Button Text</Button>
 );
 
 export const Primary = Template.bind({});
