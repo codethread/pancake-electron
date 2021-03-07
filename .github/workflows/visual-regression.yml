@@ -11,6 +11,6 @@ jobs:
       - uses: addnab/docker-run-action@v2
         with:
           image: backstopjs/backstopjs:5.1.0
-          options: --mount type=bind,source=${{ github.workspace }},target=/src -it
+          options: -it --mount type=bind,source=${{ github.workspace }},target=/src
           run: |
             test "--config=tooling/backstop/json" "--moby"
