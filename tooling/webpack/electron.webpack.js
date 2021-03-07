@@ -1,7 +1,7 @@
 const path = require('path');
 const { shared } = require('./alias');
 
-const rootPath = path.resolve(__dirname, '..');
+const rootPath = process.cwd();
 
 const common = {
   devtool: 'source-map',

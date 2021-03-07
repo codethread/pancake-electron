@@ -1,7 +1,5 @@
 /** @type {import('ts-jest/dist/types').InitialOptionsTsJest} */
 
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-
 const client = './client/**/*.ts?(x)';
 const server = './electron/**/*.ts';
 const shared = './shared/**/*.ts';
@@ -12,9 +10,9 @@ const escapeHatch = [
   '!./electron/preload.ts',
   '!./electron/createWindow.ts',
 ];
+
 module.exports = {
   preset: 'ts-jest',
-
   collectCoverage: true,
   collectCoverageFrom: all.concat(escapeHatch),
   coverageThreshold: all.reduce(
@@ -29,9 +27,7 @@ module.exports = {
     }),
     {}
   ),
-
   clearMocks: true,
-
   setupFilesAfterEnv: ['./tooling/setupTests.ts'],
   modulePathIgnorePatterns: ['e2e'],
   moduleNameMapper: {

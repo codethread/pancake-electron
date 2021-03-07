@@ -2,7 +2,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { shared } = require('./alias');
 
-const rootPath = path.resolve(__dirname, '..');
+const rootPath = process.cwd();
 
 module.exports = (_, options = {}) => ({
   resolve: {

@@ -19,7 +19,7 @@
         "shared/*"
       ]
     },
-    "jsx": "react",
+    "jsx": "react"
   },
   "include": [
     "./.eslintrc.js",
@@ -28,8 +28,7 @@
     "client",
     "electron",
     "shared",
-    "e2e",
-    ".storybook"
+    "e2e"
   ],
   "exclude": ["node_modules"]
 }
