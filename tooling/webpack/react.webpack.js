@@ -2,7 +2,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { shared } = require('./alias');
 
-const rootPath = path.resolve(__dirname, '..');
+const rootPath = process.cwd();
 
 module.exports = (_, options = {}) => ({
   resolve: {
@@ -34,7 +34,10 @@ module.exports = (_, options = {}) => ({
               '@babel/preset-typescript',
             ],
             // needed else webpack 4 itself chokes on the syntax
-            plugins: ['@babel/plugin-proposal-optional-chaining'],
+            plugins: [
+              '@babel/plugin-proposal-optional-chaining',
+              '@babel/plugin-proposal-nullish-coalescing-operator',
+            ],
           },
         },
       },

@@ -19,7 +19,7 @@
         "shared/*"
       ]
     },
-    "jsx": "react",
+    "jsx": "react"
   },
   "include": [
     "./.eslintrc.js",

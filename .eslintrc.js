@@ -109,7 +109,7 @@ module.exports = {
       },
     },
     {
-      files: ['*.spec.{js,ts}', '*.spec.tsx', 'e2e/**'],
+      files: ['*.spec.@(js|jsx|ts|tsx)', 'e2e/**'],
       plugins: ['testing-library', 'jest-dom'],
       extends: ['plugin:testing-library/react', 'plugin:jest-dom/recommended'],
       env: {
@@ -125,6 +125,13 @@ module.exports = {
             devDependencies: true,
           },
         ],
+      },
+    },
+    {
+      files: ['*.stories.@(js|jsx|ts|tsx)'],
+      rules: {
+        '@typescript-eslint/consistent-type-assertions': 'off',
+        'import/no-extraneous-dependencies': 'off',
       },
     },
     {
