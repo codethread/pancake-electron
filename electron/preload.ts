@@ -6,9 +6,6 @@ import { isIntegration } from '@shared/constants';
 const bridge: IBridge = {
   test: () => {
     ipcRenderer.send('bridge', 'test message');
-    // shell.openExternal('https://github.com/settings/tokens/new').catch((e) => {
-    //   ipcRenderer.send('unexpectedError', e);
-    // });
   },
 };
 
