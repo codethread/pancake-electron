@@ -7,3 +7,7 @@ export const app = {
 export const dialog = {
   showMessageBox: jest.fn().mockResolvedValue(null),
 };
+
+export const ipcMain = {
+  on: jest.fn(),
+};
