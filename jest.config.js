@@ -13,7 +13,7 @@ const escapeHatch = [
 
 module.exports = {
   preset: 'ts-jest',
-  collectCoverage: true,
+  collectCoverage: false,
   collectCoverageFrom: all.concat(escapeHatch),
   coverageThreshold: all.reduce(
     (coverage, name) => ({
@@ -32,6 +32,7 @@ module.exports = {
   modulePathIgnorePatterns: ['e2e'],
   moduleNameMapper: {
     '^@shared(.*)$': '<rootDir>/shared/$1',
+    '^@client(.*)$': '<rootDir>/client/$1',
     'package.json': '<rootDir>/package.json',
   },
 };

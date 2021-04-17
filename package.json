@@ -9,7 +9,7 @@
     "machine": "xstate-codegen client/**/**machine.ts",
     "storybook": "start-storybook -p 6006 -s public -c tooling/storybook",
     "lint": "eslint .",
-    "test": "jest",
+    "test": "jest --coverage",
     "visual": "backstop test --config=\"tooling/backstop.config.js\" --docker",
     "e2e": "jest e2e --modulePathIgnorePatterns='' --no-coverage",
     "docker-e2e": "docker build . -f Dockerfile -t pancake",

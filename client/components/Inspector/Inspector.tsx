@@ -1,17 +1,18 @@
-import React, { FC, useLayoutEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { inspect } from '@xstate/inspect';
-import { isDev } from '@shared/constants';
+import { isDev, isTest } from '@shared/constants';
 
-export const Inspector: FC = () => {
+export const InspectorComponent: FC = () => {
   const [inspecting, setInspecting] = useState(false);
-  useLayoutEffect(() => {
+
+  // useLayoutEffect?
+  useEffect(() => {
     const i = inspect();
-    setInspecting(true);
 
     return () => {
       i?.disconnect();
     };
-  }, []);
+  });
 
   return (
     <>
@@ -21,9 +22,10 @@ export const Inspector: FC = () => {
           setInspecting((x) => !x);
         }}
       >
-        {inspecting ? 'hide' : 'show'}
+        {inspecting ? 'hide inspector' : 'show inspector'}
       </button>
       <iframe
+        id="xstate"
         title="xstate"
         data-xstate
         style={{
@@ -36,4 +38,7 @@ export const Inspector: FC = () => {
   );
 };
 
-export const showInspector = typeof window !== 'undefined' && isDev;
+const NullComp: FC = () => (isTest ? <span data-testid="NULL_COMP" /> : null);
+
+export const Inspector: FC = () =>
+  isDev ? <InspectorComponent /> : <NullComp />;
