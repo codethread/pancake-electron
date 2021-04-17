@@ -1,20 +1,11 @@
+import TestIds from '@shared/testids';
 import React, { FC } from 'react';
-// import { assign } from 'xstate';
-// import { isDev } from '@shared/constants';
-import {
-  Inspector,
-  // assertEventType,
-  // loginMachine,
-  // useMachine,
-} from './components';
-import { GlobalStyle } from './styles/GlobalStyle';
+import Greetings from '@client/components/Greetings';
 
-export const Home: FC = () => (
-  <>
-    <Inspector />
-    <GlobalStyle />
-    {/* <LoginIn /> */}
-  </>
+export const LoginJourney: FC = () => (
+  <div data-testid={TestIds.LOGIN_JOURNEY}>
+    <Greetings />
+  </div>
 );
 
 // const LoginIn: FC = () => {

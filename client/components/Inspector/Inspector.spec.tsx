@@ -3,6 +3,7 @@ import { inspect as _inspect } from '@xstate/inspect';
 import { render, screen } from '@testing-library/react';
 import { mocked } from 'ts-jest/utils';
 import * as _constants from '@shared/constants';
+import TestIds from '@shared/testids';
 import { Inspector } from './Inspector';
 
 jest.mock('@shared/constants');
@@ -48,12 +49,13 @@ describe('Inspector', () => {
     it('does not render the inspector', () => {
       const iframe = screen.queryByTitle('xstate');
       expect(iframe).not.toBeInTheDocument();
-      expect(screen.getByTestId('NULL_COMP')).toBeInTheDocument();
+      expect(screen.getByTestId(TestIds.NULL_COMP)).toBeInTheDocument();
     });
   });
 
   describe('in development', () => {
     const disconnectSpy = jest.fn();
+    let inspectorReturnsInstance = true;
 
     beforeAll(() => {
       constants.isDev = true;
@@ -63,11 +65,13 @@ describe('Inspector', () => {
           throw new Error('no xstate iframe');
         }
 
-        return {
-          disconnect: disconnectSpy,
-          send: () => {},
-          subscribe: () => ({ unsubscribe: () => {} }),
-        };
+        return inspectorReturnsInstance
+          ? undefined
+          : {
+              disconnect: disconnectSpy,
+              send: () => {},
+              subscribe: () => ({ unsubscribe: () => {} }),
+            };
       });
     });
 
@@ -80,21 +84,39 @@ describe('Inspector', () => {
       expect(inspect).toHaveBeenCalledTimes(1);
     });
 
-    it('disconnects from the inspector when no longer rendered', () => {
-      screen.getByTestId('test-button').click();
-      expect(inspect).toHaveBeenCalledTimes(1);
-      expect(disconnectSpy).toHaveBeenCalledTimes(1);
-    });
-
     it('can have visibility toggled, which is initially hidden', () => {
       const iframe = screen.getByTitle('xstate');
       expect(iframe).toBeInTheDocument();
 
-      screen.getByRole('button', { name: /.*show.*/ }).click();
+      screen.getByRole('button', { name: /.*show.*/i }).click();
       expect(iframe).toHaveStyle({ display: 'block' });
 
-      screen.getByRole('button', { name: /.*hide.*/ }).click();
+      screen.getByRole('button', { name: /.*hide.*/i }).click();
       expect(iframe).toHaveStyle({ display: 'none' });
+    });
+
+    describe('when the inspector does not return an instance', () => {
+      beforeAll(() => {
+        inspectorReturnsInstance = false;
+      });
+
+      it('disconnects from the inspector when no longer rendered', () => {
+        screen.getByTestId('test-button').click();
+        expect(inspect).toHaveBeenCalledTimes(1);
+        expect(disconnectSpy).toHaveBeenCalledTimes(1);
+      });
+    });
+
+    describe('when the inspector does return an instance', () => {
+      beforeAll(() => {
+        inspectorReturnsInstance = true;
+      });
+
+      it('does not try to disconnect', () => {
+        screen.getByTestId('test-button').click();
+        expect(inspect).toHaveBeenCalledTimes(1);
+        expect(disconnectSpy).toHaveBeenCalledTimes(0);
+      });
     });
   });
 });

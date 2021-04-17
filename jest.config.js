@@ -3,12 +3,14 @@
 const client = './client/**/*.ts?(x)';
 const server = './electron/**/*.ts';
 const shared = './shared/**/*.ts';
-const all = [server, shared];
+const all = [server, shared, client];
 const escapeHatch = [
   '!**/index.ts?(x)',
   '!./electron/main.ts',
   '!./electron/preload.ts',
   '!./electron/createWindow.ts',
+  '!./client/App.tsx',
+  '!./client/components/Button/**',
 ];
 
 module.exports = {
@@ -16,6 +18,7 @@ module.exports = {
   collectCoverage: false,
   collectCoverageFrom: all.concat(escapeHatch),
   coverageThreshold: all.reduce(
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     (coverage, name) => ({
       ...coverage,
       [name]: {

@@ -1,1 +1,1 @@
-export { showInspector, Inspector } from './Inspector';
+export { Inspector } from './Inspector';

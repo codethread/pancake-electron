@@ -1,6 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import { inspect } from '@xstate/inspect';
-import { isDev, isTest } from '@shared/constants';
+import { isDev } from '@shared/constants';
+import { NullComp } from '@client/components';
 
 export const InspectorComponent: FC = () => {
   const [inspecting, setInspecting] = useState(false);
@@ -37,8 +38,6 @@ export const InspectorComponent: FC = () => {
     </>
   );
 };
-
-const NullComp: FC = () => (isTest ? <span data-testid="NULL_COMP" /> : null);
 
 export const Inspector: FC = () =>
   isDev ? <InspectorComponent /> : <NullComp />;
