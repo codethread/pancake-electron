@@ -1,5 +1,6 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { createMachine } from '@xstate/compiled';
+import { MachineOptions } from './utils';
 
 export interface User {
   name: string;
@@ -19,7 +20,9 @@ export type PageEvent =
   | { type: 'TRY_AGAIN' }
   | { type: 'VALIDATE'; token: string };
 
-export const loginMachine = createMachine<PageContext, PageEvent, 'uniq'>({
+export type LoginOptions = MachineOptions<PageContext, PageEvent, 'login'>;
+
+export const loginMachine = createMachine<PageContext, PageEvent, 'login'>({
   initial: 'authorize',
   context: {},
   states: {

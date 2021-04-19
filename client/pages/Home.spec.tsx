@@ -21,11 +21,15 @@ describe('Home', () => {
   it('renders the Inspector in dev mode', () => {
     renderW({ isDev: true });
     expect(screen.getByTitle('xstate')).toBeInTheDocument();
-    // TODO check an id in the iframe
   });
 
   it('renders the login journey', () => {
     renderW();
     expect(screen.getByTestId(TestIds.GREETING_MESSAGE)).toBeInTheDocument();
+  });
+
+  it('renders the navigation', () => {
+    renderW();
+    expect(screen.getByTestId(TestIds.NAVIGATION)).toBeInTheDocument();
   });
 });

@@ -1,4 +1,8 @@
 import { EventObject } from 'xstate';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { RegisteredMachine } from '@xstate/compiled';
+// eslint-disable-next-line import/no-extraneous-dependencies
+export { useMachine } from '@xstate/compiled/react';
 
 /**
  *
@@ -15,6 +19,8 @@ export function assertEventType<
   }
 }
 
-export interface Service<A> {
-  data: Promise<A>;
-}
+export type MachineOptions<
+  TContext,
+  TEvent extends EventObject,
+  Id extends string
+> = Extract<RegisteredMachine<TContext, TEvent>, { id: Id }>['_options'];

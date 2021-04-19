@@ -1,13 +1,14 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useLayoutEffect, useState } from 'react';
 import { inspect } from '@xstate/inspect';
 import { isDev } from '@shared/constants';
 import { NullComp } from '@client/components';
 
 export const InspectorComponent: FC = () => {
-  const [inspecting, setInspecting] = useState(false);
+  const [inspecting, setInspecting] = useState(true);
 
-  // useLayoutEffect?
-  useEffect(() => {
+  // required to run before render cycle so as that listeners are present when machine is mounted
+  // mocking this in the test seems overkill, so just don't change this
+  useLayoutEffect(() => {
     const i = inspect();
 
     return () => {
