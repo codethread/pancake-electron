@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { createMachine } from '@xstate/compiled';
 import { assign } from 'xstate';
-import { assertEventType, MachineOptions } from './utils';
+import { assertEventType, MachineOptions, Matches } from './utils';
 
 export interface User {
   name: string;
@@ -22,6 +22,7 @@ export type PageEvent =
   | { type: 'VALIDATE'; token: string };
 
 export type LoginOptions = MachineOptions<PageContext, PageEvent, 'login'>;
+export type LoginMatches = Matches<PageContext, PageEvent, 'login'>;
 
 export const loginOptions: LoginOptions = {
   services: {

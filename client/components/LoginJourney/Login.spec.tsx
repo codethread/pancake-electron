@@ -88,14 +88,21 @@ describe('LoginJourney', () => {
       });
 
       describe('when the user is a valid user', () => {
-        it('logs the user in', async () => {
-          renderW();
-          screen.getByRole('button', { name: /log in/i }).click();
+        describe('when the user has config', () => {
+          it('lets the user launch their dashboard and sign out', async () => {
+            renderW();
+            screen.getByRole('button', { name: /log in/i }).click();
 
-          expect(await screen.findByText(/hello bob/i)).toBeInTheDocument();
+            expect(await screen.findByText(/hello bob/i)).toBeInTheDocument();
+
+            screen.getByRole('button', { name: /launch/i }).click();
+            expect(await screen.findByText(/dashboard/i)).toBeInTheDocument();
+
+            screen.getByRole('button', { name: /log out/i }).click();
+            expect(screen.queryByText(/hello bob/i)).not.toBeInTheDocument();
+            expect(screen.queryByText(/dashboard/i)).not.toBeInTheDocument();
+          });
         });
-
-        // TODO compare has config to no config
       });
     });
   });

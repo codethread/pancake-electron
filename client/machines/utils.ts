@@ -24,3 +24,9 @@ export type MachineOptions<
   TEvent extends EventObject,
   Id extends string
 > = Extract<RegisteredMachine<TContext, TEvent>, { id: Id }>['_options'];
+
+export type Matches<
+  TContext,
+  TEvent extends EventObject,
+  Id extends string
+> = Extract<RegisteredMachine<TContext, TEvent>, { id: Id }>['_matches'];

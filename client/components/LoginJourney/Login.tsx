@@ -1,12 +1,21 @@
 import React, { FC } from 'react';
 import TestIds from '@shared/testids';
 import Greetings from '@client/components/Greetings';
-import { loginMachine, useMachine, LoginOptions } from '@client/machines';
+import {
+  loginMachine,
+  useMachine,
+  LoginOptions,
+  LoginMatches,
+} from '@client/machines';
 import { isDev } from '@shared/constants';
 
 interface ILoginJourney {
   machineOptions: LoginOptions;
 }
+const launchableStates: LoginMatches[] = [
+  'loggedOut.validateToken.hasConfig',
+  'loggedOut.validateToken.noConfig',
+];
 
 export const LoginJourney: FC<ILoginJourney> = ({ machineOptions }) => {
   const [state, send] = useMachine(loginMachine, {
@@ -17,11 +26,15 @@ export const LoginJourney: FC<ILoginJourney> = ({ machineOptions }) => {
   return (
     <div data-testid={TestIds.LOGIN_JOURNEY}>
       <Greetings />
-      {state.matches('loggedIn') ? (
-        <button type="button" onClick={() => send({ type: 'LOGOUT' })}>
-          log out
-        </button>
-      ) : (
+      {state.matches('loggedIn') && (
+        <>
+          <button type="button" onClick={() => send({ type: 'LOGOUT' })}>
+            log out
+          </button>
+          <div>dashboard</div>
+        </>
+      )}
+      {state.matches('loggedOut') && (
         <>
           <button
             type="button"
@@ -43,8 +56,13 @@ export const LoginJourney: FC<ILoginJourney> = ({ machineOptions }) => {
           </button>
         </>
       )}
-      {state.matches('loggedOut.validateToken.hasConfig') && (
-        <div>hello {state.context.user?.name}</div>
+      {launchableStates.some(state.matches) && (
+        <>
+          <div>hello {state.context.user?.name}</div>
+          <button type="button" onClick={() => send({ type: 'LAUNCH' })}>
+            launch
+          </button>
+        </>
       )}
       {state.matches('loggedOut.validateToken.profileFailure') && (
         <>
