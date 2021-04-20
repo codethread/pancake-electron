@@ -17,15 +17,23 @@ export const LoginJourney: FC<ILoginJourney> = ({ machineOptions }) => {
   return (
     <div data-testid={TestIds.LOGIN_JOURNEY}>
       <Greetings />
-      <button
-        type="button"
-        onClick={() => send({ type: 'VALIDATE', token: 'hello' })}
-      >
-        log in
-      </button>
-      <button type="button" onClick={() => send({ type: 'TOGGLE_HELP' })}>
-        toggle help
-      </button>
+      {state.matches('loggedIn') ? (
+        <button type="button" onClick={() => send({ type: 'LOGOUT' })}>
+          log out
+        </button>
+      ) : (
+        <>
+          <button
+            type="button"
+            onClick={() => send({ type: 'VALIDATE', token: 'hello' })}
+          >
+            log in
+          </button>
+          <button type="button" onClick={() => send({ type: 'TOGGLE_HELP' })}>
+            toggle help
+          </button>
+        </>
+      )}
       {state.matches('loggedOut.createToken.help') && <div>Help Section</div>}
       {state.matches('loggedOut.validateToken.invalidToken') && (
         <>
@@ -44,9 +52,9 @@ export const LoginJourney: FC<ILoginJourney> = ({ machineOptions }) => {
           <button type="button" onClick={() => send({ type: 'TRY_AGAIN' })}>
             try again
           </button>
-          {/* <button type="button" onClick={() => send({ type: 'BACK' })}> */}
-          {/*  back */}
-          {/* </button> */}
+          <button type="button" onClick={() => send({ type: 'BACK' })}>
+            back
+          </button>
         </>
       )}
     </div>

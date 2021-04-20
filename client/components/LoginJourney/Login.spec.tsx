@@ -1,38 +1,17 @@
 import React from 'react';
 import merge from 'lodash.merge';
-import { assign } from 'xstate';
 import { render, screen } from '@testing-library/react';
 
 import TestIds from '@shared/testids';
 import { DeepPartial } from '@shared/tsHelpers';
-import { assertEventType, LoginOptions } from '@client/machines';
+import { LoginOptions, loginOptions } from '@client/machines';
 import { LoginJourney } from './Login';
 
 describe('LoginJourney', () => {
-  const options: LoginOptions = {
-    services: {
-      validateToken: async () => Promise.resolve(),
-      loadConfig: async () => Promise.resolve(),
-      fetchUser: async () => Promise.resolve({ user: { name: 'bob' } }),
-    },
-    actions: {
-      storeUser: assign({
-        user: (_, e) => {
-          assertEventType(e, 'done.invoke.fetchUser');
-          return e.data.user;
-        },
-      }),
-      clearUser: assign({
-        user: (_) => null,
-      }),
-    },
-    guards: {
-      isAuth: (context) => Boolean(context.user),
-    },
-  };
-
   function renderW(overrides?: DeepPartial<LoginOptions>): void {
-    render(<LoginJourney machineOptions={merge({}, options, overrides)} />);
+    render(
+      <LoginJourney machineOptions={merge({}, loginOptions, overrides)} />
+    );
   }
 
   it('displays the greeting', () => {
@@ -95,11 +74,26 @@ describe('LoginJourney', () => {
           expect(await screen.findByText(/hello bob/i)).toBeInTheDocument();
         });
 
-        it('allows the user to return to the submit token step', () => {});
+        it('allows the user to return to the submit token step', async () => {
+          const fetchSpy = jest.fn().mockRejectedValue(new Error());
+
+          renderW({ services: { fetchUser: fetchSpy } });
+
+          screen.getByRole('button', { name: /log in/i }).click();
+          expect(await screen.findByText('no user')).toBeInTheDocument();
+
+          screen.getByRole('button', { name: /back/i }).click();
+          expect(screen.queryByText('no user')).not.toBeInTheDocument();
+        });
       });
 
       describe('when the user is a valid user', () => {
-        it('logs the user in', () => {});
+        it('logs the user in', async () => {
+          renderW();
+          screen.getByRole('button', { name: /log in/i }).click();
+
+          expect(await screen.findByText(/hello bob/i)).toBeInTheDocument();
+        });
 
         // TODO compare has config to no config
       });

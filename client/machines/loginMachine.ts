@@ -1,6 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { createMachine } from '@xstate/compiled';
-import { MachineOptions } from './utils';
+import { assign } from 'xstate';
+import { assertEventType, MachineOptions } from './utils';
 
 export interface User {
   name: string;
@@ -21,6 +22,28 @@ export type PageEvent =
   | { type: 'VALIDATE'; token: string };
 
 export type LoginOptions = MachineOptions<PageContext, PageEvent, 'login'>;
+
+export const loginOptions: LoginOptions = {
+  services: {
+    validateToken: async () => Promise.resolve(),
+    loadConfig: async () => Promise.resolve(),
+    fetchUser: async () => Promise.resolve({ user: { name: 'bob' } }),
+  },
+  actions: {
+    storeUser: assign({
+      user: (_, e) => {
+        assertEventType(e, 'done.invoke.fetchUser');
+        return e.data.user;
+      },
+    }),
+    clearUser: assign({
+      user: (_) => null,
+    }),
+  },
+  guards: {
+    isAuth: (context) => Boolean(context.user),
+  },
+};
 
 export const loginMachine = createMachine<PageContext, PageEvent, 'login'>({
   initial: 'authorize',
