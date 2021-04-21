@@ -1,0 +1,178 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`theme creates gradients 1`] = `"linear-gradient(91.71deg, rgba(236, 82, 119, 0.75) 2.59%, rgba(136, 126, 201, 0.75) 43.05%, rgba(48, 252, 204, 0.75) 95.08%)"`;
+
+exports[`theme creates gradients 2`] = `"linear-gradient(91.71deg, rgba(236, 82, 119, 0.75) 2.59%, rgba(136, 126, 201, 0.75) 43.05%, rgba(48, 252, 204, 0.75) 95.08%)"`;
+
+exports[`theme creates gradients 3`] = `
+"linear-gradient(
+        70deg,
+        #000000 15.78%,
+        #243431 83.92%
+      )"
+`;
+
+exports[`theme creates gradients 4`] = `
+"linear-gradient(
+        66deg,
+        #000000 15.78%,
+        #243431 83.92%
+      )"
+`;
+
+exports[`theme creates gradients 5`] = `
+"linear-gradient(
+        180deg,
+        rgb(66, 161, 139) 0%,
+        rgb(239, 214, 148) 100%
+      )"
+`;
+
+exports[`theme creates gradients 6`] = `
+"linear-gradient(
+        66deg,
+        rgb(66, 161, 139) 0%,
+        rgb(239, 214, 148) 100%
+      )"
+`;
+
+exports[`theme creates gradients 7`] = `
+"linear-gradient(
+        150deg,
+        #FFFBFB 1.59%,
+        rgba(163, 204, 207, 0) 43.54%,
+        rgba(163, 204, 207, 0) 51.79%,
+        #429BA0 98.7%
+      )"
+`;
+
+exports[`theme creates gradients 8`] = `
+"linear-gradient(
+        66deg,
+        #FFFBFB 1.59%,
+        rgba(163, 204, 207, 0) 43.54%,
+        rgba(163, 204, 207, 0) 51.79%,
+        #429BA0 98.7%
+      )"
+`;
+
+exports[`theme creates gradients 9`] = `
+"linear-gradient(
+        180deg,
+        #FC77EE 0%,
+        #FC7777 100%
+      )"
+`;
+
+exports[`theme creates gradients 10`] = `
+"linear-gradient(
+        66deg,
+        #FC77EE 0%,
+        #FC7777 100%
+      )"
+`;
+
+exports[`theme looks about right 1`] = `
+Object {
+  "breakpoints": Object {
+    "lg": 1280,
+    "md": 960,
+    "sm": 600,
+    "xs": 0,
+  },
+  "palette": Object {
+    "accent": "#379DCD",
+    "background": "#222831",
+    "disabled": "#AAAAAA",
+    "glass": "rgba(39, 72, 80, 0.48)",
+    "gradients": Object {
+      "background": [Function],
+      "glassEdge": [Function],
+      "masthead": [Function],
+      "rainbow": [Function],
+      "secondary": "linear-gradient(91.71deg, rgba(15, 131, 104, 0.75) 2.59%, rgba(75, 58, 180, 0.75) 95.08%)",
+      "vibrant": [Function],
+    },
+    "green": "#6FCF97",
+    "grey": "#A2B8B4",
+    "red": "#EB5757",
+    "white": "#E1E1E1",
+  },
+  "shadows": Array [
+    "none",
+  ],
+  "shape": Object {
+    "borderRadius": 20,
+  },
+  "spacing": Object {
+    "Xlarge": 64,
+    "large": 32,
+    "normal": 16,
+    "small": 8,
+    "xSmall": 4,
+  },
+  "theme": "dark",
+  "typography": Object {
+    "body": Object {
+      "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+      "fontSize": "1rem",
+      "fontWeight": 400,
+      "lineHeight": 1.5,
+      "marginBottom": 2,
+    },
+    "button": Object {
+      "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+      "fontSize": "1rem",
+      "fontWeight": 400,
+      "lineHeight": 1.5,
+      "marginBottom": 2,
+    },
+    "caption": Object {
+      "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+      "fontSize": "0.75rem",
+      "fontWeight": 400,
+      "lineHeight": 1.5,
+      "marginBottom": 2,
+    },
+    "h1": Object {
+      "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+      "fontSize": "3.75rem",
+      "fontWeight": 300,
+      "lineHeight": 1.5,
+      "marginBottom": 2,
+    },
+    "h2": Object {
+      "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+      "fontSize": "1.6rem",
+      "fontWeight": 700,
+      "lineHeight": 1.5,
+      "marginBottom": 1.2,
+    },
+    "h3": Object {
+      "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+      "fontSize": "1rem",
+      "fontWeight": 400,
+      "lineHeight": 1.5,
+      "marginBottom": 1.8,
+    },
+    "h4": Object {
+      "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+      "fontSize": "1rem",
+      "fontWeight": 400,
+      "lineHeight": 1.5,
+      "marginBottom": 2,
+    },
+    "h5": Object {
+      "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+      "fontSize": "1.1em",
+      "fontWeight": 700,
+      "lineHeight": 1.5,
+      "marginBottom": 2,
+    },
+  },
+  "zIndex": Object {
+    "background": -1,
+    "header": 1,
+  },
+}
+`;

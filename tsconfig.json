@@ -1,5 +1,12 @@
 {
   "compilerOptions": {
+    // setup
+    "lib": ["dom", "DOM.Iterable","es2019", "es2020.promise", "es2020.bigint", "es2020.string"],
+    "module": "commonjs",
+    "target": "es2019",
+    "jsx": "react",
+
+    // rules
     "strict": true ,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
@@ -12,14 +19,18 @@
     "skipLibCheck": true,
     "strictPropertyInitialization": true,
     "resolveJsonModule": true,
+
+    // links
     "baseUrl": ".",
     "types": ["jest"],
     "paths": {
       "@shared/*": [
         "shared/*"
+      ],
+      "@client/*": [
+        "client/*"
       ]
     },
-    "jsx": "react"
   },
   "include": [
     "./.eslintrc.js",

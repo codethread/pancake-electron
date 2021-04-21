@@ -1,18 +1,9 @@
-import React, { FC } from 'react';
+import React from 'react';
 import { render } from 'react-dom';
-import { GlobalStyle } from './styles/GlobalStyle';
-
-import Greetings from './components/Greetings';
+import { Home } from './pages/Home';
 
 const mainElement = document.createElement('div');
 mainElement.setAttribute('id', 'root');
 document.body.appendChild(mainElement);
 
-const App: FC = () => (
-  <>
-    <GlobalStyle />
-    <Greetings />
-  </>
-);
-
-render(<App />, mainElement);
+render(<Home />, mainElement);

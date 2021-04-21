@@ -1,6 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const { shared } = require('./alias');
+const { shared, client } = require('./alias');
 
 const rootPath = process.cwd();
 
@@ -10,6 +10,7 @@ module.exports = (_, options = {}) => ({
     mainFields: ['main', 'module', 'browser'],
     alias: {
       ...shared,
+      ...client,
     },
   },
   entry: path.resolve(rootPath, 'client', 'App.tsx'),
