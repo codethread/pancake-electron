@@ -14,7 +14,7 @@ export const InspectorComponent: FC = () => {
     return () => {
       i?.disconnect();
     };
-  });
+  }, []);
 
   return (
     <>

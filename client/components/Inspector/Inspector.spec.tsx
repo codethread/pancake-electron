@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 import { inspect as _inspect } from '@xstate/inspect';
-import { render, screen } from '@testing-library/react';
+import { render, RenderResult, screen } from '@testing-library/react';
 import { mocked } from 'ts-jest/utils';
 import * as _constants from '@shared/constants';
 import TestIds from '@shared/testids';
@@ -32,9 +32,7 @@ describe('Inspector', () => {
     );
   };
 
-  beforeEach(() => {
-    render(<InspectorWrapper />);
-  });
+  const renderW = (): RenderResult => render(<InspectorWrapper />);
 
   beforeAll(() => {
     constants.isTest = true;
@@ -47,6 +45,7 @@ describe('Inspector', () => {
     });
 
     it('does not render the inspector', () => {
+      renderW();
       const iframe = screen.queryByTitle('xstate');
       expect(iframe).not.toBeInTheDocument();
       expect(screen.getByTestId(TestIds.NULL_COMP)).toBeInTheDocument();
@@ -75,15 +74,21 @@ describe('Inspector', () => {
     });
 
     it('creates an iframe with the data-xstate property for xstate visualiser to hook into', () => {
+      renderW();
       const iframe = screen.getByTitle('xstate');
       expect(iframe).toHaveAttribute('data-xstate');
     });
 
-    it('calls the inspector after the iframe has mounted', () => {
+    it('calls the inspector after the iframe has mounted and only connects once', () => {
+      const { rerender } = renderW();
+      expect(inspect).toHaveBeenCalledTimes(1);
+
+      rerender(<InspectorWrapper />);
       expect(inspect).toHaveBeenCalledTimes(1);
     });
 
     it('can have visibility toggled, which is initially visible', () => {
+      renderW();
       const iframe = screen.getByTitle('xstate');
       expect(iframe).toBeInTheDocument();
 
@@ -100,6 +105,7 @@ describe('Inspector', () => {
       });
 
       it('disconnects from the inspector when no longer rendered', () => {
+        renderW();
         screen.getByTestId('test-button').click();
         expect(inspect).toHaveBeenCalledTimes(1);
         expect(disconnectSpy).toHaveBeenCalledTimes(1);
@@ -112,6 +118,7 @@ describe('Inspector', () => {
       });
 
       it('does not try to disconnect', () => {
+        renderW();
         screen.getByTestId('test-button').click();
         expect(inspect).toHaveBeenCalledTimes(1);
         expect(disconnectSpy).toHaveBeenCalledTimes(0);
