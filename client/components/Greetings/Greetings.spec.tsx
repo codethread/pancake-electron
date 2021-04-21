@@ -1,10 +1,10 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 
 import Greetings from './index';
 
 test('Greetings should renders', () => {
-  const { getByAltText } = render(<Greetings />);
+  render(<Greetings />);
 
-  expect(getByAltText('ReactJS logo')).toBeTruthy();
+  expect(screen.getByAltText('ReactJS logo')).toBeTruthy();
 });
