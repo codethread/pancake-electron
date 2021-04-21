@@ -59,6 +59,7 @@ describe('Inspector', () => {
     beforeAll(() => {
       constants.isDev = true;
       inspect.mockImplementation(() => {
+        // eslint-disable-next-line testing-library/no-node-access
         const el = document.getElementById('xstate');
         if (!el) {
           throw new Error('no xstate iframe');

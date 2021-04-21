@@ -51,17 +51,15 @@ export const loginMachine = createMachine<PageContext, PageEvent, 'login'>({
   context: {},
   states: {
     authorize: {
-      on: {
-        '': [
-          {
-            cond: 'isAuth',
-            target: 'loggedIn',
-          },
-          {
-            target: 'loggedOut',
-          },
-        ],
-      },
+      always: [
+        {
+          cond: 'isAuth',
+          target: 'loggedIn',
+        },
+        {
+          target: 'loggedOut',
+        },
+      ],
     },
     loggedIn: {
       id: 'loggedIn',
