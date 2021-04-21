@@ -21,6 +21,7 @@ COPY electron ./electron
 COPY shared ./shared
 COPY tooling ./tooling
 
+RUN yarn machine --once
 RUN yarn build
 
 # not needed for the build so can help with caching
