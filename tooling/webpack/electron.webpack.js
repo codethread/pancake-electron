@@ -53,7 +53,7 @@ const main = {
 const preload = {
   ...common,
   devtool: false,
-  entry: path.resolve(rootPath, 'electron', 'preload.ts'),
+  entry: path.resolve(rootPath, 'electron/windows/main/preload.ts'),
   output: {
     path: path.resolve(rootPath, 'build'),
     filename: 'preload.js',

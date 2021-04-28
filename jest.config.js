@@ -6,12 +6,11 @@ const shared = './shared/**/*.ts';
 const all = [server, shared, client];
 const escapeHatch = [
   '!**/index.ts?(x)',
-  '!./electron/main.ts',
+  '!./electron/main.ts', // cba
   '!./client/Main.tsx',
   '!./client/testHelpers/**',
-  '!./electron/preload.ts',
-  '!./electron/createWindow.ts',
-  '!./client/components/Button/**',
+  '!./electron/windows/main/createWindow.ts', // TODO
+  '!./client/components/Button/**', // going soon
 ];
 
 module.exports = {

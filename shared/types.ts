@@ -8,8 +8,6 @@ export interface ILogger extends ElectronLog {
 
 export type IClientLogger = Pick<ILogger, 'error' | 'info'>;
 
-export interface IBridge {
-  logger: IClientLogger;
-
-  test(): void;
+export interface IBridge extends IClientLogger {
+  test(...msg: string[]): void;
 }

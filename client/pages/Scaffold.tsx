@@ -11,6 +11,8 @@ export const Scaffold: FC<IScaffold> = ({ children, bridge }) => (
   <>
     <Inspector />
     <GlobalStyle />
-    <ErrorBoundary logger={bridge.logger}>{children}</ErrorBoundary>
+    <ErrorBoundary logger={{ error: bridge.error, info: bridge.info }}>
+      {children}
+    </ErrorBoundary>
   </>
 );

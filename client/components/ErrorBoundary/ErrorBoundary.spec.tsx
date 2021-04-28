@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import React from 'react';
 import { ForceError } from '@test/ForceError';
-import { bridge } from '@test/bridge';
+import { logger } from '@test/bridge';
 import { mocked } from 'ts-jest/utils';
 import { ErrorBoundary } from './ErrorBoundary';
 
@@ -11,7 +11,7 @@ interface IRender {
 
 function renderW({ shouldError = false }: IRender = {}): void {
   render(
-    <ErrorBoundary logger={bridge.logger}>
+    <ErrorBoundary logger={logger}>
       {shouldError && <ForceError errorMessage="error message" />}
       <div>hello</div>
     </ErrorBoundary>
@@ -30,7 +30,7 @@ describe('Error Boundary', () => {
 
     it('logs nothing', () => {
       renderW();
-      expect(bridge.logger.error).not.toHaveBeenCalled();
+      expect(logger.error).not.toHaveBeenCalled();
     });
   });
 
@@ -52,7 +52,7 @@ describe('Error Boundary', () => {
 
     it('logs the error', () => {
       renderW({ shouldError: true });
-      expect(bridge.logger.error).toHaveBeenCalledWith(
+      expect(logger.error).toHaveBeenCalledWith(
         expect.stringContaining('error message')
       );
     });

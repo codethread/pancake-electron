@@ -1,10 +1,12 @@
 // TODO import and mock this from somewhere?
-import { IBridge } from '@shared/types';
+import { IBridge, IClientLogger } from '@shared/types';
+
+export const logger: IClientLogger = {
+  error: jest.fn(),
+  info: jest.fn(),
+};
 
 export const bridge: IBridge = {
-  logger: {
-    error: jest.fn(),
-    info: jest.fn(),
-  },
+  ...logger,
   test: jest.fn(),
 };

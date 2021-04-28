@@ -3,7 +3,7 @@ import { BrowserWindow } from 'electron';
 import path from 'path';
 import url from 'url';
 import { isDev, isIntegration } from '@shared/constants';
-import { ILogger } from './services';
+import { ILogger } from '@shared/types';
 
 export function createWindow(logger: ILogger): BrowserWindow {
   /**

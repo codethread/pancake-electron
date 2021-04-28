@@ -6,7 +6,7 @@ import {
   setUpDevtools,
   setupIpcHandlers,
 } from './services';
-import { createWindow } from './createWindow';
+import { createWindow } from './windows/main/createWindow';
 
 let mainWindow: BrowserWindow | null;
 
