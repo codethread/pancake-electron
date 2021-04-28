@@ -9,6 +9,7 @@ const shared = {
 
 const client = {
   '@client': path.resolve(root, 'client'),
+  '@test': path.resolve(root, 'client/testsHelpers'),
 };
 
 module.exports = {

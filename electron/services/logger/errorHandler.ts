@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { app, dialog } from 'electron';
 import { CatchErrorsOptions } from 'electron-log';
-import type { ILogger } from './createLogger';
+import { ILogger } from '@shared/types';
 
 export const errorHandler: (
   logger: ILogger

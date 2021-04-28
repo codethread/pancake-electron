@@ -6,4 +6,4 @@ const mainElement = document.createElement('div');
 mainElement.setAttribute('id', 'root');
 document.body.appendChild(mainElement);
 
-render(<Home />, mainElement);
+render(<Home bridge={window.bridge} />, mainElement);

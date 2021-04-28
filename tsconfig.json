@@ -29,6 +29,9 @@
       ],
       "@client/*": [
         "client/*"
+      ],
+      "@test/*": [
+        "client/testHelpers/*"
       ]
     },
   },

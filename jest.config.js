@@ -7,9 +7,10 @@ const all = [server, shared, client];
 const escapeHatch = [
   '!**/index.ts?(x)',
   '!./electron/main.ts',
+  '!./client/Main.tsx',
+  '!./client/testHelpers/**',
   '!./electron/preload.ts',
   '!./electron/createWindow.ts',
-  '!./client/App.tsx',
   '!./client/components/Button/**',
 ];
 
@@ -36,6 +37,7 @@ module.exports = {
   moduleNameMapper: {
     '^@shared(.*)$': '<rootDir>/shared/$1',
     '^@client(.*)$': '<rootDir>/client/$1',
+    '^@test/(.*)$': '<rootDir>/client/testHelpers/$1',
     'package.json': '<rootDir>/package.json',
   },
 };
