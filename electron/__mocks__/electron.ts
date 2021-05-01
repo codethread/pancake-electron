@@ -11,3 +11,11 @@ export const dialog = {
 export const ipcMain = {
   on: jest.fn(),
 };
+
+export const ipcRenderer = {
+  send: jest.fn(),
+};
+
+export const contextBridge = {
+  exposeInMainWorld: jest.fn(),
+};

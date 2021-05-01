@@ -1,12 +1,12 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, ipcMain } from 'electron';
 import {
   logger,
   checkForUpdates,
   setUpDevtools,
   setupIpcHandlers,
 } from './services';
-import { createWindow } from './createWindow';
+import { createWindow } from './windows/main/createWindow';
 
 let mainWindow: BrowserWindow | null;
 
@@ -19,7 +19,7 @@ app
     mainWindow.on('closed', closeWindow);
   })
   .whenReady()
-  .then(setupIpcHandlers)
+  .then(() => setupIpcHandlers(ipcMain))
   .then(setUpDevtools(logger))
   .catch(logger.errorWithContext('main window creation'));
 

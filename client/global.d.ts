@@ -1,4 +1,4 @@
-import { IBridge } from '@shared/IBridge';
+import { IBridge } from '@shared/types';
 
 declare global {
   interface Window {

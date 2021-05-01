@@ -6,11 +6,11 @@ const shared = './shared/**/*.ts';
 const all = [server, shared, client];
 const escapeHatch = [
   '!**/index.ts?(x)',
-  '!./electron/main.ts',
-  '!./electron/preload.ts',
-  '!./electron/createWindow.ts',
-  '!./client/App.tsx',
-  '!./client/components/Button/**',
+  '!./electron/main.ts', // cba
+  '!./client/Main.tsx',
+  '!./client/testHelpers/**',
+  '!./electron/windows/main/createWindow.ts', // TODO
+  '!./client/components/Button/**', // going soon
 ];
 
 module.exports = {
@@ -36,6 +36,7 @@ module.exports = {
   moduleNameMapper: {
     '^@shared(.*)$': '<rootDir>/shared/$1',
     '^@client(.*)$': '<rootDir>/client/$1',
+    '^@test/(.*)$': '<rootDir>/testHelpers/$1',
     'package.json': '<rootDir>/package.json',
   },
 };

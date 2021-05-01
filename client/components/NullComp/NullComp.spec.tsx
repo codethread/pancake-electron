@@ -1,9 +1,9 @@
-import * as _constants from '@shared/constants';
 import { mocked } from 'ts-jest/utils';
 import { render, screen } from '@testing-library/react';
-import { NullComp } from '@client/components';
 import React from 'react';
+import * as _constants from '@shared/constants';
 import TestIds from '@shared/testids';
+import { NullComp } from '@client/components';
 
 jest.mock('@shared/constants');
 

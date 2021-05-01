@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 import TestIds from '@shared/testids';
+import { isDev } from '@shared/constants';
 import Greetings from '@client/components/Greetings';
 import {
   loginMachine,
@@ -7,7 +8,6 @@ import {
   LoginOptions,
   LoginMatches,
 } from '@client/machines';
-import { isDev } from '@shared/constants';
 
 interface ILoginJourney {
   machineOptions: LoginOptions;

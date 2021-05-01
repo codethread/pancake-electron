@@ -3,6 +3,7 @@ enum TestIds {
   LOGIN_JOURNEY,
   GREETING_MESSAGE,
   NAVIGATION,
+  ERROR_BOUNDARY_MESSAGE,
 }
 
 export default TestIds;
