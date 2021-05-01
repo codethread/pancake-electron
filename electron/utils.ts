@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 /**
  * Recursively Object.freeze() on objects and functions
  * @see https://github.com/substack/deep-freeze

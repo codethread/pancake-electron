@@ -15,7 +15,7 @@ export const Button: React.FC<IButton> = ({
     onClick={
       onClick ??
       (() => {
-        window.bridge.test();
+        window.bridge.test('test message');
       })
     }
   >

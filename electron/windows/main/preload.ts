@@ -1,8 +1,8 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { contextBridge } from 'electron';
+import { contextBridge, ipcRenderer } from 'electron';
 import { isIntegration } from '@shared/constants';
 import { deepFreeze } from '../../utils';
-import { bridge } from './bridge';
+import { bridgeCreator } from './bridge';
 
 const not = (bool: boolean): boolean => !bool;
 
@@ -20,7 +20,7 @@ if (not(isIntegration)) {
   /**
    * This mimics the behaviour of the context bridge to keep behaviour as prod-like as possible
    */
-  window.bridge = deepFreeze(bridge);
+  window.bridge = deepFreeze(bridgeCreator(ipcRenderer));
 
   // eval('require') here stops webpack trying to work out what's being imported
   // this removes some warnings and prevents `require` becoming webpack's own
@@ -32,5 +32,5 @@ if (not(isIntegration)) {
 }
 
 export function exposeMinimalBridgeApiToClient(): void {
-  contextBridge.exposeInMainWorld('bridge', bridge);
+  contextBridge.exposeInMainWorld('bridge', bridgeCreator(ipcRenderer));
 }

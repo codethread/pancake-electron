@@ -1,12 +1,13 @@
 import { ipcRenderer } from 'electron';
-import { bridge } from './bridge';
+import { IBridge } from '@shared/types';
+import { bridgeCreator } from './bridge';
 
-describe('bridge', () => {
+describe('bridgeCreator', () => {
   const str = 'string';
 
   interface Test {
-    args: any[];
-    method: keyof typeof bridge;
+    args: string[];
+    method: keyof IBridge;
   }
   test.each`
     method     | args
@@ -16,6 +17,7 @@ describe('bridge', () => {
   `(
     'bridge.$method sends args as an array to bridge',
     ({ method, args }: Test) => {
+      const bridge = bridgeCreator(ipcRenderer);
       bridge[method](...args);
       expect(ipcRenderer.send).toHaveBeenCalledWith(method, args);
     }

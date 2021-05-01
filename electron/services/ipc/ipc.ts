@@ -1,24 +1,35 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { ipcMain, IpcMainEvent } from 'electron';
+import { IpcMain, IpcMainEvent } from 'electron';
+import { IBridge } from '@shared/types';
 import { logger } from '../logger';
 
-export function setupIpcHandlers(): void {
-  ipcMain.on('bridge', bridge);
+type Handler<N extends keyof IBridge> = (
+  _: IpcMainEvent,
+  args: Parameters<IBridge[N]>
+) => void;
+
+interface Handlers {
+  test: Handler<'test'>;
+  info: Handler<'info'>;
+  error: Handler<'error'>;
 }
 
-export function bridge(_: IpcMainEvent, msg: string): void {
-  logger.info('ipc message', msg);
+const handlers: Handlers = {
+  test: (_, msg) => {
+    logger.info('IPC', ...msg);
+  },
+  info: (_, msg) => {
+    logger.info('IPC', ...msg);
+  },
+  error: (_, msg) => {
+    logger.error('IPC', ...msg);
+  },
+};
+
+export function setupIpcHandlers(ipcMain: IpcMain): void {
+  const keys: Array<keyof IBridge> = ['test', 'info', 'error'];
+
+  keys.forEach((key) => {
+    ipcMain.on(key, handlers[key]);
+  });
 }
-
-// ipcMain.on('unexpectedError', (_, err) => {
-//   if (err instanceof Error) {
-//     const { message, stack } = err;
-//     logger.error('unexpectedError', { message, stack });
-//   } else {
-//     logger.error('unexpectedError', JSON.stringify(err));
-//   }
-// });
-
-// shell.openExternal('https://github.com/settings/tokens/new').catch((e) => {
-//   ipcRenderer.send('unexpectedError', e);
-// });
