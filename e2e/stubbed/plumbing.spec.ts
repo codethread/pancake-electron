@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/await-thenable,@typescript-eslint/no-unsafe-call */
 import { app } from './init';
 
-describe('stubbed integration tests', () => {
+describe('plumbing tests', () => {
   beforeEach(async () => {
     if (app.isRunning()) {
       await app.restart();
