@@ -39,7 +39,7 @@ describe('errorHandler', () => {
     it('does nothing', () => {
       expect(submitIssue).not.toHaveBeenCalled();
       expect(app.quit).not.toHaveBeenCalled();
-      expect(logger.errorWithContext('')).not.toHaveBeenCalled();
+      expect(logger.error).not.toHaveBeenCalled();
     });
   });
 
@@ -53,7 +53,7 @@ describe('errorHandler', () => {
 
     it('does not log a report', () => {
       expect(submitIssue).not.toHaveBeenCalled();
-      expect(logger.errorWithContext('')).not.toHaveBeenCalled();
+      expect(logger.error).not.toHaveBeenCalled();
     });
 
     it('quits the app', () => {
@@ -70,7 +70,7 @@ describe('errorHandler', () => {
     });
 
     it('does not quit the app', () => {
-      expect(logger.errorWithContext('')).not.toHaveBeenCalled();
+      expect(logger.error).not.toHaveBeenCalled();
       expect(app.quit).not.toHaveBeenCalled();
     });
 
@@ -142,7 +142,7 @@ describe('errorHandler', () => {
 
       it('does nothing', () => {
         expect(app.quit).not.toHaveBeenCalled();
-        expect(logger.errorWithContext('')).not.toHaveBeenCalled();
+        expect(logger.error).not.toHaveBeenCalled();
       });
 
       afterAll(() => {
@@ -161,7 +161,10 @@ describe('errorHandler', () => {
       });
 
       it('logs the exception', () => {
-        expect(logger.errorWithContext('')).toHaveBeenCalledWith(err);
+        expect(logger.error).toHaveBeenCalledWith(
+          expect.any(String),
+          err.message
+        );
       });
     });
   });

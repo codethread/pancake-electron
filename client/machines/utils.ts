@@ -1,6 +1,6 @@
 import { EventObject } from 'xstate';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { RegisteredMachine } from '@xstate/compiled';
+import { RegisteredMachine, InterpreterWithMatches } from '@xstate/compiled';
 // eslint-disable-next-line import/no-extraneous-dependencies
 export { useMachine } from '@xstate/compiled/react';
 
@@ -24,6 +24,13 @@ export type MachineOptions<
   TEvent extends EventObject,
   Id extends string
 > = Extract<RegisteredMachine<TContext, TEvent>, { id: Id }>['_options'];
+
+export type MachineSend<
+  TContext,
+  TEvent extends EventObject,
+  Id extends string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+> = InterpreterWithMatches<TContext, any, TEvent, Id>['send'];
 
 export type Matches<
   TContext,

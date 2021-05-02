@@ -68,9 +68,12 @@ describe('createLogger', () => {
     });
   });
 
-  it('errorWithContext logs errors', () => {
+  it('logs errors when errorWithContext is used', () => {
+    logger.errorWithContext('context')('error string');
+    expect(log.error).toHaveBeenCalledWith('context', 'error string');
+
     logger.errorWithContext('context')(error);
-    expect(log.error).toHaveBeenCalledWith('context', error);
+    expect(log.error).toHaveBeenCalledWith('context', error.message);
   });
 
   it('sets up uncaught error handler', () => {

@@ -107,6 +107,14 @@ module.exports = {
       env: {
         browser: true,
       },
+      rules: {
+        'jsx-a11y/label-has-associated-control': [
+          2,
+          {
+            labelAttributes: ['label'],
+          },
+        ],
+      },
     },
     {
       files: ['shared/**'],

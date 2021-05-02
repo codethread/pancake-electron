@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import TestIds from '@shared/testids';
 import { isDev } from '@shared/constants';
 import Greetings from '@client/components/Greetings';
@@ -7,6 +7,8 @@ import {
   useMachine,
   LoginOptions,
   LoginMatches,
+  LoginSend,
+  LoginState,
 } from '@client/machines';
 
 interface ILoginJourney {
@@ -34,20 +36,57 @@ export const LoginJourney: FC<ILoginJourney> = ({ machineOptions }) => {
           <div>dashboard</div>
         </>
       )}
-      {state.matches('loggedOut') && (
-        <>
-          <button
-            type="button"
-            onClick={() => send({ type: 'VALIDATE', token: 'hello' })}
-          >
-            log in
-          </button>
-          <button type="button" onClick={() => send({ type: 'TOGGLE_HELP' })}>
-            toggle help
-          </button>
-        </>
+      {state.matches('loggedOut') && <Login send={send} state={state} />}
+      {state.matches('loggedOut.inputToken.help.show') && (
+        <div>Help Section</div>
       )}
-      {state.matches('loggedOut.createToken.help') && <div>Help Section</div>}
+    </div>
+  );
+};
+
+interface IProps {
+  send: LoginSend;
+  state: LoginState;
+}
+
+const Login: FC<IProps> = ({ send, state }) => {
+  const [tokenInput, setTokenInput] = useState('');
+  const [visibility, setVisibility] = useState('password');
+  return (
+    <div>
+      <button
+        type="button"
+        disabled={state.matches('loggedOut.inputToken.createToken.pending')}
+        onClick={() => send({ type: 'CREATE_TOKEN' })}
+      >
+        Create token
+      </button>
+      <label>
+        Paste your token here
+        <input
+          type={visibility}
+          value={tokenInput}
+          onChange={(e) => setTokenInput(e.target.value)}
+        />
+      </label>
+      <button
+        type="button"
+        onClick={() => {
+          setVisibility((v) => (v === 'password' ? 'text' : 'password'));
+        }}
+      >
+        toggle token visibility
+      </button>
+      <button
+        type="button"
+        disabled={!tokenInput}
+        onClick={() => send({ type: 'VALIDATE', token: 'token' })}
+      >
+        Submit Token
+      </button>
+      <button type="button" onClick={() => send({ type: 'TOGGLE_HELP' })}>
+        toggle help
+      </button>
       {state.matches('loggedOut.validateToken.invalidToken') && (
         <>
           <div>invalid token</div>

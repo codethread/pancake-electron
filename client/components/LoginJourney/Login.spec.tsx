@@ -1,35 +1,46 @@
 import React from 'react';
 import merge from 'lodash.merge';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
-import TestIds from '@shared/testids';
 import { DeepPartial } from '@shared/tsHelpers';
 import { LoginOptions, loginOptions } from '@client/machines';
+import { bridge } from '@test/bridge';
 import { LoginJourney } from './Login';
 
 describe('LoginJourney', () => {
   function renderW(overrides?: DeepPartial<LoginOptions>): void {
     render(
-      <LoginJourney machineOptions={merge({}, loginOptions, overrides)} />
+      <LoginJourney
+        machineOptions={merge({}, loginOptions(bridge), overrides)}
+      />
     );
   }
 
-  it('displays the greeting', () => {
-    // TODO remove this once an integration is made with the server
+  it('starts the user logged out', () => {
     renderW();
-
-    expect(screen.getByTestId(TestIds.GREETING_MESSAGE)).toBeInTheDocument();
+    expect(screen.queryByText('Bob')).not.toBeInTheDocument();
   });
 
   describe('when the user is not already signed in', () => {
-    it('starts logged out and user can log in', () => {
+    it('renders a link to create a new token from github, which has a delay before it can be clicked again', async () => {
       renderW();
 
-      expect(screen.queryByText('Bob')).not.toBeInTheDocument();
+      const button = screen.getByRole('button', { name: /Create token/i });
+      userEvent.click(button);
+      // difficult to test this as a behaviour
+      expect(bridge.openGithubForTokenSetup).toHaveBeenCalled();
 
-      expect(
-        screen.getByRole('button', { name: /log in/i })
-      ).toBeInTheDocument();
+      expect(button).toBeDisabled();
+      userEvent.click(button);
+      expect(bridge.openGithubForTokenSetup).toHaveBeenCalledTimes(1);
+
+      await waitFor(() => {
+        expect(button).toBeEnabled();
+      });
+
+      userEvent.click(button);
+      expect(bridge.openGithubForTokenSetup).toHaveBeenCalledTimes(2);
     });
 
     it('allows the user to toggle the help section, which starts hidden', () => {
@@ -46,11 +57,38 @@ describe('LoginJourney', () => {
       expect(screen.queryByText(helpSection)).not.toBeInTheDocument();
     });
 
+    it('should allow the user to submit a token once they enter a value', () => {
+      renderW();
+      const button = screen.getByRole('button', { name: /submit token/i });
+      expect(button).toBeDisabled();
+
+      insertTokenChars();
+      expect(button).toBeEnabled();
+    });
+
+    it('should allow toggling of the token display', () => {
+      renderW();
+
+      const input = screen.getByLabelText(/paste your token here/i);
+      expect(input).toHaveAttribute('type', 'password');
+
+      userEvent.click(
+        screen.getByRole('button', { name: /toggle token visibility/i })
+      );
+      expect(input).toHaveAttribute('type', 'text');
+
+      userEvent.click(
+        screen.getByRole('button', { name: /toggle token visibility/i })
+      );
+      expect(input).toHaveAttribute('type', 'password');
+    });
+
     describe('when the user submits an invalid token', () => {
       it('greets the user with an error, and allows them to go back', async () => {
         renderW({ services: { validateToken: async () => Promise.reject() } });
 
-        screen.getByRole('button', { name: /log in/i }).click();
+        insertTokenChars();
+        screen.getByRole('button', { name: /submit token/i }).click();
         expect(await screen.findByText('invalid token')).toBeInTheDocument();
 
         screen.getByRole('button', { name: /back/i }).click();
@@ -65,7 +103,8 @@ describe('LoginJourney', () => {
 
           renderW({ services: { fetchUser: fetchSpy } });
 
-          screen.getByRole('button', { name: /log in/i }).click();
+          insertTokenChars();
+          screen.getByRole('button', { name: /submit token/i }).click();
           expect(await screen.findByText('no user')).toBeInTheDocument();
 
           fetchSpy.mockResolvedValue({ user: { name: 'bob' } });
@@ -79,7 +118,8 @@ describe('LoginJourney', () => {
 
           renderW({ services: { fetchUser: fetchSpy } });
 
-          screen.getByRole('button', { name: /log in/i }).click();
+          insertTokenChars();
+          screen.getByRole('button', { name: /submit token/i }).click();
           expect(await screen.findByText('no user')).toBeInTheDocument();
 
           screen.getByRole('button', { name: /back/i }).click();
@@ -91,7 +131,9 @@ describe('LoginJourney', () => {
         describe('when the user has config', () => {
           it('lets the user launch their dashboard and sign out', async () => {
             renderW();
-            screen.getByRole('button', { name: /log in/i }).click();
+
+            insertTokenChars();
+            screen.getByRole('button', { name: /submit token/i }).click();
 
             expect(await screen.findByText(/hello bob/i)).toBeInTheDocument();
 
@@ -107,3 +149,8 @@ describe('LoginJourney', () => {
     });
   });
 });
+
+function insertTokenChars(): void {
+  const input = screen.getByLabelText(/paste your token here/i);
+  userEvent.type(input, 'some token');
+}

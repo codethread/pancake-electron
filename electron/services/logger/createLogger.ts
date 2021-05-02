@@ -32,8 +32,8 @@ export function createLogger(log: ElectronLog): ILogger {
   const logger: ILogger = {
     ...log,
     errorWithContext(context: string) {
-      return (err: Error) => {
-        log.error(context, err);
+      return (err: Error | string) => {
+        log.error(context, typeof err === 'string' ? err : err.message);
       };
     },
   };

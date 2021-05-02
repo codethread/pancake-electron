@@ -39,7 +39,10 @@ describe('Devtools service', () => {
       });
 
       it('it logs the error', () => {
-        expect(logger.errorWithContext('')).toHaveBeenCalledWith(err);
+        expect(logger.error).toHaveBeenCalledWith(
+          expect.anything(),
+          err.message
+        );
       });
     });
   });

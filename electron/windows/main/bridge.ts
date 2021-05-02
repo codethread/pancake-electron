@@ -4,6 +4,9 @@ import { IBridge } from '@shared/types';
 
 export function bridgeCreator(ipcRenderer: IpcRenderer): IBridge {
   return {
+    openGithubForTokenSetup(): void {
+      ipcRenderer.send('openGithubForTokenSetup', []);
+    },
     test: (...args) => {
       ipcRenderer.send('test', args);
     },

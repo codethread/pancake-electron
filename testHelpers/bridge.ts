@@ -8,5 +8,6 @@ export const logger: IClientLogger = {
 
 export const bridge: IBridge = {
   ...logger,
+  openGithubForTokenSetup: jest.fn(),
   test: jest.fn(),
 };

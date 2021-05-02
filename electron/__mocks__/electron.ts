@@ -19,3 +19,7 @@ export const ipcRenderer = {
 export const contextBridge = {
   exposeInMainWorld: jest.fn(),
 };
+
+export const shell = {
+  openExternal: jest.fn().mockResolvedValue(undefined),
+};
