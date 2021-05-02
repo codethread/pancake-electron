@@ -1,26 +1,34 @@
 import { mocked } from 'ts-jest/utils';
 import { MockIpcMain } from '@test/MockIpcMain';
 import { MockIpcRenderer } from '@test/MockIpcRenderer';
-import { shell as _shell } from 'electron';
 import { IBridge } from '@shared/types';
 import { setupIpcHandlers } from './ipc';
 import { bridgeCreator } from '../../windows/main/bridge';
 import { logger as _logger } from '../logger';
+import { IShellRepository } from '../../repositories/ShellRepository';
 
 jest.mock('../logger');
 jest.mock('electron');
 
 const logger = mocked(_logger, true);
-const shell = mocked(_shell, true);
+
+const mockShellRepository: IShellRepository = {
+  openExternal: jest.fn().mockResolvedValue(undefined),
+};
 
 // I have intimately coupled the ipcMain events to the ipcRenderer events
 // I think this is valid as we really don't want this two fall out of sync
 describe('setupIpcHandlers', () => {
-  function setup(): IBridge {
+  interface ISetup {
+    shellRepository?: IShellRepository;
+  }
+  function setup({
+    shellRepository = mockShellRepository,
+  }: ISetup = {}): IBridge {
     const mockIpcMain = new MockIpcMain();
     const mockIpcRenderer = new MockIpcRenderer(mockIpcMain);
     const bridge = bridgeCreator(mockIpcRenderer);
-    setupIpcHandlers(mockIpcMain);
+    setupIpcHandlers(mockIpcMain, shellRepository);
     return bridge;
   }
 
@@ -61,15 +69,17 @@ describe('setupIpcHandlers', () => {
       expect(logger.info).toHaveBeenCalledWith(
         expect.stringContaining(logMessage)
       );
-      expect(shell.openExternal).toHaveBeenCalledWith(
+      expect(mockShellRepository.openExternal).toHaveBeenCalledWith(
         expect.stringContaining(href)
       );
     });
 
     it('should log the error if the open fails', (done) => {
-      shell.openExternal.mockRejectedValue(new Error('poop'));
-
-      const bridge = setup();
+      const bridge = setup({
+        shellRepository: {
+          openExternal: jest.fn().mockRejectedValue(new Error('poop')),
+        },
+      });
       bridge.openGithubForTokenSetup();
 
       expect(logger.info).toHaveBeenCalledWith(

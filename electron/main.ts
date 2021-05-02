@@ -7,6 +7,7 @@ import {
   setupIpcHandlers,
 } from './services';
 import { createWindow } from './windows/main/createWindow';
+import { shellRepository } from './repositories/ShellRepository';
 
 let mainWindow: BrowserWindow | null;
 
@@ -19,7 +20,7 @@ app
     mainWindow.on('closed', closeWindow);
   })
   .whenReady()
-  .then(() => setupIpcHandlers(ipcMain))
+  .then(() => setupIpcHandlers(ipcMain, shellRepository))
   .then(setUpDevtools(logger))
   .catch(logger.errorWithContext('main window creation'));
 

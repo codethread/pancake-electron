@@ -28,7 +28,7 @@ describe('plumbing tests', () => {
       expect(log).toMatch('https://github.com/settings/tokens/new');
     });
 
-    test('when a user adds a token, they are logged in and presented with the option to launch their dashboard', async () => {
+    test.skip('when a user adds a token, they are logged in and presented with the option to launch their dashboard', async () => {
       const input = await app.client.$('input=Paste your token here');
       await input.addValue('GITHUB_TOKEN');
 

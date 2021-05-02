@@ -12,7 +12,7 @@
     "lint": "eslint .",
     "test": "jest --coverage",
     "visual": "backstop test --config=\"tooling/backstop.config.js\" --docker",
-    "e2e": "jest e2e --modulePathIgnorePatterns='' --no-coverage",
+    "e2e": "jest e2e --modulePathIgnorePatterns='' --no-coverage --maxWorkers 1",
     "docker-e2e": "docker build . -f Dockerfile -t pancake",
     "build": "FORCE_COLOR=1 run-p --print-label build:*",
     "start": "electron .",
