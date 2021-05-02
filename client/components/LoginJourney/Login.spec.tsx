@@ -137,7 +137,9 @@ describe('LoginJourney', () => {
 
             expect(await screen.findByText(/hello bob/i)).toBeInTheDocument();
 
-            screen.getByRole('button', { name: /launch/i }).click();
+            screen
+              .getByRole('button', { name: /launch my dashboard/i })
+              .click();
             expect(await screen.findByText(/dashboard/i)).toBeInTheDocument();
 
             screen.getByRole('button', { name: /log out/i }).click();

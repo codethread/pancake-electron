@@ -99,7 +99,7 @@ const Login: FC<IProps> = ({ send, state }) => {
         <>
           <div>hello {state.context.user?.name}</div>
           <button type="button" onClick={() => send({ type: 'LAUNCH' })}>
-            launch
+            Launch my dashboard
           </button>
         </>
       )}

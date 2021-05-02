@@ -28,15 +28,14 @@ describe('plumbing tests', () => {
       expect(log).toMatch('https://github.com/settings/tokens/new');
     });
 
-    test.skip('when a user adds a token, they are logged in and presented with the option to launch their dashboard', async () => {
-      const input = await app.client.$('input=Paste your token here');
+    test('when a user adds a token, they are logged in and presented with the option to launch their dashboard', async () => {
+      const input = await app.client.$('label=Paste your token here');
       await input.addValue('GITHUB_TOKEN');
 
       const submit = await app.client.$('button=Submit Token');
       await submit.click();
 
-      const launch = await app.client.$('button=Launch my dashboard');
-      expect(launch.isClickable()).toBe(true);
+      await app.client.$('button=Launch my dashboard');
     });
 
     test.todo(
