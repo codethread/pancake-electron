@@ -1,5 +1,5 @@
 const path = require('path');
-const { shared } = require('./alias');
+const { shared, server } = require('./alias');
 
 const rootPath = process.cwd();
 
@@ -10,6 +10,7 @@ const common = {
     extensions: ['.tsx', '.ts', '.js'],
     alias: {
       ...shared,
+      ...server,
     },
   },
   node: {

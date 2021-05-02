@@ -1,55 +1,17 @@
 import React, { FC, useState } from 'react';
-import TestIds from '@shared/testids';
-import { isDev } from '@shared/constants';
-import Greetings from '@client/components/Greetings';
-import {
-  loginMachine,
-  useMachine,
-  LoginOptions,
-  LoginMatches,
-  LoginSend,
-  LoginState,
-} from '@client/machines';
+import { LoginMatches, LoginSend, LoginState } from '@client/machines';
 
-interface ILoginJourney {
-  machineOptions: LoginOptions;
-}
 const launchableStates: LoginMatches[] = [
   'loggedOut.validateToken.hasConfig',
   'loggedOut.validateToken.noConfig',
 ];
-
-export const LoginJourney: FC<ILoginJourney> = ({ machineOptions }) => {
-  const [state, send] = useMachine(loginMachine, {
-    ...machineOptions,
-    devTools: isDev,
-  });
-
-  return (
-    <div data-testid={TestIds.LOGIN_JOURNEY}>
-      <Greetings />
-      {state.matches('loggedIn') && (
-        <>
-          <button type="button" onClick={() => send({ type: 'LOGOUT' })}>
-            log out
-          </button>
-          <div>dashboard</div>
-        </>
-      )}
-      {state.matches('loggedOut') && <Login send={send} state={state} />}
-      {state.matches('loggedOut.inputToken.help.show') && (
-        <div>Help Section</div>
-      )}
-    </div>
-  );
-};
 
 interface IProps {
   send: LoginSend;
   state: LoginState;
 }
 
-const Login: FC<IProps> = ({ send, state }) => {
+export const Login: FC<IProps> = ({ send, state }) => {
   const [tokenInput, setTokenInput] = useState('');
   const [visibility, setVisibility] = useState('password');
   return (

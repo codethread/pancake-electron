@@ -5,14 +5,14 @@ import { IBridge } from '@shared/types';
 import { setupIpcHandlers } from './ipc';
 import { bridgeCreator } from '../../windows/main/bridge';
 import { logger as _logger } from '../logger';
-import { IShellRepository } from '../../repositories/ShellRepository';
+import { ShellRepository } from '../../repositories/shellRepository';
 
 jest.mock('../logger');
 jest.mock('electron');
 
 const logger = mocked(_logger, true);
 
-const mockShellRepository: IShellRepository = {
+const mockShellRepository: ShellRepository = {
   openExternal: jest.fn().mockResolvedValue(undefined),
 };
 
@@ -20,7 +20,7 @@ const mockShellRepository: IShellRepository = {
 // I think this is valid as we really don't want this two fall out of sync
 describe('setupIpcHandlers', () => {
   interface ISetup {
-    shellRepository?: IShellRepository;
+    shellRepository?: ShellRepository;
   }
   function setup({
     shellRepository = mockShellRepository,

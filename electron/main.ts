@@ -1,5 +1,6 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { app, BrowserWindow, ipcMain } from 'electron';
+import { shellRepository } from '@electron/repositories';
 import {
   logger,
   checkForUpdates,
@@ -7,7 +8,6 @@ import {
   setupIpcHandlers,
 } from './services';
 import { createWindow } from './windows/main/createWindow';
-import { shellRepository } from './repositories/ShellRepository';
 
 let mainWindow: BrowserWindow | null;
 

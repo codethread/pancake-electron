@@ -1,12 +1,12 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { IpcMain, IpcMainEvent } from 'electron';
 import { IBridge } from '@shared/types';
+import { ShellRepository } from '@electron/repositories';
 import { logger } from '../logger';
-import { IShellRepository } from '../../repositories/ShellRepository';
 
 export function setupIpcHandlers(
   ipcMain: IpcMain,
-  shellRepository: IShellRepository
+  shellRepository: ShellRepository
 ): void {
   const keys: Array<keyof IBridge> = [
     'test',
@@ -34,7 +34,7 @@ interface Handlers {
   openGithubForTokenSetup: Handler<'openGithubForTokenSetup'>;
 }
 
-function handlers(shellRepository: IShellRepository): Handlers {
+function handlers(shellRepository: ShellRepository): Handlers {
   return {
     openGithubForTokenSetup(): void {
       const url = new URL('https://github.com/settings/tokens/new');

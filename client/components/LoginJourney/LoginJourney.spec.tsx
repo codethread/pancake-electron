@@ -6,7 +6,7 @@ import userEvent from '@testing-library/user-event';
 import { DeepPartial } from '@shared/tsHelpers';
 import { LoginOptions, loginOptions } from '@client/machines';
 import { bridge } from '@test/bridge';
-import { LoginJourney } from './Login';
+import { LoginJourney } from './LoginJourney';
 
 describe('LoginJourney', () => {
   function renderW(overrides?: DeepPartial<LoginOptions>): void {
