@@ -15,7 +15,15 @@ export default {
 
 const Button = styled.button``;
 
-export const Primary: Story = () => (
+export const Empty: Story = () => <Glass />;
+
+export const Simple: Story = () => (
+  <Glass>
+    <H2>Heading three</H2>
+  </Glass>
+);
+
+export const WithContent: Story = () => (
   <Glass>
     <H2 align="center">Welcome to Pancake</H2>
     <H3 align="center">The Pull Request Dashboard</H3>

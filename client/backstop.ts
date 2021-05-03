@@ -12,10 +12,7 @@ module.exports = {
       height: 768,
     },
   ],
-  scenarios: [
-    scenario('atoms-button--primary'),
-    scenario('atoms-button--secondary'),
-  ],
+  scenarios: [scenario('atoms-glass--empty')],
   paths: {
     bitmaps_reference: 'tooling/backstop_data/bitmaps_reference',
     bitmaps_test: 'tooling/backstop_data/bitmaps_test',
@@ -33,7 +30,12 @@ module.exports = {
   debugWindow: false,
 };
 
-function scenario(storyId = '') {
+interface Scenario {
+  label: string;
+  url: string;
+}
+
+function scenario(storyId = ''): Scenario {
   return {
     label: storyId,
     url: `http://host.docker.internal:6006/iframe.html?viewMode=story&id=${storyId}`,

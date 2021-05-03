@@ -5,17 +5,17 @@ export const Img = styled.img`
   max-width: 100%;
 `;
 
-interface BoxProps {
-  readonly fill?: boolean;
-}
-
-export const Box = styled.div<BoxProps>`
-  display: flex;
-  flex-direction: column;
-  margin: ${({ theme }) => theme.spacing.large}px;
-  justify-content: center;
-  align-content: center;
-`;
+// interface BoxProps {
+//   readonly fill?: boolean;
+// }
+//
+// export const Box = styled.div<BoxProps>`
+//   display: flex;
+//   flex-direction: column;
+//   margin: ${({ theme }) => theme.spacing.large}px;
+//   justify-content: center;
+//   align-content: center;
+// `;
 
 interface TextProps {
   align?: 'center' | 'justify' | 'left' | 'right';
