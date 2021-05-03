@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen } from '@test/rtl';
 import React from 'react';
 import { ForceError } from '@test/ForceError';
 import { logger } from '@test/bridge';

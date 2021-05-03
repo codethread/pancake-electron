@@ -13,10 +13,6 @@ export default {
   },
 } as Meta;
 
-// const Template: Story = (args) => (
-//   <Button {...args}>Button text</Button>
-// );
-
 const Button = styled.button``;
 
 export const Primary: Story = () => (

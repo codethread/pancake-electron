@@ -1,5 +1,5 @@
 import { mocked } from 'ts-jest/utils';
-import { render, screen } from '@testing-library/react';
+import { render, screen } from '@test/rtl';
 import React from 'react';
 import * as _constants from '@shared/constants';
 import TestIds from '@shared/testids';

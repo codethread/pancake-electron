@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 import { inspect as _inspect } from '@xstate/inspect';
-import { render, RenderResult, screen } from '@testing-library/react';
+import { render, RenderResult, screen } from '@test/rtl';
 import { mocked } from 'ts-jest/utils';
 import * as _constants from '@shared/constants';
 import TestIds from '@shared/testids';

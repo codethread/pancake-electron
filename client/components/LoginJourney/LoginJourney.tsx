@@ -3,6 +3,7 @@ import TestIds from '@shared/testids';
 import { isDev } from '@shared/constants';
 import { loginMachine, LoginOptions, useMachine } from '@client/machines';
 import { Login } from '@client/components/LoginJourney/Login';
+import { Glass } from '..';
 
 interface ILoginJourney {
   machineOptions: LoginOptions;
@@ -26,7 +27,9 @@ export const LoginJourney: FC<ILoginJourney> = ({ machineOptions }) => {
       )}
       {state.matches('loggedOut') && <Login send={send} state={state} />}
       {state.matches('loggedOut.inputToken.help.show') && (
-        <div>Help Section</div>
+        <Glass>
+          <div>Help Section</div>
+        </Glass>
       )}
     </div>
   );
