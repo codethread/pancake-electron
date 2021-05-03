@@ -12,7 +12,7 @@ RUN apt-get update && \
                     unzip \
                     && rm -rf /var/lib/apt/lists/*
 
-COPY yarn.lock package.json jest.config.js tsconfig.json ./
+COPY yarn.lock package.json jest.config.js tsconfig.json backstop.sh ./
 
 RUN yarn install
 
