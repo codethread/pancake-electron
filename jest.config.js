@@ -10,7 +10,6 @@ const escapeHatch = [
   '!./client/Main.tsx',
   '!./client/testHelpers/**',
   '!./electron/windows/main/createWindow.ts', // TODO
-  '!./client/components/Button/**', // going soon
 ];
 
 module.exports = {

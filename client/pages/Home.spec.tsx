@@ -14,7 +14,7 @@ describe('Home', () => {
 
   it('renders the login journey', () => {
     renderW();
-    expect(screen.getByTestId(TestIds.GREETING_MESSAGE)).toBeInTheDocument();
+    expect(screen.getByTestId(TestIds.LOGIN_JOURNEY)).toBeInTheDocument();
   });
 
   it('renders the navigation', () => {

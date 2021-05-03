@@ -1,7 +1,6 @@
 import React, { FC } from 'react';
 import TestIds from '@shared/testids';
 import { isDev } from '@shared/constants';
-import Greetings from '@client/components/Greetings';
 import { loginMachine, LoginOptions, useMachine } from '@client/machines';
 import { Login } from '@client/components/LoginJourney/Login';
 
@@ -17,7 +16,6 @@ export const LoginJourney: FC<ILoginJourney> = ({ machineOptions }) => {
 
   return (
     <div data-testid={TestIds.LOGIN_JOURNEY}>
-      <Greetings />
       {state.matches('loggedIn') && (
         <>
           <button type="button" onClick={() => send({ type: 'LOGOUT' })}>
