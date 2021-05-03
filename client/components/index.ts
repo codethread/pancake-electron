@@ -1,3 +1,4 @@
+export * from './Atoms';
 export * from './Inspector';
 export * from './LoginJourney';
 export * from './NullComp/NullComp';
