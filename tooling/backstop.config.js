@@ -1,3 +1,9 @@
+const glob = require('fast-glob');
+
+const rootPath = process.cwd();
+
+const scenarios = glob.sync(`${rootPath}/client/**/*backstop.js`);
+
 module.exports = {
   id: 'pancake_storybook',
   viewports: [
@@ -12,7 +18,7 @@ module.exports = {
       height: 768,
     },
   ],
-  scenarios: [scenario('atoms-glass--empty')],
+  scenarios: createScenarios(scenarios),
   paths: {
     bitmaps_reference: 'tooling/backstop_data/bitmaps_reference',
     bitmaps_test: 'tooling/backstop_data/bitmaps_test',
@@ -30,14 +36,27 @@ module.exports = {
   debugWindow: false,
 };
 
-interface Scenario {
-  label: string;
-  url: string;
+// helpers
+
+function createScenarios(files = []) {
+  const scenes = files.map((file) => require(file)); // eslint-disable-line
+
+  return flatten(scenes).map(scenario);
 }
 
-function scenario(storyId = ''): Scenario {
+function scenario(storyId = '') {
   return {
     label: storyId,
     url: `http://host.docker.internal:6006/iframe.html?viewMode=story&id=${storyId}`,
   };
+}
+
+/**
+ *
+ * @param {Array<any>} a
+ * @returns {Array<any>} one layer flatten of a
+ */
+function flatten(a = []) {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return,@typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
+  return a.reduce((flattened, cur) => flattened.concat(cur), []);
 }
