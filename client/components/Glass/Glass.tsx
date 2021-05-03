@@ -55,9 +55,9 @@ const light = '#FFFBFB';
 const middle = 'rgba(163, 204, 207, 0.1)';
 const dark = '#429BA0';
 
-const lightToMiddle = (deg = 0): string =>
+const lightToMiddle = (deg: number): string =>
   `linear-gradient(${deg}deg, ${light}, ${middle}) 1`;
-const middleToDark = (deg = 0): string =>
+const middleToDark = (deg: number): string =>
   `linear-gradient(${deg}deg, ${middle}, ${dark}) 1`;
 
 const corners: ICorner[] = [

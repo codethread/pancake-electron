@@ -5,7 +5,7 @@ import { bridge } from '@test/bridge';
 import { ForceError } from '@test/ForceError';
 import TestIds from '@shared/testids';
 import * as _constants from '@shared/constants';
-import { Scaffold } from '@client/pages/Scaffold';
+import { Scaffold } from './Scaffold';
 
 jest.mock('@shared/constants');
 const constants = mocked(_constants, true);

@@ -1,5 +1,4 @@
 import React, { FC, ReactElement } from 'react';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { render, RenderOptions } from '@testing-library/react';
 import { ThemeProvider } from 'styled-components';
 import { theme } from '@client/styles/theme';
@@ -16,7 +15,6 @@ const customRender = (
   options?: Omit<RenderOptions, 'queries'>
 ) => render(ui, { wrapper: AllTheProviders, ...options });
 
-// eslint-disable-next-line import/no-extraneous-dependencies
 export * from '@testing-library/react';
 
 export { customRender as render };

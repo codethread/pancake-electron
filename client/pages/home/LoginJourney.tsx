@@ -2,8 +2,8 @@ import React, { FC } from 'react';
 import TestIds from '@shared/testids';
 import { isDev } from '@shared/constants';
 import { loginMachine, LoginOptions, useMachine } from '@client/machines';
-import { Login } from '@client/components/LoginJourney/Login';
-import { Glass } from '..';
+import { Glass } from '@client/components';
+import { Login } from './Login';
 
 interface ILoginJourney {
   machineOptions: LoginOptions;

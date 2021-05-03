@@ -39,7 +39,8 @@ module.exports = {
 // helpers
 
 function createScenarios(files = []) {
-  const scenes = files.map((file) => require(file)); // eslint-disable-line
+  // eslint-disable-next-line global-require,import/no-dynamic-require
+  const scenes = files.map((file) => require(file));
 
   return flatten(scenes).map(scenario);
 }
@@ -51,12 +52,6 @@ function scenario(storyId = '') {
   };
 }
 
-/**
- *
- * @param {Array<any>} a
- * @returns {Array<any>} one layer flatten of a
- */
 function flatten(a = []) {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return,@typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
   return a.reduce((flattened, cur) => flattened.concat(cur), []);
 }
