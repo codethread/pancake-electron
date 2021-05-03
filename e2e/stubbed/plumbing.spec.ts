@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/await-thenable,@typescript-eslint/no-unsafe-call */
+import pj from 'package.json';
 import { app } from './init';
 
 describe('plumbing tests', () => {
@@ -43,11 +44,10 @@ describe('plumbing tests', () => {
   });
 
   it('bridge event from client is logged by electron', async () => {
-    const button = await app.client.$('button=Test Button');
-    expect(await button.getText()).toBe('Test Button');
+    const button = await app.client.$(`button=${pj.version}`);
     await button.click();
     const logs = await app.client.getMainProcessLogs();
     const [clickLog] = logs.reverse();
-    expect(clickLog).toContain('test message');
+    expect(clickLog).toContain('bridge message');
   });
 });
