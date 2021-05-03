@@ -10,10 +10,11 @@ describe('bridgeCreator', () => {
     method: keyof IBridge;
   }
   test.each`
-    method     | args
-    ${'test'}  | ${[str, str]}
-    ${'info'}  | ${[str, str]}
-    ${'error'} | ${[str, str]}
+    method                       | args
+    ${'test'}                    | ${[str, str]}
+    ${'info'}                    | ${[str, str]}
+    ${'error'}                   | ${[str, str]}
+    ${'openGithubForTokenSetup'} | ${[]}
   `(
     'bridge.$method sends args as an array to bridge',
     ({ method, args }: Test) => {

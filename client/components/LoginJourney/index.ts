@@ -1,1 +1,1 @@
-export { LoginJourney } from './Login';
+export { LoginJourney } from './LoginJourney';

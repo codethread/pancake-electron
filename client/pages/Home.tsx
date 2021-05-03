@@ -11,6 +11,6 @@ interface IHome {
 export const Home: FC<IHome> = ({ bridge }) => (
   <Scaffold bridge={bridge}>
     <Navigation />
-    <LoginJourney machineOptions={loginOptions} />
+    <LoginJourney machineOptions={loginOptions(bridge)} />
   </Scaffold>
 );

@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { contextBridge, ipcRenderer } from 'electron';
 import { isIntegration } from '@shared/constants';
-import { deepFreeze } from '../../utils';
+import { deepFreeze } from '@electron/utils';
 import { bridgeCreator } from './bridge';
 
 const not = (bool: boolean): boolean => !bool;

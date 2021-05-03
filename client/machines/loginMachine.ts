@@ -1,7 +1,8 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { createMachine } from '@xstate/compiled';
+import { createMachine, StateWithMatches } from '@xstate/compiled';
 import { assign } from 'xstate';
-import { assertEventType, MachineOptions, Matches } from './utils';
+import { IBridge } from '@shared/types';
+import { assertEventType, MachineOptions, MachineSend, Matches } from './utils';
 
 export interface User {
   name: string;
@@ -14,6 +15,7 @@ export interface PageContext {
 
 export type PageEvent =
   | { type: 'BACK' }
+  | { type: 'CREATE_TOKEN' }
   | { type: 'done.invoke.fetchUser'; data: { user: User } }
   | { type: 'LAUNCH' }
   | { type: 'LOGOUT' }
@@ -23,28 +25,35 @@ export type PageEvent =
 
 export type LoginOptions = MachineOptions<PageContext, PageEvent, 'login'>;
 export type LoginMatches = Matches<PageContext, PageEvent, 'login'>;
+export type LoginState = StateWithMatches<PageContext, PageEvent, 'login'>;
+export type LoginSend = MachineSend<PageContext, PageEvent, 'login'>;
 
-export const loginOptions: LoginOptions = {
-  services: {
-    validateToken: async () => Promise.resolve(),
-    loadConfig: async () => Promise.resolve(),
-    fetchUser: async () => Promise.resolve({ user: { name: 'bob' } }),
-  },
-  actions: {
-    storeUser: assign({
-      user: (_, e) => {
-        assertEventType(e, 'done.invoke.fetchUser');
-        return e.data.user;
+export function loginOptions(bridge: IBridge): LoginOptions {
+  return {
+    services: {
+      validateToken: async () => Promise.resolve(),
+      loadConfig: async () => Promise.resolve(),
+      fetchUser: async () => Promise.resolve({ user: { name: 'bob' } }),
+    },
+    actions: {
+      storeUser: assign({
+        user: (_, e) => {
+          assertEventType(e, 'done.invoke.fetchUser');
+          return e.data.user;
+        },
+      }),
+      clearUser: assign({
+        user: (_) => null,
+      }),
+      openGithubForTokenSetup: () => {
+        bridge.openGithubForTokenSetup();
       },
-    }),
-    clearUser: assign({
-      user: (_) => null,
-    }),
-  },
-  guards: {
-    isAuth: (context) => Boolean(context.user),
-  },
-};
+    },
+    guards: {
+      isAuth: (context) => Boolean(context.user),
+    },
+  };
+}
 
 export const loginMachine = createMachine<PageContext, PageEvent, 'login'>({
   initial: 'authorize',
@@ -72,20 +81,43 @@ export const loginMachine = createMachine<PageContext, PageEvent, 'login'>({
     },
     loggedOut: {
       id: 'loggedOut',
-      initial: 'createToken',
+      initial: 'inputToken',
       states: {
-        createToken: {
-          id: 'createToken',
-          initial: 'noHelp',
+        inputToken: {
+          id: 'inputToken',
+          type: 'parallel',
           states: {
-            noHelp: {
-              on: {
-                TOGGLE_HELP: 'help',
+            help: {
+              initial: 'hidden',
+              states: {
+                hidden: {
+                  on: {
+                    TOGGLE_HELP: 'show',
+                  },
+                },
+                show: {
+                  on: {
+                    TOGGLE_HELP: 'hidden',
+                  },
+                },
               },
             },
-            help: {
-              on: {
-                TOGGLE_HELP: 'noHelp',
+            createToken: {
+              initial: 'active',
+              states: {
+                active: {
+                  on: {
+                    CREATE_TOKEN: {
+                      target: 'pending',
+                      actions: ['openGithubForTokenSetup'],
+                    },
+                  },
+                },
+                pending: {
+                  after: {
+                    500: 'active',
+                  },
+                },
               },
             },
           },

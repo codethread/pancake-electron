@@ -12,7 +12,12 @@ const client = {
   '@client': path.resolve(root, 'client'),
 };
 
+const server = {
+  '@electron': path.resolve(root, 'electron'),
+};
+
 module.exports = {
   shared,
   client,
+  server,
 };

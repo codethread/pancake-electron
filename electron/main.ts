@@ -1,5 +1,6 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { app, BrowserWindow, ipcMain } from 'electron';
+import { shellRepository } from '@electron/repositories';
 import {
   logger,
   checkForUpdates,
@@ -19,7 +20,7 @@ app
     mainWindow.on('closed', closeWindow);
   })
   .whenReady()
-  .then(() => setupIpcHandlers(ipcMain))
+  .then(() => setupIpcHandlers(ipcMain, shellRepository))
   .then(setUpDevtools(logger))
   .catch(logger.errorWithContext('main window creation'));
 
