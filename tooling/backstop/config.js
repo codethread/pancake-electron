@@ -48,8 +48,8 @@ function createScenarios(files = []) {
 function scenario(storyId = '') {
   return {
     label: storyId,
-    url: `http://localhost:6006/iframe.html?viewMode=story&id=${storyId}`,
-    // url: `http://host.docker.internal:6006/iframe.html?viewMode=story&id=${storyId}`,
+    // url: `http://localhost:6006/iframe.html?viewMode=story&id=${storyId}`,
+    url: `http://host.docker.internal:6006/iframe.html?viewMode=story&id=${storyId}`,
   };
 }
 

@@ -21,9 +21,3 @@ jobs:
         with:
           push: false
           tags: user/app:latest
-      -
-        name: Visual
-        uses: addnab/docker-run-action@v3
-        with:
-          image: user/app:latest
-          run: sh backstop.sh
