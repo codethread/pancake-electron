@@ -1,8 +1,4 @@
-const glob = require('fast-glob');
-
-const rootPath = process.cwd();
-
-const scenarios = glob.sync(`${rootPath}/client/**/*backstop.js`);
+const getScenarios = require('./scenarios');
 
 module.exports = {
   id: 'pancake_storybook',
@@ -18,7 +14,7 @@ module.exports = {
       height: 768,
     },
   ],
-  scenarios: createScenarios(scenarios),
+  scenarios: getScenarios(),
   paths: {
     bitmaps_reference: 'tooling/backstop_data/bitmaps_reference',
     bitmaps_test: 'tooling/backstop_data/bitmaps_test',
@@ -35,24 +31,3 @@ module.exports = {
   debug: false,
   debugWindow: false,
 };
-
-// helpers
-
-function createScenarios(files = []) {
-  // eslint-disable-next-line global-require,import/no-dynamic-require
-  const scenes = files.map((file) => require(file));
-
-  return flatten(scenes).map(scenario);
-}
-
-function scenario(storyId = '') {
-  return {
-    label: storyId,
-    // url: `http://localhost:6006/iframe.html?viewMode=story&id=${storyId}`,
-    url: `http://host.docker.internal:6006/iframe.html?viewMode=story&id=${storyId}`,
-  };
-}
-
-function flatten(a = []) {
-  return a.reduce((flattened, cur) => flattened.concat(cur), []);
-}
