@@ -9,7 +9,7 @@
     "machine": "xstate-codegen \"client/machines/**/*Machine.ts\"",
     "machine:once": "yarn machine --once",
     "storybook": "start-storybook -p 6006 -s public -c tooling/storybook",
-    "lint": "eslint .",
+    "lint": "eslint . --cache",
     "test": "jest --coverage",
     "visual": "backstop test --config=tooling/backstop/config.js --docker",
     "visual:approve": "backstop approve --config=tooling/backstop/config.js",

@@ -88,16 +88,16 @@ describe('Inspector', () => {
       expect(inspect).toHaveBeenCalledTimes(1);
     });
 
-    it('can have visibility toggled, which is initially visible', () => {
+    it('can have visibility toggled, which is initially hidden', () => {
       renderW();
       const iframe = screen.getByTitle('xstate');
       expect(iframe).toBeInTheDocument();
 
-      screen.getByRole('button', { name: /.*hide.*/i }).click();
-      expect(iframe).toHaveStyle({ display: 'none' });
-
       screen.getByRole('button', { name: /.*show.*/i }).click();
       expect(iframe).toHaveStyle({ display: 'block' });
+
+      screen.getByRole('button', { name: /.*hide.*/i }).click();
+      expect(iframe).toHaveStyle({ display: 'none' });
     });
 
     describe('when the inspector does not return an instance', () => {

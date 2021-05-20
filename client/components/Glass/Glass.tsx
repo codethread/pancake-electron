@@ -16,6 +16,8 @@ export const Container = styled.div`
     'tl t tr'
     'l content r'
     'bl b br';
+
+  backdrop-filter: blur(10px);
 `;
 
 const Content = styled.div`

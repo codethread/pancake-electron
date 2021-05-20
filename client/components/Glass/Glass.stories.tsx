@@ -1,7 +1,7 @@
 import React from 'react';
 import { Story, Meta } from '@storybook/react/types-6-0';
 
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { Glass } from './Glass';
 import { H2, H3, lorem, P } from '..';
 
@@ -34,4 +34,40 @@ export const WithContent: Story = () => (
     <P>{lorem}</P>
     <Button>With a button</Button>
   </Glass>
+);
+
+const fadeIn = keyframes`
+  0% {
+    left: 100px;
+  }
+  50% {
+    left: 300px;
+  }
+  100% {
+    left: 100px;
+  }
+`;
+
+const Background = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 300px;
+  height: 300px;
+  border-radius: 150px;
+  z-index: -1;
+  box-shadow: 0 0 9px 9px ${({ theme }) => theme.palette.background} inset;
+
+  background-color: chocolate;
+
+  animation: 5s ${fadeIn} ease-in-out infinite;
+`;
+
+export const WithBackground: Story = () => (
+  <>
+    <Glass>
+      <H2>Heading three</H2>
+    </Glass>
+    <Background />
+  </>
 );
