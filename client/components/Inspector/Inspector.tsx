@@ -4,7 +4,7 @@ import { isDev } from '@shared/constants';
 import { NullComp } from '@client/components';
 
 export const InspectorComponent: FC = () => {
-  const [inspecting, setInspecting] = useState(true);
+  const [inspecting, setInspecting] = useState(false);
 
   // required to run before render cycle so as that listeners are present when machine is mounted
   // mocking this in the test seems overkill, so just don't change this

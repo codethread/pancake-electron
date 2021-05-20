@@ -45,6 +45,7 @@
     "client",
     "electron",
     "shared",
+    "testHelpers",
     "e2e"
   ],
   "exclude": ["node_modules"]

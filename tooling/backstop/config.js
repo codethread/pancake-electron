@@ -1,3 +1,5 @@
+const getScenarios = require('./scenarios');
+
 module.exports = {
   id: 'pancake_storybook',
   viewports: [
@@ -12,10 +14,7 @@ module.exports = {
       height: 768,
     },
   ],
-  scenarios: [
-    scenario('atoms-button--primary'),
-    scenario('atoms-button--secondary'),
-  ],
+  scenarios: getScenarios(),
   paths: {
     bitmaps_reference: 'tooling/backstop_data/bitmaps_reference',
     bitmaps_test: 'tooling/backstop_data/bitmaps_test',
@@ -32,10 +31,3 @@ module.exports = {
   debug: false,
   debugWindow: false,
 };
-
-function scenario(storyId = '') {
-  return {
-    label: storyId,
-    url: `http://host.docker.internal:6006/iframe.html?viewMode=story&id=${storyId}`,
-  };
-}

@@ -1,5 +1,4 @@
 /* eslint-disable class-methods-use-this,@typescript-eslint/no-explicit-any */
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { IpcMain } from 'electron';
 import { EventEmitter } from 'events';
 

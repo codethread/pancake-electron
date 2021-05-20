@@ -1,6 +1,6 @@
 import React from 'react';
 import pj from 'package.json';
-import { render, screen } from '@testing-library/react';
+import { render, screen } from '@test/rtl';
 import userEvent from '@testing-library/user-event';
 import { bridge } from '@test/bridge';
 import { Navigation } from './Navigation';

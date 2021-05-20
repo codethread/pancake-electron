@@ -1,5 +1,6 @@
 import React, { FC, useState } from 'react';
 import { LoginMatches, LoginSend, LoginState } from '@client/machines';
+import { Glass } from '@client/components';
 
 const launchableStates: LoginMatches[] = [
   'loggedOut.validateToken.hasConfig',
@@ -15,7 +16,7 @@ export const Login: FC<IProps> = ({ send, state }) => {
   const [tokenInput, setTokenInput] = useState('');
   const [visibility, setVisibility] = useState('password');
   return (
-    <div>
+    <Glass>
       <button
         type="button"
         disabled={state.matches('loggedOut.inputToken.createToken.pending')}
@@ -76,6 +77,6 @@ export const Login: FC<IProps> = ({ send, state }) => {
           </button>
         </>
       )}
-    </div>
+    </Glass>
   );
 };

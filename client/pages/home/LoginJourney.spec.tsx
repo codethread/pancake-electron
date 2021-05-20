@@ -1,6 +1,6 @@
 import React from 'react';
 import merge from 'lodash.merge';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@test/rtl';
 import userEvent from '@testing-library/user-event';
 
 import { DeepPartial } from '@shared/tsHelpers';

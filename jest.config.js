@@ -9,6 +9,7 @@ const escapeHatch = [
   '!./electron/main.ts', // cba
   '!./client/Main.tsx',
   '!./client/testHelpers/**',
+  '!./client/**/*.stories.tsx',
   '!./electron/windows/main/createWindow.ts', // TODO
 ];
 
@@ -17,7 +18,6 @@ module.exports = {
   collectCoverage: false,
   collectCoverageFrom: all.concat(escapeHatch),
   coverageThreshold: all.reduce(
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     (coverage, name) => ({
       ...coverage,
       [name]: {

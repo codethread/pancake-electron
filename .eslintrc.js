@@ -6,61 +6,21 @@ module.exports = {
     node: false,
     jest: false,
   },
-  extends: [
-    // airbnb also contains react rules
-    'airbnb-typescript',
-    'airbnb/hooks',
-    'plugin:@typescript-eslint/recommended',
-    'plugin:@typescript-eslint/recommended-requiring-type-checking',
-    // keep this last
-    'plugin:prettier/recommended',
-  ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     tsconfigRootDir: __dirname,
     project: ['./tsconfig.json'],
   },
+  extends: [
+    // airbnb also contains react rules
+    'airbnb-typescript',
+    'airbnb/hooks',
+  ],
   plugins: ['prettier', '@typescript-eslint'],
   rules: {
     'no-console': 'error',
     'react/prop-types': 'off',
     'import/prefer-default-export': 'off',
-    '@typescript-eslint/no-unused-vars': 'off',
-    '@typescript-eslint/no-unused-params': 'off',
-    '@typescript-eslint/no-use-before-define': 'off',
-    '@typescript-eslint/explicit-function-return-type': [
-      'error',
-      {
-        allowExpressions: true,
-      },
-    ],
-    '@typescript-eslint/explicit-module-boundary-types': 'error',
-    '@typescript-eslint/consistent-type-assertions': [
-      'error',
-      {
-        assertionStyle: 'never',
-      },
-    ],
-    '@typescript-eslint/consistent-type-definitions': ['error', 'interface'],
-    '@typescript-eslint/explicit-member-accessibility': [
-      'error',
-      { overrides: { constructors: 'no-public' } },
-    ],
-    '@typescript-eslint/member-ordering': 'error',
-    '@typescript-eslint/no-confusing-non-null-assertion': 'error',
-    '@typescript-eslint/no-extra-non-null-assertion': 'error',
-    '@typescript-eslint/no-implicit-any-catch': 'error',
-    '@typescript-eslint/no-unnecessary-condition': 'error',
-    '@typescript-eslint/non-nullable-type-assertion-style': 'error',
-    '@typescript-eslint/prefer-nullish-coalescing': 'error',
-    '@typescript-eslint/prefer-optional-chain': 'error',
-    '@typescript-eslint/prefer-readonly': 'error',
-    // '@typescript-eslint/prefer-readonly-parameter-types': 'error', // nice rule but issue around FB children, fix later
-    '@typescript-eslint/prefer-reduce-type-parameter': 'error',
-    '@typescript-eslint/prefer-ts-expect-error': 'error',
-    '@typescript-eslint/promise-function-async': 'error',
-    '@typescript-eslint/sort-type-union-intersection-members': 'error',
-    '@typescript-eslint/switch-exhaustiveness-check': 'error',
   },
   settings: {
     react: {
@@ -79,12 +39,71 @@ module.exports = {
   ],
   overrides: [
     {
+      files: ['*.js'],
+      extends: [
+        // keep this last
+        'plugin:prettier/recommended',
+      ],
+      rules: {
+        '@typescript-eslint/no-use-before-define': 'off',
+      },
+    },
+    {
+      files: ['*.ts', '*.tsx'],
+      extends: [
+        'plugin:@typescript-eslint/recommended',
+        'plugin:@typescript-eslint/recommended-requiring-type-checking',
+        // keep this last
+        'plugin:prettier/recommended',
+      ],
+      rules: {
+        '@typescript-eslint/no-unused-vars': 'off',
+        '@typescript-eslint/no-unused-params': 'off',
+        '@typescript-eslint/no-use-before-define': 'off',
+        '@typescript-eslint/explicit-function-return-type': [
+          'error',
+          {
+            allowExpressions: true,
+          },
+        ],
+        '@typescript-eslint/explicit-module-boundary-types': 'error',
+        '@typescript-eslint/consistent-type-assertions': [
+          'error',
+          {
+            assertionStyle: 'never',
+          },
+        ],
+        '@typescript-eslint/consistent-type-definitions': [
+          'error',
+          'interface',
+        ],
+        '@typescript-eslint/explicit-member-accessibility': [
+          'error',
+          { overrides: { constructors: 'no-public' } },
+        ],
+        '@typescript-eslint/member-ordering': 'error',
+        '@typescript-eslint/no-confusing-non-null-assertion': 'error',
+        '@typescript-eslint/no-extra-non-null-assertion': 'error',
+        '@typescript-eslint/no-implicit-any-catch': 'error',
+        '@typescript-eslint/no-unnecessary-condition': 'error',
+        '@typescript-eslint/non-nullable-type-assertion-style': 'error',
+        '@typescript-eslint/prefer-nullish-coalescing': 'error',
+        '@typescript-eslint/prefer-optional-chain': 'error',
+        '@typescript-eslint/prefer-readonly': 'error',
+        // '@typescript-eslint/prefer-readonly-parameter-types': 'error', // nice rule but issue around FB children, fix later
+        '@typescript-eslint/prefer-reduce-type-parameter': 'error',
+        '@typescript-eslint/prefer-ts-expect-error': 'error',
+        '@typescript-eslint/promise-function-async': 'error',
+        '@typescript-eslint/sort-type-union-intersection-members': 'error',
+        '@typescript-eslint/switch-exhaustiveness-check': 'error',
+      },
+    },
+    {
       files: ['tooling/**', '.eslintrc.js', 'jest.config.js'],
       env: {
         node: true,
       },
       rules: {
-        '@typescript-eslint/no-var-requires': 'off',
         'import/no-extraneous-dependencies': [
           'error',
           {
@@ -97,7 +116,7 @@ module.exports = {
       // envs don't seem to work since adding airbnb-typescript but keeping them
       // anyway in the event the issue is fixed, or I work out what I've done wrong
       // I suspect I'm expected to use typescript to check globals
-      files: ['electron/**'],
+      files: ['electron/**', '**/*.backstop.js'],
       env: {
         node: true,
       },
@@ -123,7 +142,7 @@ module.exports = {
       },
     },
     {
-      files: ['*.spec.@(js|jsx|ts|tsx)', 'e2e/**'],
+      files: ['*.spec.@(js|jsx|ts|tsx)', 'e2e/**', 'testHelpers/**'],
       plugins: ['testing-library', 'jest-dom'],
       extends: ['plugin:testing-library/react', 'plugin:jest-dom/recommended'],
       env: {
@@ -146,13 +165,6 @@ module.exports = {
       rules: {
         '@typescript-eslint/consistent-type-assertions': 'off',
         'import/no-extraneous-dependencies': 'off',
-      },
-    },
-    {
-      files: ['*.js'],
-      rules: {
-        '@typescript-eslint/no-unsafe-assignment': 'off',
-        '@typescript-eslint/explicit-function-return-type': 'off',
       },
     },
   ],
