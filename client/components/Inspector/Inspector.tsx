@@ -3,8 +3,12 @@ import { inspect } from '@xstate/inspect';
 import { isDev } from '@shared/constants';
 import { NullComp } from '@client/components';
 
-export const InspectorComponent: FC = () => {
-  const [inspecting, setInspecting] = useState(false);
+export interface IInspector {
+  toggleable?: boolean;
+}
+
+export const InspectorComponent: FC<IInspector> = ({ toggleable }) => {
+  const [inspecting, setInspecting] = useState(!toggleable);
 
   // required to run before render cycle so as that listeners are present when machine is mounted
   // mocking this in the test seems overkill, so just don't change this
@@ -18,14 +22,16 @@ export const InspectorComponent: FC = () => {
 
   return (
     <>
-      <button
-        type="button"
-        onClick={() => {
-          setInspecting((x) => !x);
-        }}
-      >
-        {inspecting ? 'hide inspector' : 'show inspector'}
-      </button>
+      {toggleable && (
+        <button
+          type="button"
+          onClick={() => {
+            setInspecting((x) => !x);
+          }}
+        >
+          {inspecting ? 'hide inspector' : 'show inspector'}
+        </button>
+      )}
       <iframe
         id="xstate"
         title="xstate"
@@ -40,5 +46,5 @@ export const InspectorComponent: FC = () => {
   );
 };
 
-export const Inspector: FC = () =>
-  isDev ? <InspectorComponent /> : <NullComp />;
+export const Inspector: FC<IInspector> = ({ toggleable }) =>
+  isDev ? <InspectorComponent toggleable={toggleable} /> : <NullComp />;

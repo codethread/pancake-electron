@@ -4,7 +4,7 @@ import { render, RenderResult, screen } from '@test/rtl';
 import { mocked } from 'ts-jest/utils';
 import * as _constants from '@shared/constants';
 import TestIds from '@shared/testids';
-import { Inspector } from './Inspector';
+import { IInspector, Inspector } from './Inspector';
 
 jest.mock('@shared/constants');
 jest.mock('@xstate/inspect', () => ({
@@ -15,7 +15,7 @@ const inspect = mocked(_inspect);
 const constants = mocked(_constants, true);
 
 describe('Inspector', () => {
-  const InspectorWrapper: FC = () => {
+  const InspectorWrapper: FC<IInspector> = ({ toggleable }) => {
     const [isVisible, setIsVisible] = useState(true);
     return (
       <div>
@@ -27,12 +27,13 @@ describe('Inspector', () => {
             setIsVisible((v) => !v);
           }}
         />
-        {isVisible ? <Inspector /> : null}
+        {isVisible ? <Inspector toggleable={toggleable} /> : null}
       </div>
     );
   };
 
-  const renderW = (): RenderResult => render(<InspectorWrapper />);
+  const renderW = (props?: IInspector): RenderResult =>
+    render(<InspectorWrapper toggleable={props?.toggleable} />);
 
   beforeAll(() => {
     constants.isTest = true;
@@ -80,24 +81,40 @@ describe('Inspector', () => {
       expect(iframe).toHaveAttribute('data-xstate');
     });
 
-    it('calls the inspector after the iframe has mounted and only connects once', () => {
-      const { rerender } = renderW();
-      expect(inspect).toHaveBeenCalledTimes(1);
+    describe('when passed a toggleable prop', () => {
+      it('calls the inspector after the iframe has mounted and only connects once', () => {
+        const { rerender } = renderW({ toggleable: true });
+        expect(inspect).toHaveBeenCalledTimes(1);
 
-      rerender(<InspectorWrapper />);
-      expect(inspect).toHaveBeenCalledTimes(1);
+        rerender(<InspectorWrapper />);
+        expect(inspect).toHaveBeenCalledTimes(1);
+      });
+
+      it('can have visibility toggled, which is initially hidden', () => {
+        renderW({ toggleable: true });
+        const iframe = screen.getByTitle('xstate');
+        expect(iframe).toBeInTheDocument();
+
+        screen.getByRole('button', { name: /.*show.*/i }).click();
+        expect(iframe).toHaveStyle({ display: 'block' });
+
+        screen.getByRole('button', { name: /.*hide.*/i }).click();
+        expect(iframe).toHaveStyle({ display: 'none' });
+      });
     });
 
-    it('can have visibility toggled, which is initially hidden', () => {
-      renderW();
-      const iframe = screen.getByTitle('xstate');
-      expect(iframe).toBeInTheDocument();
+    describe('when not passed a toggleable prop', () => {
+      it('can not be toggled, and is always shown', () => {
+        renderW();
+        const iframe = screen.getByTitle('xstate');
+        expect(iframe).toBeInTheDocument();
 
-      screen.getByRole('button', { name: /.*show.*/i }).click();
-      expect(iframe).toHaveStyle({ display: 'block' });
+        expect(
+          screen.queryByRole('button', { name: /.*show.*/i })
+        ).not.toBeInTheDocument();
 
-      screen.getByRole('button', { name: /.*hide.*/i }).click();
-      expect(iframe).toHaveStyle({ display: 'none' });
+        expect(iframe).toHaveStyle({ display: 'block' });
+      });
     });
 
     describe('when the inspector does not return an instance', () => {
