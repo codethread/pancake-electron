@@ -2,12 +2,7 @@ import React, { FC, useState } from 'react';
 import { LoginSend, LoginState } from '@client/machines';
 import { Glass } from '@client/components';
 import { useMachine } from '@client/machines/utils';
-import {
-  formMachine,
-  FormOptions,
-  formOptions,
-} from '@client/machines/form/formMachine';
-import merge from 'lodash.merge';
+import { formMachine, formOptions } from '@client/machines/form/formMachine';
 import { isDev } from '@shared/constants';
 
 interface IProps {
@@ -15,24 +10,17 @@ interface IProps {
   state: LoginState;
 }
 
-export type Partial2Deep<T> = {
-  [P in keyof T]?: Partial<T[P]>;
-};
-
-const createFormOptions = (overrides: Partial2Deep<FormOptions>): FormOptions =>
-  merge({ devTools: isDev }, formOptions(), overrides);
-
 export const Login: FC<IProps> = ({ send, state }) => {
-  const [formState, formSend] = useMachine(
-    formMachine,
-    createFormOptions({
+  const [formState, formSend] = useMachine(formMachine, {
+    ...formOptions({
       actions: {
-        validToken: ({ text }) => {
+        submitValidToken: ({ text }) => {
           send({ type: 'VALIDATE', token: text });
         },
       },
-    })
-  );
+    }),
+    devTools: isDev,
+  });
 
   const token = formState.context.text;
 

@@ -1,6 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { createMachine, StateWithMatches } from '@xstate/compiled';
 import { assign } from 'xstate';
+import merge from 'lodash.merge';
 import { MachineOptions } from '../utils';
 
 interface FormContext {
@@ -13,11 +14,14 @@ type FormEvent = { type: 'ENTER_INPUT'; text: string } | { type: 'SUBMIT' };
 export type FormOptions = MachineOptions<FormContext, FormEvent, 'form'>;
 export type FormState = StateWithMatches<FormContext, FormEvent, 'form'>;
 
-export const formOptions = (): FormOptions => ({
+export type Partial2Deep<T> = {
+  [P in keyof T]?: Partial<T[P]>;
+};
+
+const formOptionsDefaults: FormOptions = {
   guards: {
-    isGithubToken: (c, e) =>
-      /[A-Za-z0-9_]{40,}/.test(e.type === 'ENTER_INPUT' ? e.text : c.text),
-    isCleared: (_, { text }) => text === '',
+    isGithubToken: ({ errors }) => errors.length === 0,
+    isCleared: (c) => c.text === '',
   },
   actions: {
     storeInput: assign({
@@ -39,9 +43,15 @@ export const formOptions = (): FormOptions => ({
         return c.errors;
       },
     }),
-    validToken: () => {},
+    submitValidToken: () => {
+      throw new Error('action not implemented');
+    },
   },
-});
+};
+
+export const formOptions = (
+  overrides: Partial2Deep<FormOptions>
+): FormOptions => merge({}, formOptionsDefaults, overrides);
 
 export const formMachine = createMachine<FormContext, FormEvent, 'form'>({
   id: 'formMachine',
@@ -58,7 +68,7 @@ export const formMachine = createMachine<FormContext, FormEvent, 'form'>({
         SUBMIT: [
           {
             cond: 'isGithubToken',
-            actions: 'validToken',
+            actions: 'submitValidToken',
           },
           {
             target: 'invalid',
@@ -68,20 +78,12 @@ export const formMachine = createMachine<FormContext, FormEvent, 'form'>({
     },
     invalid: {
       onEntry: 'storeInput',
+      always: [
+        { cond: 'isCleared', target: 'entering' },
+        { cond: 'isGithubToken', target: 'entering' },
+      ],
       on: {
-        ENTER_INPUT: [
-          {
-            cond: 'isCleared',
-            target: 'entering',
-          },
-          {
-            cond: 'isGithubToken',
-            target: 'entering',
-          },
-          {
-            target: 'invalid',
-          },
-        ],
+        ENTER_INPUT: 'invalid',
       },
     },
   },

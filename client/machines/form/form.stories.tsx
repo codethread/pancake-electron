@@ -2,28 +2,23 @@ import React, { FC } from 'react';
 import { Story, Meta } from '@storybook/react/types-6-0';
 import { Inspector } from '@client/components';
 import { useMachine } from '@client/machines';
-import merge from 'lodash.merge';
-import { Partial2Deep } from '@client/pages/home/Login';
-import { formMachine, formOptions, FormOptions } from './formMachine';
+import { formMachine, formOptions } from './formMachine';
 
 export default {
   title: 'Machines/Form',
 } as Meta;
 
-const createFormOptions = (overrides: Partial2Deep<FormOptions>): FormOptions =>
-  merge({ devTools: true }, formOptions(), overrides);
-
 const FormMachine: FC = () => {
-  const [state, send] = useMachine(
-    formMachine,
-    createFormOptions({
+  const [state, send] = useMachine(formMachine, {
+    devTools: true,
+    ...formOptions({
       actions: {
-        validToken: () => {
+        submitValidToken: () => {
           console.log('yay');
         },
       },
-    })
-  );
+    }),
+  });
 
   return (
     <form
