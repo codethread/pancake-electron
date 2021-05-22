@@ -57,103 +57,92 @@ describe('LoginJourney', () => {
       expect(screen.queryByText(helpSection)).not.toBeInTheDocument();
     });
 
-    describe('as the user inputs a token', () => {
-      it('should allow the user to submit a token once they enter a value', () => {
+    describe('when the user inputs an invalid token', () => {
+      it('should display errors to the client and disable the submit button', async () => {
         renderW();
-        const button = screen.getByRole('button', { name: /submit token/i });
-        expect(button).toBeDisabled();
 
-        insertValidToken();
-        expect(button).toBeEnabled();
+        const input = screen.getByLabelText(/paste your token here/i);
+        userEvent.type(input, 'too short');
+
+        expect(
+          screen.queryByText("That doesn't look like a valid token!")
+        ).not.toBeInTheDocument();
+
+        const button = screen.getByRole('button', { name: /submit token/i });
+
+        userEvent.click(button);
+
+        expect(
+          await screen.findByText("That doesn't look like a valid token!")
+        ).toBeInTheDocument();
+        expect(
+          screen.getByText('at least 40 characters required')
+        ).toBeInTheDocument();
+        expect(
+          screen.getByText('only alpha numeric characters and "_"')
+        ).toBeInTheDocument();
+
+        expect(button).toBeDisabled();
       });
 
-      describe('when the token does not look correct', () => {
-        it('should display errors to the client and disable the submit button', async () => {
-          renderW();
+      it('should continue to show errors until the input is cleared', async () => {
+        renderW();
 
-          const input = screen.getByLabelText(/paste your token here/i);
-          userEvent.type(input, 'too short');
+        const input = screen.getByLabelText(/paste your token here/i);
+        userEvent.type(input, 'rubbish token');
+        userEvent.type(input, '{enter}');
 
-          expect(
-            screen.queryByText("That doesn't look like a valid token!")
-          ).not.toBeInTheDocument();
+        expect(
+          await screen.findByText("That doesn't look like a valid token!")
+        ).toBeInTheDocument();
 
-          const button = screen.getByRole('button', { name: /submit token/i });
+        userEvent.clear(input);
 
-          userEvent.click(button);
+        expect(
+          screen.queryByText("That doesn't look like a valid token!")
+        ).not.toBeInTheDocument();
+      });
 
-          expect(
-            await screen.findByText("That doesn't look like a valid token!")
-          ).toBeInTheDocument();
-          expect(
-            screen.getByText('at least 40 characters required')
-          ).toBeInTheDocument();
-          expect(
-            screen.getByText('only alpha numeric characters and "_"')
-          ).toBeInTheDocument();
+      it('should continue to show errors until all the errors are resolved', async () => {
+        renderW();
 
-          expect(button).toBeDisabled();
-        });
+        const input = screen.getByLabelText(/paste your token here/i);
+        userEvent.type(input, 'too_short-');
 
-        it('should continue to show errors until the input is cleared', async () => {
-          renderW();
+        expect(
+          screen.queryByText("That doesn't look like a valid token!")
+        ).not.toBeInTheDocument();
 
-          const input = screen.getByLabelText(/paste your token here/i);
-          userEvent.type(input, 'rubbish token');
-          userEvent.type(input, '{enter}');
+        screen.getByRole('button', { name: /submit token/i }).click();
 
-          expect(
-            await screen.findByText("That doesn't look like a valid token!")
-          ).toBeInTheDocument();
+        expect(
+          await screen.findByText("That doesn't look like a valid token!")
+        ).toBeInTheDocument();
 
-          userEvent.clear(input);
+        expect(screen.getByText('at least 40 characters required'));
+        expect(screen.getByText('only alpha numeric characters and "_"'));
 
-          expect(
-            screen.queryByText("That doesn't look like a valid token!")
-          ).not.toBeInTheDocument();
-        });
+        userEvent.type(input, '{backspace}');
 
-        it('should continue to show errors until all the errors are resolved', async () => {
-          renderW();
+        expect(
+          screen.getByText('at least 40 characters required')
+        ).toBeInTheDocument();
+        expect(
+          screen.queryByText('only alpha numeric characters and "_"')
+        ).not.toBeInTheDocument();
 
-          const input = screen.getByLabelText(/paste your token here/i);
-          userEvent.type(input, 'too_short-');
+        expect(
+          screen.getByText("That doesn't look like a valid token!")
+        ).toBeInTheDocument();
 
-          expect(
-            screen.queryByText("That doesn't look like a valid token!")
-          ).not.toBeInTheDocument();
+        userEvent.type(input, 'f'.repeat(40));
 
-          screen.getByRole('button', { name: /submit token/i }).click();
+        expect(
+          screen.queryByText("That doesn't look like a valid token!")
+        ).not.toBeInTheDocument();
 
-          expect(
-            await screen.findByText("That doesn't look like a valid token!")
-          ).toBeInTheDocument();
-
-          expect(screen.getByText('at least 40 characters required'));
-          expect(screen.getByText('only alpha numeric characters and "_"'));
-
-          userEvent.type(input, '{backspace}');
-
-          expect(
-            screen.getByText('at least 40 characters required')
-          ).toBeInTheDocument();
-          expect(
-            screen.queryByText('only alpha numeric characters and "_"')
-          ).not.toBeInTheDocument();
-
-          expect(
-            screen.getByText("That doesn't look like a valid token!")
-          ).toBeInTheDocument();
-
-          userEvent.type(input, 'f'.repeat(40));
-
-          expect(
-            screen.queryByText("That doesn't look like a valid token!")
-          ).not.toBeInTheDocument();
-
-          const button = screen.getByRole('button', { name: /submit token/i });
-          expect(button).toBeEnabled();
-        });
+        const button = screen.getByRole('button', { name: /submit token/i });
+        expect(button).toBeEnabled();
       });
     });
 

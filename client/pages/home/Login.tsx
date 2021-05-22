@@ -4,25 +4,23 @@ import { Glass } from '@client/components';
 import { useMachine } from '@client/machines/utils';
 import {
   formMachine,
-  FormMatches,
   FormOptions,
   formOptions,
 } from '@client/machines/form/formMachine';
 import merge from 'lodash.merge';
+import { isDev } from '@shared/constants';
 
 interface IProps {
   send: LoginSend;
   state: LoginState;
 }
 
-const noProgress: FormMatches[] = ['invalid', 'empty'];
-
 export type Partial2Deep<T> = {
   [P in keyof T]?: Partial<T[P]>;
 };
 
 const createFormOptions = (overrides: Partial2Deep<FormOptions>): FormOptions =>
-  merge({}, formOptions(), overrides);
+  merge({ devTools: isDev }, formOptions(), overrides);
 
 export const Login: FC<IProps> = ({ send, state }) => {
   const [formState, formSend] = useMachine(
@@ -76,7 +74,7 @@ export const Login: FC<IProps> = ({ send, state }) => {
         </button>
         <button
           type="button"
-          disabled={noProgress.some(formState.matches)}
+          disabled={formState.matches('invalid')}
           onClick={() => formSend({ type: 'SUBMIT' })}
         >
           Submit Token

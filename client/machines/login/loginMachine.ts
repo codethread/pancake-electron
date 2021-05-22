@@ -64,6 +64,7 @@ export function loginOptions(bridge: IBridge): LoginOptions {
 }
 
 export const loginMachine = createMachine<PageContext, PageEvent, 'login'>({
+  id: 'loginMachine',
   initial: 'authorize',
   context: {},
   states: {
