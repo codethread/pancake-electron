@@ -5,6 +5,7 @@ import { MachineOptions, Matches } from '../utils';
 
 interface FormContext {
   text: string;
+  errors: string[];
 }
 
 type FormEvent =
@@ -25,6 +26,17 @@ export const formOptions = (): FormOptions => ({
   actions: {
     storeInput: assign({
       text: (_, { text }) => text,
+      errors: (_, { text }) => {
+        const errors: string[] = [];
+        if (text.length < 40) {
+          errors.push('at least 40 characters required');
+        }
+        if (/[^\w]/.test(text)) {
+          errors.push('only alpha numeric characters and "_"');
+        }
+
+        return errors;
+      },
     }),
     validToken: () => {},
   },
@@ -33,6 +45,7 @@ export const formOptions = (): FormOptions => ({
 export const formMachine = createMachine<FormContext, FormEvent, 'form'>({
   context: {
     text: '',
+    errors: [],
   },
   initial: 'empty',
   states: {

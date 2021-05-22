@@ -72,7 +72,7 @@ describe('LoginJourney', () => {
           renderW();
 
           const input = screen.getByLabelText(/paste your token here/i);
-          userEvent.type(input, 'too_short');
+          userEvent.type(input, 'too short');
 
           expect(
             screen.queryByText("That doesn't look like a valid token!")
@@ -85,6 +85,13 @@ describe('LoginJourney', () => {
           expect(
             await screen.findByText("That doesn't look like a valid token!")
           ).toBeInTheDocument();
+          expect(
+            screen.getByText('at least 40 characters required')
+          ).toBeInTheDocument();
+          expect(
+            screen.getByText('only alpha numeric characters and "_"')
+          ).toBeInTheDocument();
+
           expect(button).toBeDisabled();
         });
 
@@ -110,7 +117,7 @@ describe('LoginJourney', () => {
           renderW();
 
           const input = screen.getByLabelText(/paste your token here/i);
-          userEvent.type(input, 'too_short');
+          userEvent.type(input, 'too_short-');
 
           expect(
             screen.queryByText("That doesn't look like a valid token!")
@@ -122,10 +129,20 @@ describe('LoginJourney', () => {
             await screen.findByText("That doesn't look like a valid token!")
           ).toBeInTheDocument();
 
-          userEvent.type(input, 'foo');
+          expect(screen.getByText('at least 40 characters required'));
+          expect(screen.getByText('only alpha numeric characters and "_"'));
+
+          userEvent.type(input, '{backspace}');
 
           expect(
-            await screen.findByText("That doesn't look like a valid token!")
+            screen.getByText('at least 40 characters required')
+          ).toBeInTheDocument();
+          expect(
+            screen.queryByText('only alpha numeric characters and "_"')
+          ).not.toBeInTheDocument();
+
+          expect(
+            screen.getByText("That doesn't look like a valid token!")
           ).toBeInTheDocument();
 
           userEvent.type(input, 'f'.repeat(40));

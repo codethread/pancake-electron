@@ -39,6 +39,7 @@ export const Login: FC<IProps> = ({ send, state }) => {
   const token = formState.context.text;
 
   const [visibility, setVisibility] = useState('password');
+
   return (
     <Glass>
       <button
@@ -85,7 +86,13 @@ export const Login: FC<IProps> = ({ send, state }) => {
         toggle help
       </button>
       {formState.matches('invalid') && (
-        <p>That doesn't look like a valid token!</p>
+        <>
+          <p>That doesn't look like a valid token!</p>
+          {formState.context.errors.map((err, idx) => (
+            // eslint-disable-next-line react/no-array-index-key
+            <p key={idx}>{err}</p>
+          ))}
+        </>
       )}
     </Glass>
   );
