@@ -127,6 +127,7 @@ module.exports = {
         browser: true,
       },
       rules: {
+        'react/no-unescaped-entities': 'off', // things like "don't" need the apostrophe escaped
         'jsx-a11y/label-has-associated-control': [
           2,
           {

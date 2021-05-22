@@ -1,6 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { FC } from 'react';
 import styled from 'styled-components';
+import { isTest } from '@shared/constants';
 
 const borderW = '1px';
 const borderR = 20;
@@ -69,7 +70,8 @@ const corners: ICorner[] = [
   { gridArea: 'br', top: -100, left: -100, color: dark },
 ];
 
-export const Glass: FC = ({ children }) => (
+const GlassStub: FC = ({ children }) => <div>{children}</div>;
+const GlassComp: FC = ({ children }) => (
   <Container>
     {corners.map((corner) => (
       <Corner key={corner.gridArea} {...corner}>
@@ -107,3 +109,5 @@ export const Glass: FC = ({ children }) => (
     <Content>{children}</Content>
   </Container>
 );
+
+export const Glass = isTest ? GlassStub : GlassComp;

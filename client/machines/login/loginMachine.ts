@@ -2,7 +2,12 @@
 import { createMachine, StateWithMatches } from '@xstate/compiled';
 import { assign } from 'xstate';
 import { IBridge } from '@shared/types';
-import { assertEventType, MachineOptions, MachineSend, Matches } from './utils';
+import {
+  assertEventType,
+  MachineOptions,
+  MachineSend,
+  Matches,
+} from '../utils';
 
 export interface User {
   name: string;
@@ -48,6 +53,9 @@ export function loginOptions(bridge: IBridge): LoginOptions {
       openGithubForTokenSetup: () => {
         bridge.openGithubForTokenSetup();
       },
+      storeToken: assign({
+        token: (_, { token }) => token,
+      }),
     },
     guards: {
       isAuth: (context) => Boolean(context.user),
@@ -122,10 +130,14 @@ export const loginMachine = createMachine<PageContext, PageEvent, 'login'>({
             },
           },
           on: {
-            VALIDATE: 'validateToken',
+            VALIDATE: {
+              target: 'validateToken',
+              actions: 'storeToken',
+            },
           },
         },
         validateToken: {
+          id: 'validateToken',
           initial: 'validatingToken',
           states: {
             validatingToken: {
