@@ -14,6 +14,7 @@ export const ipcMain = {
 
 export const ipcRenderer = {
   send: jest.fn(),
+  invoke: jest.fn(),
 };
 
 export const contextBridge = {

@@ -38,9 +38,7 @@ describe('plumbing tests', () => {
       await app.client.$('button=Launch my dashboard');
     });
 
-    test.todo(
-      'when a user clicks the Launch button, they are presented with their dashboard'
-    );
+    test.todo('when a user clicks the Launch button, they are presented with their dashboard');
   });
 
   describe('given a user is logged in', () => {

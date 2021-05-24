@@ -3,9 +3,7 @@ import { app, dialog } from 'electron';
 import { CatchErrorsOptions } from 'electron-log';
 import { ILogger } from '@shared/types';
 
-export const errorHandler: (
-  logger: ILogger
-) => CatchErrorsOptions['onError'] = (logger) => (
+export const errorHandler: (logger: ILogger) => CatchErrorsOptions['onError'] = (logger) => (
   error,
   versions,
   submitIssue
@@ -22,14 +20,11 @@ export const errorHandler: (
       if (result.response === 1) {
         const body = generateReport(error, versions);
 
-        submitIssue?.(
-          'https://github.com/AHDesigns/pancake-electron/issues/new',
-          {
-            title: 'Error report',
-            body,
-            labels: 'to refine, bug',
-          }
-        );
+        submitIssue?.('https://github.com/AHDesigns/pancake-electron/issues/new', {
+          title: 'Error report',
+          body,
+          labels: 'to refine, bug',
+        });
         return;
       }
       if (result.response === 2) {
@@ -52,9 +47,7 @@ function generateReport(
   const os = versions?.os ?? 'no OS detected';
   const code = '```';
   const heading = '**Error Report:**';
-  const stack = error.stack
-    ? `Stacktrace: \n${code}\n${error.stack}\n${code}`
-    : 'No stacktrace';
+  const stack = error.stack ? `Stacktrace: \n${code}\n${error.stack}\n${code}` : 'No stacktrace';
 
   return `**Describe the bug**
 Describe as best you can when the error occured, with steps leading up to it if possible.

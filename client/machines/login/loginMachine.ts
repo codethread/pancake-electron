@@ -1,13 +1,6 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { createMachine, StateWithMatches } from '@xstate/compiled';
-import { assign } from 'xstate';
-import { IBridge } from '@shared/types';
-import {
-  assertEventType,
-  MachineOptions,
-  MachineSend,
-  Matches,
-} from '../utils';
+import { MachineOptions, MachineSend, Matches } from '../utils';
 
 export interface User {
   name: string;
@@ -32,36 +25,6 @@ export type LoginOptions = MachineOptions<PageContext, PageEvent, 'login'>;
 export type LoginMatches = Matches<PageContext, PageEvent, 'login'>;
 export type LoginState = StateWithMatches<PageContext, PageEvent, 'login'>;
 export type LoginSend = MachineSend<PageContext, PageEvent, 'login'>;
-
-export function loginOptions(bridge: IBridge): LoginOptions {
-  return {
-    services: {
-      validateToken: async () => Promise.resolve(),
-      loadConfig: async () => Promise.resolve(),
-      fetchUser: async () => Promise.resolve({ user: { name: 'bob' } }),
-    },
-    actions: {
-      storeUser: assign({
-        user: (_, e) => {
-          assertEventType(e, 'done.invoke.fetchUser');
-          return e.data.user;
-        },
-      }),
-      clearUser: assign({
-        user: (_) => null,
-      }),
-      openGithubForTokenSetup: () => {
-        bridge.openGithubForTokenSetup();
-      },
-      storeToken: assign({
-        token: (_, { token }) => token,
-      }),
-    },
-    guards: {
-      isAuth: (context) => Boolean(context.user),
-    },
-  };
-}
 
 export const loginMachine = createMachine<PageContext, PageEvent, 'login'>({
   id: 'loginMachine',
@@ -143,7 +106,7 @@ export const loginMachine = createMachine<PageContext, PageEvent, 'login'>({
           states: {
             validatingToken: {
               invoke: {
-                src: 'validateToken',
+                src: 'validateTokenPermissions',
                 onDone: 'fetchingProfile',
                 onError: 'invalidToken',
               },

@@ -1,4 +1,4 @@
-import { ipcRenderer } from 'electron';
+import { IpcRenderer, ipcRenderer } from 'electron';
 import { IBridge } from '@shared/types';
 import { bridgeCreator } from './bridge';
 
@@ -8,19 +8,21 @@ describe('bridgeCreator', () => {
   interface Test {
     args: string[];
     method: keyof IBridge;
+    ipc: keyof IpcRenderer;
   }
   test.each`
-    method                       | args
-    ${'test'}                    | ${[str, str]}
-    ${'info'}                    | ${[str, str]}
-    ${'error'}                   | ${[str, str]}
-    ${'openGithubForTokenSetup'} | ${[]}
+    method                       | args          | ipc
+    ${'test'}                    | ${[str, str]} | ${'send'}
+    ${'info'}                    | ${[str, str]} | ${'send'}
+    ${'error'}                   | ${[str, str]} | ${'send'}
+    ${'openGithubForTokenSetup'} | ${[]}         | ${'send'}
+    ${'validateGithubToken'}     | ${[str]}      | ${'invoke'}
   `(
-    'bridge.$method sends args as an array to bridge',
-    ({ method, args }: Test) => {
+    'bridge.$method sends args as an array to bridge method "$ipc"',
+    async ({ method, args, ipc }: Test) => {
       const bridge = bridgeCreator(ipcRenderer);
-      bridge[method](...args);
-      expect(ipcRenderer.send).toHaveBeenCalledWith(method, args);
+      await bridge[method](...args);
+      expect(ipcRenderer[ipc]).toHaveBeenCalledWith(method, args);
     }
   );
 });

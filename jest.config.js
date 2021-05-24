@@ -30,7 +30,7 @@ module.exports = {
     {}
   ),
   clearMocks: true,
-  setupFilesAfterEnv: ['./tooling/setupTests.ts'],
+  setupFilesAfterEnv: ['./tooling/setupTests.ts', './testHelpers/jest.setup.ts'],
   modulePathIgnorePatterns: ['e2e'],
   moduleNameMapper: {
     '^@shared(.*)$': '<rootDir>/shared/$1',

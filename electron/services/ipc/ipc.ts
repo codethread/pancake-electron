@@ -1,42 +1,24 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { IpcMain, IpcMainEvent } from 'electron';
-import { IBridge } from '@shared/types';
-import { ShellRepository } from '@electron/repositories';
+import { IpcMain } from 'electron';
+import { Repositories } from '@electron/repositories';
 import { logger } from '../logger';
+import { validateGithubToken } from './handlers/validateGithubToken';
+import { handlerMethods, Handlers } from './Handlers';
 
-export function setupIpcHandlers(
-  ipcMain: IpcMain,
-  shellRepository: ShellRepository
-): void {
-  const keys: Array<keyof IBridge> = [
-    'test',
-    'info',
-    'error',
-    'openGithubForTokenSetup',
-  ];
+export function setupIpcHandlers(ipcMain: IpcMain, repos: Repositories): void {
+  const loadedHandlers = handlers(repos);
 
-  const loadedHandlers = handlers(shellRepository);
-
-  keys.forEach((key) => {
-    ipcMain.on(key, loadedHandlers[key]);
+  handlerMethods.forEach(({ key, method }) => {
+    // @ts-expect-error not sure how to type this
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    ipcMain[method](key, loadedHandlers[key]);
   });
 }
 
-type Handler<N extends keyof IBridge> = (
-  _: IpcMainEvent,
-  args: Parameters<IBridge[N]>
-) => void;
-
-interface Handlers {
-  test: Handler<'test'>;
-  info: Handler<'info'>;
-  error: Handler<'error'>;
-  openGithubForTokenSetup: Handler<'openGithubForTokenSetup'>;
-}
-
-function handlers(shellRepository: ShellRepository): Handlers {
+function handlers(repos: Repositories): Handlers {
   return {
-    openGithubForTokenSetup(): void {
+    validateGithubToken: validateGithubToken(repos),
+    openGithubForTokenSetup() {
       const url = new URL('https://github.com/settings/tokens/new');
       url.search = new URLSearchParams({
         description: 'Pancake PR dashboard',
@@ -44,7 +26,7 @@ function handlers(shellRepository: ShellRepository): Handlers {
       }).toString();
 
       logger.info(`opening external url ${url.href}`);
-      shellRepository
+      repos.shellRepository
         .openExternal(url.href)
         .catch(logger.errorWithContext('shell open github'));
     },

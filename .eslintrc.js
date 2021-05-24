@@ -73,10 +73,7 @@ module.exports = {
             assertionStyle: 'never',
           },
         ],
-        '@typescript-eslint/consistent-type-definitions': [
-          'error',
-          'interface',
-        ],
+        '@typescript-eslint/consistent-type-definitions': ['error', 'interface'],
         '@typescript-eslint/explicit-member-accessibility': [
           'error',
           { overrides: { constructors: 'no-public' } },

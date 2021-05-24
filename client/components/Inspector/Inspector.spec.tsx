@@ -109,9 +109,7 @@ describe('Inspector', () => {
         const iframe = screen.getByTitle('xstate');
         expect(iframe).toBeInTheDocument();
 
-        expect(
-          screen.queryByRole('button', { name: /.*show.*/i })
-        ).not.toBeInTheDocument();
+        expect(screen.queryByRole('button', { name: /.*show.*/i })).not.toBeInTheDocument();
 
         expect(iframe).toHaveStyle({ display: 'block' });
       });

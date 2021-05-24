@@ -1,12 +1,7 @@
 import React, { FC } from 'react';
 import TestIds from '@shared/testids';
 import { isDev } from '@shared/constants';
-import {
-  loginMachine,
-  LoginMatches,
-  LoginOptions,
-  useMachine,
-} from '@client/machines';
+import { loginMachine, LoginMatches, LoginOptions, useMachine } from '@client/machines';
 import { Glass } from '@client/components';
 import { LoginPage } from '@client/pages/home/LoginPage';
 import { Login } from './Login';
@@ -37,9 +32,7 @@ export const LoginJourney: FC<ILoginJourney> = ({ machineOptions }) => {
             <div>dashboard</div>
           </>
         )}
-        {state.matches('loggedOut.inputToken') && (
-          <Login send={send} state={state} />
-        )}
+        {state.matches('loggedOut.inputToken') && <Login send={send} state={state} />}
         {state.matches('loggedOut.validateToken.invalidToken') && (
           <>
             <div>invalid token</div>

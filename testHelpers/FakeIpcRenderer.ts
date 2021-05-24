@@ -1,11 +1,12 @@
 /* eslint-disable class-methods-use-this,@typescript-eslint/no-explicit-any */
 import { IpcRenderer } from 'electron';
 import { EventEmitter } from 'events';
-import { MockIpcMain } from '@test/MockIpcMain';
+import { FakeIpcMain } from '@test/FakeIpcMain';
 
-export class MockIpcRenderer extends EventEmitter implements IpcRenderer {
-  constructor(private readonly mockIpcMain: MockIpcMain) {
+export class FakeIpcRenderer extends EventEmitter implements IpcRenderer {
+  constructor(private readonly mockIpcMain: FakeIpcMain) {
     super();
+    mockIpcMain.linkRenderer(this);
   }
 
   public send(channel: string, ...args: any[]): void {
@@ -14,8 +15,22 @@ export class MockIpcRenderer extends EventEmitter implements IpcRenderer {
     this.mockIpcMain.emit(channel, ipcMainEvent, ...args);
   }
 
-  public async invoke(_: string, ...___: any[]): Promise<any> {
-    return Promise.reject(new Error('method not yet mocked'));
+  public async invoke(channel: string, ...args: any[]): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.on(`${channel}-reply`, (res) => {
+        this.removeAllListeners(`${channel}-reply`);
+        this.removeAllListeners(`${channel}-reply-fail`);
+        resolve(res);
+      });
+
+      this.on(`${channel}-reply-fail`, (e) => {
+        this.removeAllListeners(`${channel}-reply`);
+        this.removeAllListeners(`${channel}-reply-fail`);
+        reject(e);
+      });
+
+      this.mockIpcMain.emit(channel, ...args);
+    });
   }
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types

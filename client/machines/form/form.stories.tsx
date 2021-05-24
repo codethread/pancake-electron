@@ -14,7 +14,7 @@ const FormMachine: FC = () => {
     ...formOptions({
       actions: {
         submitValidToken: () => {
-          console.log('yay');
+          // TODO: use actions to log
         },
       },
     }),

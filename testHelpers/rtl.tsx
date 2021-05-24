@@ -10,10 +10,8 @@ const AllTheProviders: FC = ({ children }) => (
 );
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type,@typescript-eslint/explicit-module-boundary-types
-const customRender = (
-  ui: ReactElement,
-  options?: Omit<RenderOptions, 'queries'>
-) => render(ui, { wrapper: AllTheProviders, ...options });
+const customRender = (ui: ReactElement, options?: Omit<RenderOptions, 'queries'>) =>
+  render(ui, { wrapper: AllTheProviders, ...options });
 
 export * from '@testing-library/react';
 

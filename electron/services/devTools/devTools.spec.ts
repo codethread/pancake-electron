@@ -1,6 +1,4 @@
-import _installExtension, {
-  REACT_DEVELOPER_TOOLS,
-} from 'electron-devtools-installer';
+import _installExtension, { REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';
 import { mocked } from 'ts-jest/utils';
 import * as _constants from '@shared/constants';
 import { logger } from '../logger';
@@ -26,9 +24,7 @@ describe('Devtools service', () => {
     });
 
     it('logs installation', () => {
-      expect(logger.info).toHaveBeenCalledWith(
-        `Added Extension: "${REACT_DEVELOPER_TOOLS.id}"`
-      );
+      expect(logger.info).toHaveBeenCalledWith(`Added Extension: "${REACT_DEVELOPER_TOOLS.id}"`);
     });
 
     describe('when there is an error', () => {
@@ -39,10 +35,7 @@ describe('Devtools service', () => {
       });
 
       it('it logs the error', () => {
-        expect(logger.error).toHaveBeenCalledWith(
-          expect.anything(),
-          err.message
-        );
+        expect(logger.error).toHaveBeenCalledWith(expect.anything(), err.message);
       });
     });
   });

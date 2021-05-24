@@ -93,6 +93,7 @@
     "electron-devtools-installer": "3.1.1",
     "electron-log": "4.3.2",
     "electron-updater": "4.3.5",
+    "got": "11.8.2",
     "lodash.merge": "4.6.2",
     "react": "16.14.0",
     "react-dom": "16.14.0",

@@ -84,9 +84,6 @@ describe('createLogger', () => {
   });
 
   it('logs the initialised state', () => {
-    expect(log.info).toHaveBeenCalledWith(
-      expect.any(String),
-      expect.any(String)
-    );
+    expect(log.info).toHaveBeenCalledWith(expect.any(String), expect.any(String));
   });
 });

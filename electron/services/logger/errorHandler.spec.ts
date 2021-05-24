@@ -161,10 +161,7 @@ describe('errorHandler', () => {
       });
 
       it('logs the exception', () => {
-        expect(logger.error).toHaveBeenCalledWith(
-          expect.any(String),
-          err.message
-        );
+        expect(logger.error).toHaveBeenCalledWith(expect.any(String), err.message);
       });
     });
   });

@@ -3,6 +3,7 @@ import { Story, Meta } from '@storybook/react/types-6-0';
 import { Inspector } from '@client/components';
 import { loginMachine, loginOptions, useMachine } from '@client/machines';
 import { IBridge } from '@shared/types';
+import { ok } from '@shared/Result';
 
 export default {
   title: 'Machines/Login',
@@ -12,6 +13,7 @@ const bridge: IBridge = {
   error(): void {},
   info(): void {},
   openGithubForTokenSetup(): void {},
+  validateGithubToken: async () => Promise.resolve(ok(true)),
   test(): void {},
 };
 

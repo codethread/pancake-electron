@@ -1,22 +1,30 @@
 import React from 'react';
-import merge from 'lodash.merge';
 import { render, screen, waitFor } from '@test/rtl';
 import userEvent from '@testing-library/user-event';
 
 import { DeepPartial } from '@shared/tsHelpers';
 import { LoginOptions, loginOptions } from '@client/machines';
 import { bridge } from '@test/bridge';
+import { IBridge } from '@shared/types';
+import { merge } from '@shared/merge';
 import { LoginJourney } from './LoginJourney';
 
-describe('LoginJourney', () => {
-  function renderW(overrides?: DeepPartial<LoginOptions>): void {
-    render(
-      <LoginJourney
-        machineOptions={merge({}, loginOptions(bridge), overrides)}
-      />
-    );
-  }
+/**
+ * Render the login journey allowing machine option and bridge overrides
+ *
+ * bridge overrides are preferred, and machine overrides are only to be used before a service has an implementation
+ */
+function renderW({
+  overrides,
+  bridgeOverrides,
+}: { overrides?: DeepPartial<LoginOptions>; bridgeOverrides?: Partial<IBridge> } = {}): void {
+  const fakeBridge = merge(bridge, bridgeOverrides);
+  const machineOptions = merge(loginOptions(fakeBridge), overrides);
 
+  render(<LoginJourney machineOptions={machineOptions} />);
+}
+
+describe('LoginJourney', () => {
   it('starts the user logged out', () => {
     renderW();
     expect(screen.queryByText('Bob')).not.toBeInTheDocument();
@@ -64,9 +72,7 @@ describe('LoginJourney', () => {
         const input = screen.getByLabelText(/paste your token here/i);
         userEvent.type(input, 'too short');
 
-        expect(
-          screen.queryByText("That doesn't look like a valid token!")
-        ).not.toBeInTheDocument();
+        expect(screen.queryByText("That doesn't look like a valid token!")).not.toBeInTheDocument();
 
         const button = screen.getByRole('button', { name: /submit token/i });
 
@@ -75,12 +81,8 @@ describe('LoginJourney', () => {
         expect(
           await screen.findByText("That doesn't look like a valid token!")
         ).toBeInTheDocument();
-        expect(
-          screen.getByText('at least 40 characters required')
-        ).toBeInTheDocument();
-        expect(
-          screen.getByText('only alpha numeric characters and "_"')
-        ).toBeInTheDocument();
+        expect(screen.getByText('at least 40 characters required')).toBeInTheDocument();
+        expect(screen.getByText('only alpha numeric characters and "_"')).toBeInTheDocument();
 
         expect(button).toBeDisabled();
       });
@@ -98,9 +100,7 @@ describe('LoginJourney', () => {
 
         userEvent.clear(input);
 
-        expect(
-          screen.queryByText("That doesn't look like a valid token!")
-        ).not.toBeInTheDocument();
+        expect(screen.queryByText("That doesn't look like a valid token!")).not.toBeInTheDocument();
       });
 
       it('should continue to show errors until all the errors are resolved', async () => {
@@ -109,9 +109,7 @@ describe('LoginJourney', () => {
         const input = screen.getByLabelText(/paste your token here/i);
         userEvent.type(input, 'too_short-');
 
-        expect(
-          screen.queryByText("That doesn't look like a valid token!")
-        ).not.toBeInTheDocument();
+        expect(screen.queryByText("That doesn't look like a valid token!")).not.toBeInTheDocument();
 
         screen.getByRole('button', { name: /submit token/i }).click();
 
@@ -124,22 +122,14 @@ describe('LoginJourney', () => {
 
         userEvent.type(input, '{backspace}');
 
-        expect(
-          screen.getByText('at least 40 characters required')
-        ).toBeInTheDocument();
-        expect(
-          screen.queryByText('only alpha numeric characters and "_"')
-        ).not.toBeInTheDocument();
+        expect(screen.getByText('at least 40 characters required')).toBeInTheDocument();
+        expect(screen.queryByText('only alpha numeric characters and "_"')).not.toBeInTheDocument();
 
-        expect(
-          screen.getByText("That doesn't look like a valid token!")
-        ).toBeInTheDocument();
+        expect(screen.getByText("That doesn't look like a valid token!")).toBeInTheDocument();
 
         userEvent.type(input, 'f'.repeat(40));
 
-        expect(
-          screen.queryByText("That doesn't look like a valid token!")
-        ).not.toBeInTheDocument();
+        expect(screen.queryByText("That doesn't look like a valid token!")).not.toBeInTheDocument();
 
         const button = screen.getByRole('button', { name: /submit token/i });
         expect(button).toBeEnabled();
@@ -152,20 +142,18 @@ describe('LoginJourney', () => {
       const input = screen.getByLabelText(/paste your token here/i);
       expect(input).toHaveAttribute('type', 'password');
 
-      userEvent.click(
-        screen.getByRole('button', { name: /toggle token visibility/i })
-      );
+      userEvent.click(screen.getByRole('button', { name: /toggle token visibility/i }));
       expect(input).toHaveAttribute('type', 'text');
 
-      userEvent.click(
-        screen.getByRole('button', { name: /toggle token visibility/i })
-      );
+      userEvent.click(screen.getByRole('button', { name: /toggle token visibility/i }));
       expect(input).toHaveAttribute('type', 'password');
     });
 
     describe('when the user submits an invalid token', () => {
       it('greets the user with an error, and allows them to go back', async () => {
-        renderW({ services: { validateToken: async () => Promise.reject() } });
+        renderW({
+          bridgeOverrides: { validateGithubToken: jest.fn().mockRejectedValue(new Error()) },
+        });
 
         insertValidToken();
         screen.getByRole('button', { name: /submit token/i }).click();
@@ -181,7 +169,7 @@ describe('LoginJourney', () => {
         it('allows the user to try the again', async () => {
           const fetchSpy = jest.fn().mockRejectedValue(new Error());
 
-          renderW({ services: { fetchUser: fetchSpy } });
+          renderW({ overrides: { services: { fetchUser: fetchSpy } } });
 
           insertValidToken();
           screen.getByRole('button', { name: /submit token/i }).click();
@@ -196,7 +184,7 @@ describe('LoginJourney', () => {
         it('allows the user to return to the submit token step', async () => {
           const fetchSpy = jest.fn().mockRejectedValue(new Error());
 
-          renderW({ services: { fetchUser: fetchSpy } });
+          renderW({ overrides: { services: { fetchUser: fetchSpy } } });
 
           insertValidToken();
           screen.getByRole('button', { name: /submit token/i }).click();
@@ -216,13 +204,9 @@ describe('LoginJourney', () => {
             screen.getByRole('button', { name: /submit token/i }).click();
 
             expect(await screen.findByText(/hello bob/i)).toBeInTheDocument();
-            expect(
-              screen.queryByRole('button', { name: /submit token/i })
-            ).not.toBeInTheDocument();
+            expect(screen.queryByRole('button', { name: /submit token/i })).not.toBeInTheDocument();
 
-            screen
-              .getByRole('button', { name: /launch my dashboard/i })
-              .click();
+            screen.getByRole('button', { name: /launch my dashboard/i }).click();
             expect(await screen.findByText(/dashboard/i)).toBeInTheDocument();
 
             screen.getByRole('button', { name: /log out/i }).click();

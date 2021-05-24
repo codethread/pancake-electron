@@ -15,10 +15,7 @@ interface IRender {
   children?: ReactNode;
 }
 
-function renderW({
-  isDev = false,
-  children = <div>child</div>,
-}: IRender = {}): void {
+function renderW({ isDev = false, children = <div>child</div> }: IRender = {}): void {
   constants.isDev = isDev;
   render(<Scaffold bridge={bridge}>{children}</Scaffold>);
 }
