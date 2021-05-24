@@ -3,6 +3,17 @@
 
 export type Result<O, E = string> = Err<O, E> | Ok<O, E>;
 
+type SimpleResult<O, E> = Pick<Err<O, E>, 'ok' | 'reason'> | Pick<Ok<O, E>, 'ok' | 'val'>;
+
+export const strip = <A, B>(result: Result<A, B>): SimpleResult<A, B> =>
+  result.unwrap({
+    Ok: (val) => ({ ok: true, val }),
+    Err: (reason) => ({ ok: false, reason }),
+  });
+
+export const reBuild = <A, B>(result: SimpleResult<A, B>): Result<A, B> =>
+  result.ok ? ok(result.val) : err(result.reason);
+
 export const ok = <O, E = string>(arg: O): Ok<O, E> => ({
   ok: true,
   val: arg,

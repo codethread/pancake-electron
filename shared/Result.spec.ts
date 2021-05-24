@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/consistent-type-assertions,@typescript-eslint/require-await,@typescript-eslint/explicit-function-return-type */
-import { err, isErr, isOk, ok, Result, tupleResult } from './Result';
+import { err, isErr, isOk, ok, reBuild, Result, strip, tupleResult } from './Result';
 
 describe('Result', () => {
   describe('ok', () => {
@@ -39,6 +39,15 @@ describe('Result', () => {
       // test our custom matcher
       expect(result).toMatchResult(err('failed'));
       expect(err({ data: { nested: 4 } })).toMatchResult(err({ data: { nested: 4 } }));
+    });
+  });
+
+  describe('boundary handlers to allow post message to move Result between processes', () => {
+    it('should strip and rebuild an Ok -> Ok', () => {
+      expect(reBuild(strip(ok('data')))).toMatchResult(ok('data'));
+    });
+    it('should strip and rebuild an Err -> Err', () => {
+      expect(reBuild(strip(err(5)))).toMatchResult(err(5));
     });
   });
 

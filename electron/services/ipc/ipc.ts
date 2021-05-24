@@ -1,6 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { IpcMain } from 'electron';
 import { Repositories } from '@electron/repositories';
+import { strip } from '@shared/Result';
 import { logger } from '../logger';
 import { handlerMethods, Handlers } from './Handlers';
 import { validateGithubToken } from './handlers/validateGithubToken';
@@ -12,7 +13,10 @@ export function setupIpcHandlers(ipcMain: IpcMain, repos: Repositories): void {
   handlerMethods.forEach(({ key, method }) => {
     // @ts-expect-error not sure how to type this
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    ipcMain[method](key, loadedHandlers[key]);
+    ipcMain[method](key, async (e, args) => {
+      const result = await loadedHandlers[key](e, args);
+      return result && strip(result);
+    });
   });
 }
 
