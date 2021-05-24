@@ -28,6 +28,18 @@ describe('github repo', () => {
         );
         expect(scopes).toMatchResult(ok(['foo', 'bar']));
       });
+
+      it('should return a list of scopes', async () => {
+        got.mockResolvedValue({
+          headers: {
+            'x-oauth-scopes': ['foo', 'bar'],
+          },
+        });
+
+        const scopes = await githubRepository().getTokenScopes('123uio');
+
+        expect(scopes).toMatchResult(ok(['foo', 'bar']));
+      });
     });
 
     describe('when no headers are returned', () => {

@@ -5,7 +5,7 @@ import { isTest } from '@shared/constants';
 
 const borderW = '1px';
 const borderR = 20;
-export const Container = styled.div`
+const Container = styled.div`
   margin: ${({ theme }) => theme.spacing.large}px;
   max-width: 450px;
   background-color: ${(props) => props.theme.palette.glass};
@@ -69,6 +69,7 @@ const corners: ICorner[] = [
 ];
 
 const GlassStub: FC = ({ children }) => <div>{children}</div>;
+
 const GlassComp: FC = ({ children }) => (
   <Container>
     {corners.map((corner) => (
@@ -108,4 +109,4 @@ const GlassComp: FC = ({ children }) => (
   </Container>
 );
 
-export const Glass = isTest ? GlassStub : GlassComp;
+export const Glass = (useStub = isTest): FC => (useStub ? GlassStub : GlassComp);

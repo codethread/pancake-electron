@@ -3,6 +3,11 @@ import React from 'react';
 import { Glass } from './Glass';
 
 test('Glass renders', () => {
-  expect(render(<Glass />)).toBeTruthy();
-  expect(render(<Glass>Hi</Glass>)).toBeTruthy();
+  const GlassComp = Glass(false);
+  const GlassStub = Glass(true);
+
+  expect(render(<GlassStub />)).toBeTruthy();
+  expect(render(<GlassStub>Hi</GlassStub>)).toBeTruthy();
+  expect(render(<GlassComp />)).toBeTruthy();
+  expect(render(<GlassComp>Hi</GlassComp>)).toBeTruthy();
 });

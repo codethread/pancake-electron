@@ -2,8 +2,9 @@
 import { IpcMain } from 'electron';
 import { Repositories } from '@electron/repositories';
 import { logger } from '../logger';
-import { validateGithubToken } from './handlers/validateGithubToken';
 import { handlerMethods, Handlers } from './Handlers';
+import { validateGithubToken } from './handlers/validateGithubToken';
+import { openGithubForTokenSetup } from './handlers/openGithubForTokenSetup';
 
 export function setupIpcHandlers(ipcMain: IpcMain, repos: Repositories): void {
   const loadedHandlers = handlers(repos);
@@ -18,18 +19,7 @@ export function setupIpcHandlers(ipcMain: IpcMain, repos: Repositories): void {
 function handlers(repos: Repositories): Handlers {
   return {
     validateGithubToken: validateGithubToken(repos),
-    openGithubForTokenSetup() {
-      const url = new URL('https://github.com/settings/tokens/new');
-      url.search = new URLSearchParams({
-        description: 'Pancake PR dashboard',
-        scopes: 'repo,read:org',
-      }).toString();
-
-      logger.info(`opening external url ${url.href}`);
-      repos.shellRepository
-        .openExternal(url.href)
-        .catch(logger.errorWithContext('shell open github'));
-    },
+    openGithubForTokenSetup: openGithubForTokenSetup(repos),
     test: (_, msg) => {
       logger.info('IPC', ...msg);
     },

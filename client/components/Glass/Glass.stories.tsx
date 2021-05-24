@@ -2,7 +2,7 @@ import React from 'react';
 import { Story, Meta } from '@storybook/react/types-6-0';
 
 import styled, { keyframes } from 'styled-components';
-import { Glass } from './Glass';
+import { Glass } from './index';
 import { H2, H3, lorem, P } from '..';
 
 export default {
