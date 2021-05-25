@@ -20,6 +20,7 @@ COPY client ./client
 COPY electron ./electron
 COPY shared ./shared
 COPY tooling ./tooling
+COPY testHelpers ./testHelpers
 
 RUN yarn machine --once
 RUN yarn build

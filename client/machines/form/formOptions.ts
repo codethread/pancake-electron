@@ -12,20 +12,19 @@ const formOptionsDefaults: FormOptions = {
     storeInput: assign({
       text: (c, e) => (e.type === 'ENTER_INPUT' ? e.text : c.text),
       errors: (c, e) => {
-        if (e.type === 'ENTER_INPUT') {
-          const errors: string[] = [];
+        if (e.type !== 'ENTER_INPUT') return c.errors;
 
-          if (e.text.length < 40) {
-            errors.push('at least 40 characters required');
-          }
+        const errors: string[] = [];
 
-          if (/[^\w]/.test(e.text)) {
-            errors.push('only alpha numeric characters and "_"');
-          }
-
-          return errors;
+        if (e.text.length < 40) {
+          errors.push('at least 40 characters required');
         }
-        return c.errors;
+
+        if (/[^\w]/.test(e.text)) {
+          errors.push('only alpha numeric characters and "_"');
+        }
+
+        return errors;
       },
     }),
     submitValidToken: () => {

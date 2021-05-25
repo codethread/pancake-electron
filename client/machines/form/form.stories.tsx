@@ -14,8 +14,9 @@ const FormMachine: FC = () => {
     devTools: true,
     ...formOptions({
       actions: {
-        submitValidToken: () => {
-          // TODO: use actions to log
+        submitValidToken: ({ text }) => {
+          // eslint-disable-next-line no-console
+          console.log('submitting', text);
         },
       },
     }),
