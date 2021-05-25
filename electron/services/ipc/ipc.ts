@@ -13,8 +13,8 @@ export function setupIpcHandlers(ipcMain: IpcMain, repos: Repositories): void {
   handlerMethods.forEach(({ key, method }) => {
     // @ts-expect-error not sure how to type this
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    ipcMain[method](key, async (e, args) => {
-      const result = await loadedHandlers[key](e, args);
+    ipcMain[method](key, async (event, args) => {
+      const result = await loadedHandlers[key](event, args);
       return result && strip(result);
     });
   });

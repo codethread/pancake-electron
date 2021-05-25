@@ -14,7 +14,9 @@ export const githubRepository = (): GithubRepository => ({
         },
       });
 
-      const scopes = toArr(headers['x-oauth-scopes'] ?? []);
+      const scopes = toArr(headers['x-oauth-scopes'] ?? [])
+        .filter(Boolean)
+        .map((s) => s.trim());
 
       if (scopes.length === 0) return err('no scopes for token');
 

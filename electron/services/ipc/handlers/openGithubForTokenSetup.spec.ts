@@ -20,6 +20,7 @@ describe('openGithubForTokenSetup', () => {
 
     expect(logger.info).toHaveBeenCalledWith(expect.stringContaining(logMessage));
     expect(spy).toHaveBeenCalledWith(expect.stringContaining(href));
+    expect(spy).toHaveBeenCalledWith(expect.stringMatching(/repo.+read.+org/));
   });
 
   it('should log the error if the open fails', (done) => {

@@ -2,7 +2,8 @@ import React, { FC } from 'react';
 import { Story, Meta } from '@storybook/react/types-6-0';
 import { Inspector } from '@client/components';
 import { useMachine } from '@client/machines';
-import { formMachine, formOptions } from './formMachine';
+import { formOptions } from '@client/machines/form/formOptions';
+import { formMachine } from './formMachine';
 
 export default {
   title: 'Machines/Form',

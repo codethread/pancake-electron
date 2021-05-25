@@ -1,8 +1,8 @@
 import React, { FC, useState } from 'react';
-import { LoginSend, LoginState } from '@client/machines';
+import { LoginSend, LoginState, formMachine, formOptions } from '@client/machines';
 import { Glass } from '@client/components';
 import { useMachine } from '@client/machines/utils';
-import { formMachine, formOptions } from '@client/machines/form/formMachine';
+
 import { isDev } from '@shared/constants';
 
 interface IProps {

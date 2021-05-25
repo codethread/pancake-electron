@@ -157,11 +157,11 @@ describe('Result', () => {
       });
     });
 
-    describe('unwrap', () => {
+    describe('match', () => {
       it('should allow handling both err and ok results and only run the appropriate function', () => {
         const okResult = ok(5) as Result<number>;
 
-        const result = okResult.unwrap({
+        const result = okResult.match({
           Ok: (n) => 5 * n,
           Err: (e) => `fail: ${e}`,
         });
@@ -170,7 +170,7 @@ describe('Result', () => {
 
         const errResult = err('burger') as Result<number>;
 
-        const result2 = errResult.unwrap({
+        const result2 = errResult.match({
           Ok: (n) => 5 * n,
           Err: (e) => `fail: ${e}`,
         });

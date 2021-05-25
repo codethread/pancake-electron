@@ -6,7 +6,7 @@ export type Result<O, E = string> = Err<O, E> | Ok<O, E>;
 type SimpleResult<O, E> = Pick<Err<O, E>, 'ok' | 'reason'> | Pick<Ok<O, E>, 'ok' | 'val'>;
 
 export const strip = <A, B>(result: Result<A, B>): SimpleResult<A, B> =>
-  result.unwrap({
+  result.match({
     Ok: (val) => ({ ok: true, val }),
     Err: (reason) => ({ ok: false, reason }),
   });
@@ -21,7 +21,7 @@ export const ok = <O, E = string>(arg: O): Ok<O, E> => ({
   errMap: () => ok(arg),
   flatMap: (cb) => cb(arg),
   chain: async (cb) => cb(arg),
-  unwrap: ({ Ok }) => Ok(arg),
+  match: ({ Ok }) => Ok(arg),
 });
 
 export const err = <E = string, O = string>(arg: E): Err<O, E> => ({
@@ -31,7 +31,7 @@ export const err = <E = string, O = string>(arg: E): Err<O, E> => ({
   errMap: (cb) => err(cb(arg)),
   flatMap: () => err(arg),
   chain: async () => Promise.resolve(err(arg)),
-  unwrap: ({ Err }) => Err(arg),
+  match: ({ Err }) => Err(arg),
 });
 
 // TODO there is an issue in here if you try to flatMap from two different error types, but I've spent too long on this already and most useful functionality is there
@@ -42,7 +42,7 @@ export interface Err<O, E = string> {
   errMap: (cb: (arg: E) => E) => Result<O, E>;
   flatMap: <A>(cb: (arg: O) => Result<A, E>) => Result<A, E>;
   chain: <A>(cb: (arg: O) => Promise<Result<A, E>>) => Promise<Result<A, E>>;
-  unwrap: <R, T>(handlers: { Err: (e: E) => R; Ok: (o: O) => T }) => R;
+  match: <R, T>(handlers: { Err: (e: E) => R; Ok: (o: O) => T }) => R;
 }
 
 export interface Ok<O, E = string> {
@@ -52,7 +52,7 @@ export interface Ok<O, E = string> {
   errMap: (cb: (arg: E) => E) => Result<O, E>;
   flatMap: <A>(cb: (arg: O) => Result<A, E>) => Result<A, E>;
   chain: <A>(cb: (arg: O) => Promise<Result<A, E>>) => Promise<Result<A, E>>;
-  unwrap: <R, T>(handlers: { Err: (e: E) => R; Ok: (o: O) => T }) => T;
+  match: <R, T>(handlers: { Err: (e: E) => R; Ok: (o: O) => T }) => T;
 }
 
 export const isErr = <O, E>(result: Result<O, E>): result is Err<O, E> => !result.ok;

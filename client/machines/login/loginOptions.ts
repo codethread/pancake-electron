@@ -6,7 +6,7 @@ export function loginOptions(bridge: IBridge): LoginOptions {
   return {
     services: {
       validateTokenPermissions: async ({ token }) =>
-        (await bridge.validateGithubToken(token ?? '')).unwrap({
+        (await bridge.validateGithubToken(token ?? '')).match({
           Ok: async () => Promise.resolve(),
           Err: async (e) => Promise.reject(e),
         }),

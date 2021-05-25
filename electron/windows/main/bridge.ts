@@ -5,13 +5,10 @@ import { reBuild, Result } from '@shared/Result';
 
 export function bridgeCreator(ipcRenderer: IpcRenderer): IBridge {
   return {
-    async validateGithubToken(...token): Promise<Result<boolean>> {
-      // TODO could come up with a type guard?
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return,@typescript-eslint/no-unsafe-assignment
-      const result = await ipcRenderer.invoke('validateGithubToken', token);
-      return reBuild(result);
+    async validateGithubToken(...token) {
+      return invoker('validateGithubToken', token);
     },
-    openGithubForTokenSetup(): void {
+    openGithubForTokenSetup() {
       ipcRenderer.send('openGithubForTokenSetup', []);
     },
     test: (...args) => {
@@ -24,4 +21,16 @@ export function bridgeCreator(ipcRenderer: IpcRenderer): IBridge {
       ipcRenderer.send('error', params);
     },
   };
+
+  // bit of ugliness here to save us repeating it above
+  // the idea is that all invokes return a Result
+  // however a Result can't be passed across processes so we `strip` it in the main process,
+  // and then build it back up here.
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async function invoker<A = any, B = any>(key: keyof IBridge, args: any[]): Promise<Result<A, B>> {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const strippedResult = await ipcRenderer.invoke(key, args);
+    return reBuild<A, B>(strippedResult);
+  }
 }

@@ -149,6 +149,7 @@ module.exports = {
       },
       rules: {
         // '@typescript-eslint/no-unsafe-call': 'off',
+        '@typescript-eslint/require-await': 'off', // very common to create simple promise returns, and this saves on boilerplate
         '@typescript-eslint/unbound-method': 'off',
         'import/no-extraneous-dependencies': [
           'error',

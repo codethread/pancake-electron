@@ -7,6 +7,7 @@ import { LoginOptions, loginOptions } from '@client/machines';
 import { bridge } from '@test/bridge';
 import { IBridge } from '@shared/types';
 import { merge } from '@shared/merge';
+import { err } from '@shared/Result';
 import { LoginJourney } from './LoginJourney';
 
 /**
@@ -152,7 +153,7 @@ describe('LoginJourney', () => {
     describe('when the user submits an invalid token', () => {
       it('greets the user with an error, and allows them to go back', async () => {
         renderW({
-          bridgeOverrides: { validateGithubToken: jest.fn().mockRejectedValue(new Error()) },
+          bridgeOverrides: { validateGithubToken: async () => err('') },
         });
 
         insertValidToken();

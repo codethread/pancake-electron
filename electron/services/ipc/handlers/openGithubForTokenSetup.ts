@@ -1,6 +1,7 @@
 import { logger } from '@electron/services';
 import { Repositories } from '@electron/repositories';
 import { Handlers } from '@electron/services/ipc/Handlers';
+import { githubScopes } from '@shared/constants';
 
 export const openGithubForTokenSetup = ({
   shellRepository,
@@ -8,7 +9,7 @@ export const openGithubForTokenSetup = ({
   const url = new URL('https://github.com/settings/tokens/new');
   url.search = new URLSearchParams({
     description: 'Pancake PR dashboard',
-    scopes: 'repo,read:org',
+    scopes: githubScopes.join(','),
   }).toString();
 
   logger.info(`opening external url ${url.href}`);

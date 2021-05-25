@@ -10,6 +10,7 @@ const escapeHatch = [
   '!./client/Main.tsx',
   '!./client/testHelpers/**',
   '!./client/**/*.stories.tsx',
+  '!./client/machines/**/*Options.ts', // too annoying to test
   '!./electron/windows/main/createWindow.ts', // TODO
 ];
 
