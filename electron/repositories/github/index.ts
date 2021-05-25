@@ -1,2 +1,3 @@
 export { fakeGithub } from './fakeGithub';
-export { githubRepository, GithubRepository } from './github';
+export type { GithubRepository } from './github';
+export { githubRepository } from './github';
