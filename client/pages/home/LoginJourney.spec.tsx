@@ -2,33 +2,28 @@ import React from 'react';
 import { render, screen, waitFor } from '@test/rtl';
 import userEvent from '@testing-library/user-event';
 
-import { DeepPartial } from '@shared/tsHelpers';
-import { LoginOptions, loginOptions } from '@client/machines';
+import { loginOptions } from '@client/machines';
 import { bridge } from '@test/bridge';
 import { IBridge } from '@shared/types';
 import { merge } from '@shared/merge';
-import { err } from '@shared/Result';
+import { err, ok } from '@shared/Result';
+import { createMockFn } from '@test/createMockFn';
+import { exampleUser } from '@test/fixtures/github';
 import { LoginJourney } from './LoginJourney';
 
-/**
- * Render the login journey allowing machine option and bridge overrides
- *
- * bridge overrides are preferred, and machine overrides are only to be used before a service has an implementation
- */
-function renderW({
-  overrides,
-  bridgeOverrides,
-}: { overrides?: DeepPartial<LoginOptions>; bridgeOverrides?: Partial<IBridge> } = {}): void {
-  const fakeBridge = merge(bridge, bridgeOverrides);
-  const machineOptions = merge(loginOptions(fakeBridge), overrides);
+function renderW(overrides: Partial<IBridge> = {}): void {
+  const fakeBridge = merge(bridge, overrides);
+  const machineOptions = loginOptions(fakeBridge);
 
   render(<LoginJourney machineOptions={machineOptions} />);
 }
 
+const userGreeting = new RegExp(`hello ${exampleUser.name}`, 'i');
+
 describe('LoginJourney', () => {
   it('starts the user logged out', () => {
     renderW();
-    expect(screen.queryByText('Bob')).not.toBeInTheDocument();
+    expect(screen.queryByText(userGreeting)).not.toBeInTheDocument();
   });
 
   describe('when the user is not already signed in', () => {
@@ -153,7 +148,7 @@ describe('LoginJourney', () => {
     describe('when the user submits an invalid token', () => {
       it('greets the user with an error, and allows them to go back', async () => {
         renderW({
-          bridgeOverrides: { validateGithubToken: async () => err('') },
+          validateGithubToken: async () => err(''),
         });
 
         insertValidToken();
@@ -168,24 +163,24 @@ describe('LoginJourney', () => {
     describe('when the user submits a valid token', () => {
       describe('when the github profile fetch fails', () => {
         it('allows the user to try the again', async () => {
-          const fetchSpy = jest.fn().mockRejectedValue(new Error());
+          const getCurrentUser = createMockFn<IBridge['getCurrentUser']>()
+            .mockResolvedValueOnce(err('could not get user'))
+            .mockResolvedValueOnce(ok(exampleUser));
 
-          renderW({ overrides: { services: { fetchUser: fetchSpy } } });
+          renderW({ getCurrentUser });
 
           insertValidToken();
           screen.getByRole('button', { name: /submit token/i }).click();
           expect(await screen.findByText('no user')).toBeInTheDocument();
 
-          fetchSpy.mockResolvedValue({ user: { name: 'bob' } });
-
           screen.getByRole('button', { name: /try again/i }).click();
-          expect(await screen.findByText(/hello bob/i)).toBeInTheDocument();
+          expect(await screen.findByText(userGreeting)).toBeInTheDocument();
         });
 
         it('allows the user to return to the submit token step', async () => {
-          const fetchSpy = jest.fn().mockRejectedValue(new Error());
+          const getCurrentUser: IBridge['getCurrentUser'] = async () => err('could not get user');
 
-          renderW({ overrides: { services: { fetchUser: fetchSpy } } });
+          renderW({ getCurrentUser });
 
           insertValidToken();
           screen.getByRole('button', { name: /submit token/i }).click();
@@ -204,14 +199,14 @@ describe('LoginJourney', () => {
             insertValidToken();
             screen.getByRole('button', { name: /submit token/i }).click();
 
-            expect(await screen.findByText(/hello bob/i)).toBeInTheDocument();
+            expect(await screen.findByText(userGreeting)).toBeInTheDocument();
             expect(screen.queryByRole('button', { name: /submit token/i })).not.toBeInTheDocument();
 
             screen.getByRole('button', { name: /launch my dashboard/i }).click();
             expect(await screen.findByText(/dashboard/i)).toBeInTheDocument();
 
             screen.getByRole('button', { name: /log out/i }).click();
-            expect(screen.queryByText(/hello bob/i)).not.toBeInTheDocument();
+            expect(screen.queryByText(userGreeting)).not.toBeInTheDocument();
             expect(screen.queryByText(/dashboard/i)).not.toBeInTheDocument();
           });
         });

@@ -4,6 +4,9 @@ import { reBuild, Result } from '@shared/Result';
 
 export function bridgeCreator(ipcRenderer: IpcRenderer): IBridge {
   return {
+    async getCurrentUser() {
+      return invoker('getCurrentUser', []);
+    },
     async validateGithubToken(...token) {
       return invoker('validateGithubToken', token);
     },

@@ -13,6 +13,7 @@ export interface IBridge extends IClientLogger {
   openGithubForTokenSetup(): void;
   test(...msg: string[]): void;
   validateGithubToken(...token: string[]): Promise<Result<boolean>>;
+  getCurrentUser(): Promise<Result<User>>;
 }
 
 export type Partial2Deep<T> = {
@@ -37,3 +38,10 @@ export type Partial2Deep<T> = {
 // }
 //
 // type Maybe<A> = None<A> | Some<A>;
+
+export interface User {
+  name: string;
+  avatarUrl: string;
+  id: string;
+  login: string;
+}

@@ -1,6 +1,7 @@
 // TODO import and mock this from somewhere?
 import { IBridge, IClientLogger } from '@shared/types';
 import { ok } from '@shared/Result';
+import { exampleUser } from '@test/fixtures/github';
 
 export const logger: IClientLogger = {
   error: jest.fn(),
@@ -9,7 +10,8 @@ export const logger: IClientLogger = {
 
 export const bridge: IBridge = {
   ...logger,
+  test: jest.fn(),
   openGithubForTokenSetup: jest.fn(),
   validateGithubToken: async () => Promise.resolve(ok(true)),
-  test: jest.fn(),
+  getCurrentUser: async () => Promise.resolve(ok(exampleUser)),
 };
