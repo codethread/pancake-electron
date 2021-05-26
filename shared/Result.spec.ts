@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/consistent-type-assertions,@typescript-eslint/require-await,@typescript-eslint/explicit-function-return-type */
+/* eslint-disable @typescript-eslint/consistent-type-assertions,@typescript-eslint/explicit-function-return-type */
 import { err, isErr, isOk, ok, reBuild, Result, strip, tupleResult } from './Result';
 
 describe('Result', () => {

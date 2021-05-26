@@ -8,7 +8,6 @@ export const parameters = {
 };
 
 export const decorators = [
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   (Story) => (
     // eslint-disable-next-line react/jsx-filename-extension
     <ThemeProvider theme={theme}>

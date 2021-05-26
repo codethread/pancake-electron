@@ -75,7 +75,6 @@ export const Login: FC<IProps> = ({ send, state }) => {
         <>
           <p>That doesn't look like a valid token!</p>
           {formState.context.errors.map((err, idx) => (
-            // eslint-disable-next-line react/no-array-index-key
             <p key={idx}>{err}</p>
           ))}
         </>

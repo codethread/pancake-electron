@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { DefaultTheme } from 'styled-components';
 import { IFont } from './styled';
 
@@ -98,8 +97,7 @@ export const theme: DefaultTheme = {
   },
 };
 
-// eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-function generateFontVariant(overrides = {} as Partial<IFont>): IFont {
+function generateFontVariant(overrides: Partial<IFont> = {}): IFont {
   return {
     ...body,
     ...overrides,

@@ -1,5 +1,4 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { IpcMainEvent, IpcMainInvokeEvent } from 'electron';
+import { IpcMainEvent, IpcMainInvokeEvent } from '@electron/electron';
 import { IBridge } from '@shared/types';
 
 type IpcMainMethods = 'handle' | 'on';

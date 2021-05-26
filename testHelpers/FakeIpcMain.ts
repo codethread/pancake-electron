@@ -1,5 +1,5 @@
-/* eslint-disable class-methods-use-this,@typescript-eslint/no-explicit-any */
-import { IpcMain, IpcMainInvokeEvent, IpcRenderer } from 'electron';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { IpcMain, IpcMainInvokeEvent, IpcRenderer } from '@electron/electron';
 import { EventEmitter } from 'events';
 
 export class FakeIpcMain extends EventEmitter implements IpcMain {
@@ -39,6 +39,7 @@ export class FakeIpcMain extends EventEmitter implements IpcMain {
     this.noop(channel);
   }
 
+  // eslint-disable-next-line class-methods-use-this
   private noop(
     channel: string,
     listener?: (event: Electron.IpcMainInvokeEvent, ...args: any[]) => any

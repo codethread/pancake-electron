@@ -1,5 +1,4 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { BrowserWindow } from 'electron';
+import { BrowserWindow } from '@electron/electron';
 import path from 'path';
 import url from 'url';
 import { isDev, isIntegration } from '@shared/constants';

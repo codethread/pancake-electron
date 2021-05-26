@@ -1,5 +1,4 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { app, BrowserWindow, ipcMain } from 'electron';
+import { app, BrowserWindow, ipcMain } from '@electron/electron';
 import { fakeRepositories, productionRepositories } from '@electron/repositories';
 import { isIntegration } from '@shared/constants';
 import { logger, checkForUpdates, setUpDevtools, setupIpcHandlers } from './services';

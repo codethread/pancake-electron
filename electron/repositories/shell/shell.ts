@@ -1,5 +1,4 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { shell } from 'electron';
+import { shell } from '@electron/electron';
 
 export interface ShellRepository {
   openExternal(href: string): Promise<void>;

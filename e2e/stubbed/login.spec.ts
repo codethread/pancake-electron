@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/await-thenable,@typescript-eslint/no-unsafe-call */
 import { app } from './init';
 
 describe('plumbing tests', () => {

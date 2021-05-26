@@ -7,6 +7,7 @@ const all = [server, shared, client];
 const escapeHatch = [
   '!**/index.ts?(x)',
   '!./electron/main.ts', // cba
+  '!./electron/electron.ts', // just to save eslint warnings
   '!./client/Main.tsx',
   '!./client/testHelpers/**',
   '!./client/**/*.stories.tsx',

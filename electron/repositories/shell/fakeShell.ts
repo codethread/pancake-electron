@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { logger } from '@electron/services';
 import { merge } from '@shared/merge';
 import { ShellRepository } from './shell';

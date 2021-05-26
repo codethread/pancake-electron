@@ -1,5 +1,4 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { IpcRenderer } from 'electron';
+import { IpcRenderer } from '@electron/electron';
 import { IBridge } from '@shared/types';
 import { reBuild, Result } from '@shared/Result';
 

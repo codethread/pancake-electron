@@ -1,5 +1,4 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { IpcMain } from 'electron';
+import { IpcMain } from '@electron/electron';
 import { Repositories } from '@electron/repositories';
 import { strip } from '@shared/Result';
 import { logger } from '../logger';

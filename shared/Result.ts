@@ -1,4 +1,3 @@
-/* eslint-disable no-redeclare */
 // based on rust's Result Enum, this is a really basic functor and would probably make someone who knows FP cry
 
 export type Result<O, E = string> = Err<O, E> | Ok<O, E>;
