@@ -1,12 +1,27 @@
 import { err, ok, Result } from '@shared/Result';
 import got from 'got';
+import { User } from '@shared/types';
+
+interface GithubUser {
+  data: {
+    user: User;
+  };
+}
 
 export interface GithubRepository {
   getTokenScopes(token: string): Promise<Result<string[]>>;
+  getCurrentUser(): Promise<Result<GithubUser>>;
 }
 
 export const githubRepository = (): GithubRepository => ({
-  async getTokenScopes(token: string): Promise<Result<string[]>> {
+  async getCurrentUser() {
+    throw new Error('not implemented');
+    githubGraphql({
+      operationName: 'GetCurrentUser',
+      variables: {},
+    });
+  },
+  async getTokenScopes(token: string) {
     try {
       const { headers } = await got('https://api.github.com', {
         headers: {

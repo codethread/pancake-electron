@@ -1,11 +1,9 @@
 import { IpcMain } from '@electron/electron';
 import { Repositories } from '@electron/repositories';
+import { logger } from '@electron/services/logger';
 import { Result, strip } from '@shared/Result';
-import { logger } from '../logger';
-import { handlerMethods, Handlers } from './Handlers';
-import { validateGithubToken } from './handlers/validateGithubToken';
-import { openGithubForTokenSetup } from './handlers/openGithubForTokenSetup';
-import { getCurrentUser } from './handlers/getCurrentUser';
+import { Handlers, handlerMethods } from './handlers/Handlers';
+import { validateGithubToken, openGithubForTokenSetup, getCurrentUser } from './handlers';
 
 export function setupIpcHandlers(ipcMain: IpcMain, repos: Repositories): void {
   const loadedHandlers = handlers(repos);

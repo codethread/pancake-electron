@@ -9,6 +9,7 @@ export interface ILogger extends ElectronLog {
 
 export type IClientLogger = Pick<ILogger, 'error' | 'info'>;
 
+// All methods must return void a Result type
 export interface IBridge extends IClientLogger {
   openGithubForTokenSetup(): void;
   test(...msg: string[]): void;

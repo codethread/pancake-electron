@@ -1,10 +1,10 @@
 import { IpcMainEvent, IpcMainInvokeEvent } from '@electron/electron';
 import { IBridge } from '@shared/types';
 
-type IpcMainMethods = 'handle' | 'on';
+export type IpcMainMethods = 'handle' | 'on';
 type IpcRendererMethods = 'invoke' | 'send';
 
-type Handler<N extends keyof IBridge, B extends IpcRendererMethods = 'send'> = (
+export type Handler<N extends keyof IBridge, B extends IpcRendererMethods = 'send'> = (
   event: B extends 'send' ? IpcMainEvent : IpcMainInvokeEvent,
   args: Parameters<IBridge[N]>
 ) => ReturnType<IBridge[N]>;
