@@ -2,10 +2,7 @@ const getScenarios = require('./scenarios');
 
 describe('getScenarios', () => {
   it('should run', () => {
-    const parseMock = jest
-      .fn()
-      .mockReturnValueOnce(['A', 'B'])
-      .mockReturnValueOnce(['C']);
+    const parseMock = jest.fn().mockReturnValueOnce(['A', 'B']).mockReturnValueOnce(['C']);
     const globMock = jest.fn().mockReturnValue(['fileA', 'fileB']);
 
     const scenes = getScenarios(parseMock, globMock);

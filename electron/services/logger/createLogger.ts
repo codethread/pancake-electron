@@ -25,9 +25,7 @@ export function createLogger(log: ElectronLog): ILogger {
   // eslint-disable-next-line no-param-reassign
   log.transports.file.level = getLevel(fileLogLevels);
   // eslint-disable-next-line no-param-reassign
-  log.transports.console.level = isIntegration
-    ? 'info'
-    : getLevel(consoleLogLevels);
+  log.transports.console.level = isIntegration ? 'info' : getLevel(consoleLogLevels);
 
   const logger: ILogger = {
     ...log,

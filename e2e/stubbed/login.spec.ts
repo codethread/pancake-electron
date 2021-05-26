@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/await-thenable,@typescript-eslint/no-unsafe-call */
 import { app } from './init';
 
 describe('plumbing tests', () => {
@@ -30,7 +29,7 @@ describe('plumbing tests', () => {
 
     test('when a user adds a token, they are logged in and presented with the option to launch their dashboard', async () => {
       const input = await app.client.$('label=Paste your token here');
-      await input.addValue('GITHUB_TOKEN');
+      await input.addValue('f'.repeat(40));
 
       const submit = await app.client.$('button=Submit Token');
       await submit.click();
@@ -38,9 +37,7 @@ describe('plumbing tests', () => {
       await app.client.$('button=Launch my dashboard');
     });
 
-    test.todo(
-      'when a user clicks the Launch button, they are presented with their dashboard'
-    );
+    test.todo('when a user clicks the Launch button, they are presented with their dashboard');
   });
 
   describe('given a user is logged in', () => {

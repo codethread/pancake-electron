@@ -26,5 +26,6 @@ RUN yarn build
 
 # not needed for the build so can help with caching
 COPY e2e ./e2e
+COPY testHelpers ./testHelpers
 
-RUN NODE_ENV=production xvfb-run --auto-servernum --server-args='-screen 0, 1600x900x24' yarn e2e
+RUN xvfb-run --auto-servernum --server-args='-screen 0, 1600x900x24' yarn e2e

@@ -1,6 +1,4 @@
-import installExtension, {
-  REACT_DEVELOPER_TOOLS,
-} from 'electron-devtools-installer';
+import installExtension, { REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';
 import { isDev } from '@shared/constants';
 import { ILogger } from '../logger';
 

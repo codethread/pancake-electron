@@ -11,7 +11,7 @@ interface IScaffold {
 
 export const Scaffold: FC<IScaffold> = ({ children, bridge }) => (
   <>
-    <Inspector />
+    <Inspector toggleable />
     <GlobalStyle />
     <ErrorBoundary logger={{ error: bridge.error, info: bridge.info }}>
       <ThemeProvider theme={theme}>{children}</ThemeProvider>

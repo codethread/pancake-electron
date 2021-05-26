@@ -23,19 +23,13 @@ export class ErrorBoundary extends Component<Props, State> {
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
     const { props } = this;
-    props.logger.error(
-      `[ErrorBoundary error] ${error.message}\n${errorInfo.componentStack}`
-    );
+    props.logger.error(`[ErrorBoundary error] ${error.message}\n${errorInfo.componentStack}`);
   }
 
   public render(): ReactNode {
     const { props, state } = this;
     if (state.hasError) {
-      return (
-        <h1 data-testid={testIds.ERROR_BOUNDARY_MESSAGE}>
-          Something went wrong.
-        </h1>
-      );
+      return <h1 data-testid={testIds.ERROR_BOUNDARY_MESSAGE}>Something went wrong.</h1>;
     }
     return props.children;
   }

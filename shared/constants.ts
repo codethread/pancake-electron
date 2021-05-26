@@ -43,3 +43,5 @@ function sanitiseNodenv(env?: string): Nodenv {
   assertValidNodenv(sanitisedNodenv);
   return sanitisedNodenv;
 }
+
+export const githubScopes = ['repo', 'read:org'];

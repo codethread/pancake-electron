@@ -7,9 +7,11 @@ const all = [server, shared, client];
 const escapeHatch = [
   '!**/index.ts?(x)',
   '!./electron/main.ts', // cba
+  '!./electron/electron.ts', // just to save eslint warnings
   '!./client/Main.tsx',
   '!./client/testHelpers/**',
   '!./client/**/*.stories.tsx',
+  '!./client/machines/**/*Options.ts', // too annoying to test
   '!./electron/windows/main/createWindow.ts', // TODO
 ];
 
@@ -30,7 +32,7 @@ module.exports = {
     {}
   ),
   clearMocks: true,
-  setupFilesAfterEnv: ['./tooling/setupTests.ts'],
+  setupFilesAfterEnv: ['./tooling/setupTests.ts', './testHelpers/jest.setup.ts'],
   modulePathIgnorePatterns: ['e2e'],
   moduleNameMapper: {
     '^@shared(.*)$': '<rootDir>/shared/$1',

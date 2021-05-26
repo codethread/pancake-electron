@@ -4,8 +4,6 @@ interface IForceError {
   errorMessage?: string;
 }
 
-export const ForceError: FC<IForceError> = ({
-  errorMessage = 'error message',
-}) => {
+export const ForceError: FC<IForceError> = ({ errorMessage = 'error message' }) => {
   throw new Error(errorMessage);
 };

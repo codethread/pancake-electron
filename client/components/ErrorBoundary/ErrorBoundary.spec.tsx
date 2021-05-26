@@ -23,9 +23,7 @@ describe('Error Boundary', () => {
     it('renders children', () => {
       renderW();
       expect(screen.getByText('hello')).toBeInTheDocument();
-      expect(
-        screen.queryByText('Something went wrong')
-      ).not.toBeInTheDocument();
+      expect(screen.queryByText('Something went wrong')).not.toBeInTheDocument();
     });
 
     it('logs nothing', () => {
@@ -52,9 +50,7 @@ describe('Error Boundary', () => {
 
     it('logs the error', () => {
       renderW({ shouldError: true });
-      expect(logger.error).toHaveBeenCalledWith(
-        expect.stringContaining('error message')
-      );
+      expect(logger.error).toHaveBeenCalledWith(expect.stringContaining('error message'));
     });
   });
 });

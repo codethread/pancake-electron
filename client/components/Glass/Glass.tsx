@@ -1,10 +1,11 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { FC } from 'react';
 import styled from 'styled-components';
+import { isTest } from '@shared/constants';
 
 const borderW = '1px';
 const borderR = 20;
-export const Container = styled.div`
+const Container = styled.div`
   margin: ${({ theme }) => theme.spacing.large}px;
   max-width: 450px;
   background-color: ${(props) => props.theme.palette.glass};
@@ -57,10 +58,8 @@ const light = '#FFFBFB';
 const middle = 'rgba(163, 204, 207, 0.1)';
 const dark = '#429BA0';
 
-const lightToMiddle = (deg: number): string =>
-  `linear-gradient(${deg}deg, ${light}, ${middle}) 1`;
-const middleToDark = (deg: number): string =>
-  `linear-gradient(${deg}deg, ${middle}, ${dark}) 1`;
+const lightToMiddle = (deg: number): string => `linear-gradient(${deg}deg, ${light}, ${middle}) 1`;
+const middleToDark = (deg: number): string => `linear-gradient(${deg}deg, ${middle}, ${dark}) 1`;
 
 const corners: ICorner[] = [
   { gridArea: 'tl', top: 0, left: 0, color: light },
@@ -69,7 +68,9 @@ const corners: ICorner[] = [
   { gridArea: 'br', top: -100, left: -100, color: dark },
 ];
 
-export const Glass: FC = ({ children }) => (
+const GlassStub: FC = ({ children }) => <div>{children}</div>;
+
+const GlassComp: FC = ({ children }) => (
   <Container>
     {corners.map((corner) => (
       <Corner key={corner.gridArea} {...corner}>
@@ -107,3 +108,5 @@ export const Glass: FC = ({ children }) => (
     <Content>{children}</Content>
   </Container>
 );
+
+export const Glass = (useStub = isTest): FC => (useStub ? GlassStub : GlassComp);

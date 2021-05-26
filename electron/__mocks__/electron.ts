@@ -14,6 +14,8 @@ export const ipcMain = {
 
 export const ipcRenderer = {
   send: jest.fn(),
+  // mock with a simple result returned
+  invoke: jest.fn().mockResolvedValue({ ok: true, val: 'some value' }),
 };
 
 export const contextBridge = {

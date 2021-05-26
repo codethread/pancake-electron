@@ -1,11 +1,9 @@
 import React, { FC, useState } from 'react';
-import { LoginMatches, LoginSend, LoginState } from '@client/machines';
+import { LoginSend, LoginState, formMachine, formOptions } from '@client/machines';
 import { Glass } from '@client/components';
+import { useMachine } from '@client/machines/utils';
 
-const launchableStates: LoginMatches[] = [
-  'loggedOut.validateToken.hasConfig',
-  'loggedOut.validateToken.noConfig',
-];
+import { isDev } from '@shared/constants';
 
 interface IProps {
   send: LoginSend;
@@ -13,8 +11,21 @@ interface IProps {
 }
 
 export const Login: FC<IProps> = ({ send, state }) => {
-  const [tokenInput, setTokenInput] = useState('');
+  const [formState, formSend] = useMachine(formMachine, {
+    ...formOptions({
+      actions: {
+        submitValidToken: ({ text }) => {
+          send({ type: 'VALIDATE', token: text });
+        },
+      },
+    }),
+    devTools: isDev,
+  });
+
+  const token = formState.context.text;
+
   const [visibility, setVisibility] = useState('password');
+
   return (
     <Glass>
       <button
@@ -24,57 +35,48 @@ export const Login: FC<IProps> = ({ send, state }) => {
       >
         Create token
       </button>
-      <label>
-        Paste your token here
-        <input
-          type={visibility}
-          value={tokenInput}
-          onChange={(e) => setTokenInput(e.target.value)}
-        />
-      </label>
-      <button
-        type="button"
-        onClick={() => {
-          setVisibility((v) => (v === 'password' ? 'text' : 'password'));
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+
+          formSend({ type: 'SUBMIT' });
         }}
       >
-        toggle token visibility
-      </button>
-      <button
-        type="button"
-        disabled={!tokenInput}
-        onClick={() => send({ type: 'VALIDATE', token: 'token' })}
-      >
-        Submit Token
-      </button>
+        <label>
+          Paste your token here
+          <input
+            type={visibility}
+            value={token}
+            onChange={({ target: { value } }) => {
+              formSend({ type: 'ENTER_INPUT', text: value });
+            }}
+          />
+        </label>
+        <button
+          type="button"
+          onClick={() => {
+            setVisibility((v) => (v === 'password' ? 'text' : 'password'));
+          }}
+        >
+          toggle token visibility
+        </button>
+        <button
+          type="button"
+          disabled={formState.matches('invalid')}
+          onClick={() => formSend({ type: 'SUBMIT' })}
+        >
+          Submit Token
+        </button>
+      </form>
       <button type="button" onClick={() => send({ type: 'TOGGLE_HELP' })}>
         toggle help
       </button>
-      {state.matches('loggedOut.validateToken.invalidToken') && (
+      {formState.matches('invalid') && (
         <>
-          <div>invalid token</div>
-          <button type="button" onClick={() => send({ type: 'BACK' })}>
-            back
-          </button>
-        </>
-      )}
-      {launchableStates.some(state.matches) && (
-        <>
-          <div>hello {state.context.user?.name}</div>
-          <button type="button" onClick={() => send({ type: 'LAUNCH' })}>
-            Launch my dashboard
-          </button>
-        </>
-      )}
-      {state.matches('loggedOut.validateToken.profileFailure') && (
-        <>
-          <div>no user</div>
-          <button type="button" onClick={() => send({ type: 'TRY_AGAIN' })}>
-            try again
-          </button>
-          <button type="button" onClick={() => send({ type: 'BACK' })}>
-            back
-          </button>
+          <p>That doesn't look like a valid token!</p>
+          {formState.context.errors.map((err, idx) => (
+            <p key={idx}>{err}</p>
+          ))}
         </>
       )}
     </Glass>

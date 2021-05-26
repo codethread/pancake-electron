@@ -73,10 +73,7 @@ module.exports = {
             assertionStyle: 'never',
           },
         ],
-        '@typescript-eslint/consistent-type-definitions': [
-          'error',
-          'interface',
-        ],
+        '@typescript-eslint/consistent-type-definitions': ['error', 'interface'],
         '@typescript-eslint/explicit-member-accessibility': [
           'error',
           { overrides: { constructors: 'no-public' } },
@@ -127,6 +124,8 @@ module.exports = {
         browser: true,
       },
       rules: {
+        'react/no-array-index-key': 'off', // we all know what we're doing here
+        'react/no-unescaped-entities': 'off', // things like "don't" need the apostrophe escaped
         'jsx-a11y/label-has-associated-control': [
           2,
           {
@@ -151,6 +150,7 @@ module.exports = {
       },
       rules: {
         // '@typescript-eslint/no-unsafe-call': 'off',
+        '@typescript-eslint/require-await': 'off', // very common to create simple promise returns, and this saves on boilerplate
         '@typescript-eslint/unbound-method': 'off',
         'import/no-extraneous-dependencies': [
           'error',

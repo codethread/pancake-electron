@@ -8,12 +8,11 @@ module.exports = ({ config }) => {
   //   "node_modules",
   // ]
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,no-param-reassign
+  // eslint-disable-next-line no-param-reassign
   config.resolve.alias = {
     ...shared,
     ...client,
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return config;
 };

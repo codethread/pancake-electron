@@ -29,10 +29,7 @@ describe('checkForUpdates', () => {
     });
 
     it('catches and logs error', () => {
-      expect(logger.error).toHaveBeenCalledWith(
-        expect.any(String),
-        err.message
-      );
+      expect(logger.error).toHaveBeenCalledWith(expect.any(String), err.message);
     });
   });
 });
