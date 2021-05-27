@@ -14,6 +14,7 @@ Pancake is an [electron](https://www.electronjs.org/) app built using:
 - [Backstop.js](https://garris.github.io/BackstopJS/) for visual regression tests
 - [Spectron](https://www.electronjs.org/spectron) for e2e tests running against the production electron app (it's a wrapper around [webdriver.io](https://v6.webdriver.io/docs/api.html) which in turn wraps selenium)
 - Github actions for CI (not yet supporting publishing)
+- Graphql Codegen to generate type definitions for Github graphql queries, and lint
 
 Install a node manager of your choice (volta is supported and recommended)
 
@@ -45,6 +46,7 @@ Some other useful commands
 | `yarn checks` | runs the full checklist of lint, test, build and e2e ||
 | `yarn docker-e2e` | runs the e2e tests via a Dockerfile in a headless state - this is how CI will run these tests |
 | `yarn release` | see [releasing wiki](https://github.com/AHDesigns/pancake-electron/wiki/Releasing) for information
+| `yarn graphql` | generate type definitions for graphql queries used by the Github Repository (needs local schema generated using an [IDE plugin](https://github.com/kamilkisiela/graphql-config/tree/legacy#editors))|
 
 
 ## License

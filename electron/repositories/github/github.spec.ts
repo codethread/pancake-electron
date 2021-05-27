@@ -35,4 +35,11 @@ describe('github repo', () => {
       expect(await githubRepository().getTokenScopes('123uio')).toMatchResult(result);
     });
   });
+
+  describe('#getCurrentUser', () => {
+    it('should do things', async () => {
+      const res = await githubRepository().getCurrentUser();
+      expect(res).toBe('');
+    });
+  });
 });

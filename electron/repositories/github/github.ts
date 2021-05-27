@@ -1,25 +1,29 @@
 import { err, ok, Result } from '@shared/Result';
 import got from 'got';
-import { User } from '@shared/types';
-
-interface GithubUser {
-  data: {
-    user: User;
-  };
-}
+import { GetCurrentUser, GetCurrentUserQuery } from './generated/graphql';
 
 export interface GithubRepository {
   getTokenScopes(token: string): Promise<Result<string[]>>;
-  getCurrentUser(): Promise<Result<GithubUser>>;
+  getCurrentUser(): Promise<Result<GetCurrentUserQuery>>;
 }
+
+const githubGraphql = 'https://api.github.com/graphql';
 
 export const githubRepository = (): GithubRepository => ({
   async getCurrentUser() {
-    throw new Error('not implemented');
-    githubGraphql({
-      operationName: 'GetCurrentUser',
-      variables: {},
+    const res = await got<GetCurrentUserQuery>(githubGraphql, {
+      responseType: 'json',
+      headers: {
+        Authorization: `token ${process.env.GH_TOKEN ?? ''}`,
+      },
+      body: GetCurrentUser,
     });
+    return ok(res.body);
+    // const a: GetCurrentUserQuery = {};
+    // githubGraphql({
+    //   operationName: 'GetCurrentUser',
+    //   variables: {},
+    // });
   },
   async getTokenScopes(token: string) {
     try {

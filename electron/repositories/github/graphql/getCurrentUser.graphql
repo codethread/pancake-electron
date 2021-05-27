@@ -1,0 +1,8 @@
+query GetCurrentUser {
+    viewer {
+        name
+        avatarUrl
+        id
+        login
+    }
+}
