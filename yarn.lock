@@ -2460,14 +2460,6 @@
     mkdirp "^1.0.4"
     rimraf "^3.0.2"
 
-"@octokit/graphql-schema@10.42.0":
-  version "10.42.0"
-  resolved "https://registry.yarnpkg.com/@octokit/graphql-schema/-/graphql-schema-10.42.0.tgz#35d944ee1ccdd0b304f1a8721d7cb573f388fc4b"
-  integrity sha512-6nuBSVIgvFblBZFnkqeifK4uANXTDZJ7JSo6eQuSbnqjOFalN8QP3CC9r8oKmHT0tzrIxzSyhuTYslzufaF5HA==
-  dependencies:
-    graphql "^15.0.0"
-    graphql-tag "^2.10.3"
-
 "@pmmmwh/react-refresh-webpack-plugin@^0.4.2":
   version "0.4.3"
   resolved "https://registry.yarnpkg.com/@pmmmwh/react-refresh-webpack-plugin/-/react-refresh-webpack-plugin-0.4.3.tgz#1eec460596d200c0236bf195b078a5d1df89b766"
@@ -9365,7 +9357,7 @@ graphql-request@^3.3.0:
     extract-files "^9.0.0"
     form-data "^3.0.0"
 
-graphql-tag@^2.10.3, graphql-tag@^2.11.0:
+graphql-tag@^2.11.0:
   version "2.12.4"
   resolved "https://registry.yarnpkg.com/graphql-tag/-/graphql-tag-2.12.4.tgz#d34066688a4f09e72d6f4663c74211e9b4b7c4bf"
   integrity sha512-VV1U4O+9x99EkNpNmCUV5RZwq6MnK4+pGbRYWG+lA/m3uo7TSqJF81OkcOP148gFP6fzdl7JWYBrwWVTS9jXww==
@@ -9377,7 +9369,7 @@ graphql-ws@^4.4.1:
   resolved "https://registry.yarnpkg.com/graphql-ws/-/graphql-ws-4.5.1.tgz#d9dc6e047c6d4ddb928ccbfb3ca3022580a89925"
   integrity sha512-GE7vCMKe2D7fc0ugkM1V8QMneHcbV9c3BpPBzdlW/Uzkqv0F/zZq9DDHxLzg55ZhE5OSLL+n/gyqAMPgH59hcw==
 
-graphql@^15.0.0:
+graphql@15.5.0:
   version "15.5.0"
   resolved "https://registry.yarnpkg.com/graphql/-/graphql-15.5.0.tgz#39d19494dbe69d1ea719915b578bf920344a69d5"
   integrity sha512-OmaM7y0kaK31NKG31q4YbD2beNYa6jBBKtMFT6gLYJljHLJr42IqJ8KX08u3Li/0ifzTU5HjmoOOrwa5BRLeDA==
