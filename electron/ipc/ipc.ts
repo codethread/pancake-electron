@@ -12,7 +12,7 @@ export function setupIpcHandlers(ipcMain: IpcMain, repos: Repositories): void {
     // @ts-expect-error not sure how to type this
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     ipcMain[method](key, async (event, args) => {
-      const result: Result<any> | void = await loadedHandlers[key](event, args);
+      const result: Result<unknown> | void = await loadedHandlers[key](event, args);
       return result && strip(result);
     });
   });
