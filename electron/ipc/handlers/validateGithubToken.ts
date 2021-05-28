@@ -1,7 +1,7 @@
 import { Repositories } from '@electron/repositories';
 import { err, ok } from '@shared/Result';
 import { githubScopes } from '@shared/constants';
-import { Handlers } from '../Handlers';
+import { Handlers } from './Handlers';
 
 export const errMessage = err<string, boolean>('missing scopes');
 

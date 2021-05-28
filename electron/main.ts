@@ -1,7 +1,8 @@
 import { app, BrowserWindow, ipcMain } from '@electron/electron';
-import { fakeRepositories, productionRepositories } from '@electron/repositories';
 import { isIntegration } from '@shared/constants';
-import { logger, checkForUpdates, setUpDevtools, setupIpcHandlers } from './services';
+import { fakeRepositories, productionRepositories } from './repositories';
+import { logger, checkForUpdates, setUpDevtools } from './services';
+import { setupIpcHandlers } from './ipc';
 import { createWindow } from './windows/main/createWindow';
 
 let mainWindow: BrowserWindow | null;

@@ -10,18 +10,24 @@ export function loginOptions(bridge: IBridge): LoginOptions {
           Ok: async () => Promise.resolve(),
           Err: async (e) => Promise.reject(e),
         }),
+      fetchUser: async ({ token }) =>
+        (await bridge.getCurrentUser(token ?? '')).match({
+          Ok: (user) => user,
+          Err: () => {
+            throw new Error();
+          },
+        }),
       loadConfig: async () => Promise.resolve(),
-      fetchUser: async () => Promise.resolve({ user: { name: 'bob' } }),
     },
     actions: {
       storeUser: assign({
         user: (_, e) => {
           assertEventType(e, 'done.invoke.fetchUser');
-          return e.data.user;
+          return e.data;
         },
       }),
       clearUser: assign({
-        user: (_) => null,
+        user: (_) => undefined,
       }),
       openGithubForTokenSetup: () => {
         bridge.openGithubForTokenSetup();

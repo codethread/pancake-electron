@@ -8,11 +8,12 @@ const escapeHatch = [
   '!**/index.ts?(x)',
   '!./electron/main.ts', // cba
   '!./electron/electron.ts', // just to save eslint warnings
+  '!./electron/windows/main/createWindow.ts', // TODO
   '!./client/Main.tsx',
   '!./client/testHelpers/**',
   '!./client/**/*.stories.tsx',
   '!./client/machines/**/*Options.ts', // too annoying to test
-  '!./electron/windows/main/createWindow.ts', // TODO
+  '!./shared/graphql',
 ];
 
 module.exports = {

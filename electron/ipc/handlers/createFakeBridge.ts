@@ -3,7 +3,7 @@ import { IBridge } from '@shared/types';
 import { FakeIpcMain } from '@test/FakeIpcMain';
 import { FakeIpcRenderer } from '@test/FakeIpcRenderer';
 import { bridgeCreator } from '@electron/windows/main/bridge';
-import { setupIpcHandlers } from '@electron/services';
+import { setupIpcHandlers } from '../ipc';
 
 // I have intimately coupled the ipcMain events to the ipcRenderer events
 // I think this is valid, despite that making this an integration test

@@ -1,6 +1,6 @@
 import { logger } from '@electron/services';
 import { Repositories } from '@electron/repositories';
-import { Handlers } from '@electron/services/ipc/Handlers';
+import { Handlers } from '@electron/ipc/handlers/Handlers';
 import { githubScopes } from '@shared/constants';
 
 export const openGithubForTokenSetup = ({

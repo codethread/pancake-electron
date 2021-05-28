@@ -43,7 +43,7 @@ export const LoginJourney: FC<ILoginJourney> = ({ machineOptions }) => {
         )}
         {launchableStates.some(state.matches) && (
           <>
-            <div>hello {state.context.user?.name}</div>
+            <div>hello {state.context.user?.viewer.name}</div>
             <button type="button" onClick={() => send({ type: 'LAUNCH' })}>
               Launch my dashboard
             </button>
