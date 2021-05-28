@@ -3,4 +3,5 @@ import { Handlers } from './Handlers';
 
 export const getCurrentUser = ({
   githubRepository,
-}: Repositories): Handlers['getCurrentUser'] => async () => githubRepository.getCurrentUser();
+}: Repositories): Handlers['getCurrentUser'] => async (_, [token]) =>
+  githubRepository.getCurrentUser(token);

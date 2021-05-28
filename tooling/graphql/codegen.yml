@@ -3,7 +3,7 @@ schema: "tooling/graphql/github-schema.graphql"
 documents:
   - electron/repositories/github/graphql/*.graphql
 generates:
-  electron/repositories/github/generated/graphql.ts:
+  shared/graphql.ts:
     # https://www.graphql-code-generator.com/docs/plugins/index
     plugins:
       # Generate types for TypeScript - those are usually relevant for both client side and server side code
@@ -15,3 +15,9 @@ generates:
     config:
       # force typescript-document-nodes to just use normal strings, not gql``
       documentMode: string
+      # don't turn _User into _UserQuery
+      omitOperationSuffix: true
+      # don't need __typename in payloads for cache
+      skipTypename: true
+      # adds 'Request' to the end of the actual query strings, to distinguish types from strings
+      nameSuffix: 'Request'

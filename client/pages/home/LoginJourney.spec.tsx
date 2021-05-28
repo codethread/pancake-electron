@@ -18,7 +18,7 @@ function renderW(overrides: Partial<IBridge> = {}): void {
   render(<LoginJourney machineOptions={machineOptions} />);
 }
 
-const userGreeting = new RegExp(`hello ${exampleUser.name}`, 'i');
+const userGreeting = new RegExp(`hello ${exampleUser.viewer.name}`, 'i');
 
 describe('LoginJourney', () => {
   it('starts the user logged out', () => {
@@ -169,9 +169,10 @@ describe('LoginJourney', () => {
 
           renderW({ getCurrentUser });
 
-          insertValidToken();
+          const validToken = insertValidToken();
           screen.getByRole('button', { name: /submit token/i }).click();
           expect(await screen.findByText('no user')).toBeInTheDocument();
+          expect(getCurrentUser).toHaveBeenCalledWith(validToken);
 
           screen.getByRole('button', { name: /try again/i }).click();
           expect(await screen.findByText(userGreeting)).toBeInTheDocument();
@@ -215,7 +216,9 @@ describe('LoginJourney', () => {
   });
 });
 
-function insertValidToken(): void {
+function insertValidToken(): string {
+  const token = 'ffffffffffffffffffffffffffffffffffffffffff';
   const input = screen.getByLabelText(/paste your token here/i);
-  userEvent.type(input, 'ffffffffffffffffffffffffffffffffffffffffff');
+  userEvent.type(input, token);
+  return token;
 }

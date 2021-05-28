@@ -12,12 +12,6 @@ const fakes: GithubRepository = {
     return Promise.resolve(ok(githubScopes));
   },
   async getCurrentUser() {
-    return Promise.resolve(
-      ok({
-        data: {
-          user: exampleUser,
-        },
-      })
-    );
+    return Promise.resolve(ok(exampleUser));
   },
 };

@@ -1,17 +1,17 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { createMachine, StateWithMatches } from '@xstate/compiled';
-import { User } from '@shared/types';
+import type { _User } from '@shared/graphql';
 import { MachineOptions, MachineSend, Matches } from '../utils';
 
 export interface PageContext {
-  user?: User;
+  user?: _User;
   token?: string;
 }
 
 export type PageEvent =
   | { type: 'BACK' }
   | { type: 'CREATE_TOKEN' }
-  | { type: 'done.invoke.fetchUser'; data: User }
+  | { type: 'done.invoke.fetchUser'; data: _User }
   | { type: 'LAUNCH' }
   | { type: 'LOGOUT' }
   | { type: 'TOGGLE_HELP' }

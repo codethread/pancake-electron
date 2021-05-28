@@ -1,5 +1,6 @@
 import { ElectronLog } from 'electron-log';
 import { Result } from '@shared/Result';
+import { _User } from '@shared/graphql';
 
 export interface ILogger extends ElectronLog {
   errorWithContext(context: string): (err: Error | string) => void;
@@ -9,12 +10,13 @@ export interface ILogger extends ElectronLog {
 
 export type IClientLogger = Pick<ILogger, 'error' | 'info'>;
 
-// All methods must return void a Result type
+// TODO create a type to encapsulate this
+// All methods must return void or Result type
 export interface IBridge extends IClientLogger {
   openGithubForTokenSetup(): void;
   test(...msg: string[]): void;
   validateGithubToken(...token: string[]): Promise<Result<boolean>>;
-  getCurrentUser(): Promise<Result<User>>;
+  getCurrentUser(...token: string[]): Promise<Result<_User>>;
 }
 
 export type Partial2Deep<T> = {
@@ -39,10 +41,3 @@ export type Partial2Deep<T> = {
 // }
 //
 // type Maybe<A> = None<A> | Some<A>;
-
-export interface User {
-  name: string;
-  avatarUrl: string;
-  id: string;
-  login: string;
-}

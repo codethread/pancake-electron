@@ -10,8 +10,8 @@ export function loginOptions(bridge: IBridge): LoginOptions {
           Ok: async () => Promise.resolve(),
           Err: async (e) => Promise.reject(e),
         }),
-      fetchUser: async () =>
-        (await bridge.getCurrentUser()).match({
+      fetchUser: async ({ token }) =>
+        (await bridge.getCurrentUser(token ?? '')).match({
           Ok: (user) => user,
           Err: () => {
             throw new Error();

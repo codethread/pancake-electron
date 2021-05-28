@@ -1,11 +1,11 @@
 import { err, ok, Result } from '@shared/Result';
-import { User } from '@shared/types';
 import { exampleUser } from '@test/fixtures/github';
+import { _User } from '@shared/graphql';
 import { createFakeBridge } from './createFakeBridge';
 
 interface Test {
-  response: Result<User>;
-  result: Result<User>;
+  response: Result<_User>;
+  result: Result<_User>;
 }
 
 jest.mock('@electron/services/logger');

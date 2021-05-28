@@ -37,7 +37,7 @@ module.exports = {
     'tooling/backstop_data/ci_report',
     'tooling/backstop_data/bitmaps_test',
     'tooling/graphql',
-    'electron/repositories/github/generated/',
+    'shared/graphql.ts',
   ],
   overrides: [
     {
