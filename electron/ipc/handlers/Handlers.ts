@@ -16,6 +16,7 @@ export interface Handlers {
   openGithubForTokenSetup: Handler<'openGithubForTokenSetup'>;
   validateGithubToken: Handler<'validateGithubToken', 'invoke'>;
   getCurrentUser: Handler<'getCurrentUser', 'invoke'>;
+  loadUserConfig: Handler<'loadUserConfig', 'invoke'>;
 }
 
 export const handlerMethods: Array<{ key: keyof IBridge; method: IpcMainMethods }> = [

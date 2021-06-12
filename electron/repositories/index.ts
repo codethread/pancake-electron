@@ -1,12 +1,16 @@
 import { merge } from '@shared/merge';
 import { Partial2Deep } from '@shared/types';
-import { fakeGithub, githubRepository, GithubRepository } from './github';
-import { fakeShell, shellRepository, ShellRepository } from './shell';
+import { fakeGithub, githubRepository, GithubRepository as Github } from './github';
+import { fakeShell, shellRepository, ShellRepository as Shell } from './shell';
 
-export interface Repositories {
-  shellRepository: ShellRepository;
-  githubRepository: GithubRepository;
+export interface GithubRepository {
+  githubRepository: Github;
 }
+export interface ShellRepository {
+  shellRepository: Shell;
+}
+
+export type Repositories = GithubRepository & ShellRepository;
 
 export const productionRepositories: Repositories = {
   githubRepository: githubRepository(),

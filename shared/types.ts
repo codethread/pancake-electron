@@ -10,6 +10,11 @@ export interface ILogger extends ElectronLog {
 
 export type IClientLogger = Pick<ILogger, 'error' | 'info'>;
 
+export interface UserConfig {
+  filters: [];
+  user: _User;
+}
+
 // TODO create a type to encapsulate this
 // All methods must return void or Result type
 export interface IBridge extends IClientLogger {
@@ -17,6 +22,7 @@ export interface IBridge extends IClientLogger {
   test(...msg: string[]): void;
   validateGithubToken(...token: string[]): Promise<Result<boolean>>;
   getCurrentUser(...token: string[]): Promise<Result<_User>>;
+  loadUserConfig(): Promise<Result<UserConfig>>;
 }
 
 export type Partial2Deep<T> = {
@@ -41,3 +47,7 @@ export type Partial2Deep<T> = {
 // }
 //
 // type Maybe<A> = None<A> | Some<A>;
+
+export interface AnyObject {
+  [key: string]: any;
+}
