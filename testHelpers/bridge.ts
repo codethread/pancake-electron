@@ -12,6 +12,12 @@ export const bridge: IBridge = {
   ...logger,
   test: jest.fn(),
   openGithubForTokenSetup: jest.fn(),
-  validateGithubToken: async () => Promise.resolve(ok(true)),
+  validateAndStoreGithubToken: async () => Promise.resolve(ok(true)),
   getCurrentUser: async () => Promise.resolve(ok(exampleUser)),
+  loadUserConfig: async () =>
+    Promise.resolve(
+      ok({
+        filters: [],
+      })
+    ),
 };

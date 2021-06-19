@@ -2,6 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import TestIds from '@shared/testids';
 import { bridge } from '@test/bridge';
+import { waitForLoadingToFinish } from './home/testHelpers';
 import { Home } from './Home';
 
 describe('Home', () => {
@@ -12,13 +13,15 @@ describe('Home', () => {
     render(<Home bridge={bridge} />);
   }
 
-  it('renders the login journey', () => {
+  it('renders the login journey', async () => {
     renderW();
+    await waitForLoadingToFinish();
     expect(screen.getByTestId(TestIds.LOGIN_JOURNEY)).toBeInTheDocument();
   });
 
-  it('renders the navigation', () => {
+  it('renders the navigation', async () => {
     renderW();
+    await waitForLoadingToFinish();
     expect(screen.getByTestId(TestIds.NAVIGATION)).toBeInTheDocument();
   });
 });

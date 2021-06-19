@@ -1,6 +1,7 @@
 import Store from 'electron-store';
 import { DeepPartial } from '@shared/tsHelpers';
 import { err, ok, Result } from '@shared/Result';
+import { logger } from '@electron/services';
 import { getKeyPathsAndValues } from './getKeyPathsAndValues';
 
 // type Scalar = boolean | number | string | null | undefined;
@@ -22,12 +23,25 @@ export interface StoreRepository<T> {
 }
 
 export interface StoreConfig<T> {
+  /**
+   * Name of the config file to be created
+   *
+   * e.g `Foo` will become Foo.json
+   */
   name: string;
+  /**
+   * Directory for the config file, sensible default for Operating System if none provided
+   */
   cwd?: string;
-  defaults?: T;
+  /**
+   * Initial values for config, if no config file exists
+   */
+  defaults: T;
 }
 
 export const storeRepository = <T>(storeConfig: StoreConfig<T>): StoreRepository<T> => {
+  const { name, cwd } = storeConfig;
+  logger.info(`setting up Store Repo: name ${name}${cwd ? `cwd ${cwd}` : ''}`);
   const store = new Store<T>(storeConfig);
   return {
     read() {
@@ -40,7 +54,12 @@ export const storeRepository = <T>(storeConfig: StoreConfig<T>): StoreRepository
           store.set(path, value);
         });
         return ok(store.store);
-      } catch (_: unknown) {
+      } catch (e: unknown) {
+        logger.warn(
+          `failed to update store "${name}", err:\n${
+            e instanceof Error ? e.message : 'unknownError'
+          }`
+        );
         store.set(originalStore);
         return err('failed to update');
       }

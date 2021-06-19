@@ -14,7 +14,7 @@ export interface Handlers {
   info: Handler<'info'>;
   error: Handler<'error'>;
   openGithubForTokenSetup: Handler<'openGithubForTokenSetup'>;
-  validateGithubToken: Handler<'validateGithubToken', 'invoke'>;
+  validateAndStoreGithubToken: Handler<'validateAndStoreGithubToken', 'invoke'>;
   getCurrentUser: Handler<'getCurrentUser', 'invoke'>;
   loadUserConfig: Handler<'loadUserConfig', 'invoke'>;
 }
@@ -24,6 +24,6 @@ export const handlerMethods: Array<{ key: keyof IBridge; method: IpcMainMethods 
   { key: 'info', method: 'on' },
   { key: 'error', method: 'on' },
   { key: 'openGithubForTokenSetup', method: 'on' },
-  { key: 'validateGithubToken', method: 'handle' },
+  { key: 'validateAndStoreGithubToken', method: 'handle' },
   { key: 'getCurrentUser', method: 'handle' },
 ];

@@ -5,9 +5,9 @@ import { Handlers } from './Handlers';
 
 export const errMessage = err<string, boolean>('missing scopes');
 
-export const validateGithubToken = ({
+export const validateAndStoreGithubToken = ({
   githubRepository,
-}: GithubRepository): Handlers['validateGithubToken'] => async (_, [token]) => {
+}: GithubRepository): Handlers['validateAndStoreGithubToken'] => async (_, [token]) => {
   const res = await githubRepository.getTokenScopes(token);
 
   return res.flatMap((scopes) =>

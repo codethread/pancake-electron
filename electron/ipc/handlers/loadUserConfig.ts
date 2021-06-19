@@ -1,6 +1,7 @@
-import { Handlers } from '@electron/ipc/handlers/Handlers';
-import { err } from '@shared/Result';
+import { ClientStoreRepository } from '@electron/repositories';
+import { Handlers } from './Handlers';
 
 export const loadUserConfig = ({
-  storeRepository,
-}: StoreRepository): Handlers['loadUserConfig'] => async () => Promise.resolve(err('file corrupt'));
+  clientStoreRepository,
+}: ClientStoreRepository): Handlers['loadUserConfig'] => async () =>
+  Promise.resolve(clientStoreRepository.read());

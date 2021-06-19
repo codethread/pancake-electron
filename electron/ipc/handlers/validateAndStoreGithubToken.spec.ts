@@ -1,11 +1,11 @@
 import { ok } from '@shared/Result';
 import { githubScopes } from '@shared/constants';
 import { createFakeBridge } from './createFakeBridge';
-import { errMessage } from './validateGithubToken';
+import { errMessage } from './validateAndStoreGithubToken';
 
 jest.mock('@electron/services/logger');
 
-describe('validateGithubToken', () => {
+describe('validateAndStoreGithubToken', () => {
   test.each`
     title             | scopes                            | result
     ${'partial'}      | ${ok(['repo'])}                   | ${errMessage}
@@ -19,7 +19,7 @@ describe('validateGithubToken', () => {
       },
     });
 
-    const res = await bridge.validateGithubToken('1234');
+    const res = await bridge.validateAndStoreGithubToken('1234');
 
     expect(res).toMatchResult(result);
   });

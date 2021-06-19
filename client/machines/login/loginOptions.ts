@@ -6,7 +6,7 @@ export function loginOptions(bridge: IBridge): LoginOptions {
   return {
     services: {
       validateTokenPermissions: async ({ token }) =>
-        (await bridge.validateGithubToken(token ?? '')).match({
+        (await bridge.validateAndStoreGithubToken(token ?? '')).match({
           Ok: async () => Promise.resolve(),
           Err: async (e) => Promise.reject(e),
         }),
@@ -37,7 +37,7 @@ export function loginOptions(bridge: IBridge): LoginOptions {
       }),
     },
     guards: {
-      isAuth: (context) => Boolean(context.user),
+      isLoggedIn: (context) => Boolean(context.user),
     },
   };
 }

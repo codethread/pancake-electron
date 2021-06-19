@@ -24,6 +24,7 @@ export const LoginJourney: FC<ILoginJourney> = ({ machineOptions }) => {
   return (
     <div data-testid={TestIds.LOGIN_JOURNEY}>
       <LoginPage>
+        {state.matches('authorize') && <p>loading</p>}
         {state.matches('loggedIn') && (
           <>
             <button type="button" onClick={() => send({ type: 'LOGOUT' })}>

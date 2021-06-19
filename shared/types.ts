@@ -10,9 +10,9 @@ export interface ILogger extends ElectronLog {
 
 export type IClientLogger = Pick<ILogger, 'error' | 'info'>;
 
-export interface UserConfig {
+export interface UserStore {
   filters: [];
-  user: _User;
+  user?: _User;
 }
 
 // TODO create a type to encapsulate this
@@ -20,9 +20,9 @@ export interface UserConfig {
 export interface IBridge extends IClientLogger {
   openGithubForTokenSetup(): void;
   test(...msg: string[]): void;
-  validateGithubToken(...token: string[]): Promise<Result<boolean>>;
+  validateAndStoreGithubToken(...token: string[]): Promise<Result<boolean>>;
   getCurrentUser(...token: string[]): Promise<Result<_User>>;
-  loadUserConfig(): Promise<Result<UserConfig>>;
+  loadUserConfig(): Promise<Result<UserStore>>;
 }
 
 export type Partial2Deep<T> = {

@@ -9,7 +9,7 @@ let mainWindow: BrowserWindow | null;
 
 checkForUpdates(logger);
 
-const repos = isIntegration ? fakeRepositories() : productionRepositories;
+const repos = isIntegration ? fakeRepositories() : productionRepositories();
 
 app
   .on('ready', () => {

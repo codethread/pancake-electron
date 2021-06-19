@@ -7,8 +7,8 @@ export function bridgeCreator(ipcRenderer: IpcRenderer): IBridge {
     async getCurrentUser(...token) {
       return invoker('getCurrentUser', token);
     },
-    async validateGithubToken(...token) {
-      return invoker('validateGithubToken', token);
+    async validateAndStoreGithubToken(...token) {
+      return invoker('validateAndStoreGithubToken', token);
     },
     openGithubForTokenSetup() {
       ipcRenderer.send('openGithubForTokenSetup', []);
@@ -21,6 +21,9 @@ export function bridgeCreator(ipcRenderer: IpcRenderer): IBridge {
     },
     error(...params) {
       ipcRenderer.send('error', params);
+    },
+    async loadUserConfig() {
+      return invoker('loadUserConfig', []);
     },
   };
 

@@ -11,13 +11,13 @@ describe('bridgeCreator', () => {
     ipc: keyof IpcRenderer;
   }
   test.each`
-    method                       | args          | ipc
-    ${'test'}                    | ${[str, str]} | ${'send'}
-    ${'info'}                    | ${[str, str]} | ${'send'}
-    ${'error'}                   | ${[str, str]} | ${'send'}
-    ${'openGithubForTokenSetup'} | ${[]}         | ${'send'}
-    ${'validateGithubToken'}     | ${[str]}      | ${'invoke'}
-    ${'getCurrentUser'}          | ${[str]}      | ${'invoke'}
+    method                           | args          | ipc
+    ${'test'}                        | ${[str, str]} | ${'send'}
+    ${'info'}                        | ${[str, str]} | ${'send'}
+    ${'error'}                       | ${[str, str]} | ${'send'}
+    ${'openGithubForTokenSetup'}     | ${[]}         | ${'send'}
+    ${'validateAndStoreGithubToken'} | ${[str]}      | ${'invoke'}
+    ${'getCurrentUser'}              | ${[str]}      | ${'invoke'}
   `(
     'bridge.$method sends args as an array to bridge method "$ipc"',
     async ({ method, args, ipc }: Test) => {

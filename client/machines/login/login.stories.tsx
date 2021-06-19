@@ -3,7 +3,7 @@ import { Story, Meta } from '@storybook/react/types-6-0';
 import { Inspector } from '@client/components';
 import { loginMachine, loginOptions, useMachine } from '@client/machines';
 import { IBridge } from '@shared/types';
-import { ok } from '@shared/Result';
+import { err, ok } from '@shared/Result';
 import { exampleUser } from '@test/fixtures/github';
 
 export default {
@@ -11,10 +11,11 @@ export default {
 } as Meta;
 
 const bridge: IBridge = {
+  loadUserConfig: async () => Promise.resolve(err('no store')),
   error(): void {},
   info(): void {},
   openGithubForTokenSetup(): void {},
-  validateGithubToken: async () => Promise.resolve(ok(true)),
+  validateAndStoreGithubToken: async () => Promise.resolve(ok(true)),
   test(): void {},
   getCurrentUser: async () => Promise.resolve(ok(exampleUser)),
 };

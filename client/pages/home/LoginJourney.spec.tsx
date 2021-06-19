@@ -9,6 +9,7 @@ import { merge } from '@shared/merge';
 import { err, ok } from '@shared/Result';
 import { createMockFn } from '@test/createMockFn';
 import { exampleUser } from '@test/fixtures/github';
+import { waitForLoadingToFinish } from './testHelpers';
 import { LoginJourney } from './LoginJourney';
 
 function renderW(overrides: Partial<IBridge> = {}): void {
@@ -18,19 +19,28 @@ function renderW(overrides: Partial<IBridge> = {}): void {
   render(<LoginJourney machineOptions={machineOptions} />);
 }
 
+async function renderAndWaitForLoadingToFinish(
+  overrides: Parameters<typeof renderW>[0] = {}
+): Promise<void> {
+  renderW(overrides);
+  await waitForLoadingToFinish();
+}
+
 const userGreeting = new RegExp(`hello ${exampleUser.viewer.name}`, 'i');
 
 describe('LoginJourney', () => {
-  it('starts the user logged out', () => {
+  it('should display the loading spinner at startup', async () => {
     renderW();
     expect(screen.queryByText(userGreeting)).not.toBeInTheDocument();
+    // let the component finish rendering to prevent any `act` warnings
+    await screen.findByRole('button', { name: /Create token/i });
   });
 
   describe('when the user is not already signed in', () => {
     it('renders a link to create a new token from github, which has a delay before it can be clicked again', async () => {
-      renderW();
+      await renderAndWaitForLoadingToFinish();
 
-      const button = screen.getByRole('button', { name: /Create token/i });
+      const button = await screen.findByRole('button', { name: /Create token/i });
       userEvent.click(button);
       // difficult to test this as a behaviour
       expect(bridge.openGithubForTokenSetup).toHaveBeenCalled();
@@ -47,8 +57,8 @@ describe('LoginJourney', () => {
       expect(bridge.openGithubForTokenSetup).toHaveBeenCalledTimes(2);
     });
 
-    it('allows the user to toggle the help section, which starts hidden', () => {
-      renderW();
+    it('allows the user to toggle the help section, which starts hidden', async () => {
+      await renderAndWaitForLoadingToFinish();
 
       const helpSection = /help section/i;
       const toggleHelp = /toggle help/i;
@@ -63,7 +73,7 @@ describe('LoginJourney', () => {
 
     describe('when the user inputs an invalid token', () => {
       it('should display errors to the client and disable the submit button', async () => {
-        renderW();
+        await renderAndWaitForLoadingToFinish();
 
         const input = screen.getByLabelText(/paste your token here/i);
         userEvent.type(input, 'too short');
@@ -84,7 +94,7 @@ describe('LoginJourney', () => {
       });
 
       it('should continue to show errors until the input is cleared', async () => {
-        renderW();
+        await renderAndWaitForLoadingToFinish();
 
         const input = screen.getByLabelText(/paste your token here/i);
         userEvent.type(input, 'rubbish token');
@@ -100,7 +110,7 @@ describe('LoginJourney', () => {
       });
 
       it('should continue to show errors until all the errors are resolved', async () => {
-        renderW();
+        await renderAndWaitForLoadingToFinish();
 
         const input = screen.getByLabelText(/paste your token here/i);
         userEvent.type(input, 'too_short-');
@@ -132,8 +142,8 @@ describe('LoginJourney', () => {
       });
     });
 
-    it('should allow toggling of the token display', () => {
-      renderW();
+    it('should allow toggling of the token display', async () => {
+      await renderAndWaitForLoadingToFinish();
 
       const input = screen.getByLabelText(/paste your token here/i);
       expect(input).toHaveAttribute('type', 'password');
@@ -147,8 +157,8 @@ describe('LoginJourney', () => {
 
     describe('when the user submits an invalid token', () => {
       it('greets the user with an error, and allows them to go back', async () => {
-        renderW({
-          validateGithubToken: async () => err(''),
+        await renderAndWaitForLoadingToFinish({
+          validateAndStoreGithubToken: async () => err(''),
         });
 
         insertValidToken();
@@ -167,7 +177,7 @@ describe('LoginJourney', () => {
             .mockResolvedValueOnce(err('could not get user'))
             .mockResolvedValueOnce(ok(exampleUser));
 
-          renderW({ getCurrentUser });
+          await renderAndWaitForLoadingToFinish({ getCurrentUser });
 
           const validToken = insertValidToken();
           screen.getByRole('button', { name: /submit token/i }).click();
@@ -181,7 +191,7 @@ describe('LoginJourney', () => {
         it('allows the user to return to the submit token step', async () => {
           const getCurrentUser: IBridge['getCurrentUser'] = async () => err('could not get user');
 
-          renderW({ getCurrentUser });
+          await renderAndWaitForLoadingToFinish({ getCurrentUser });
 
           insertValidToken();
           screen.getByRole('button', { name: /submit token/i }).click();
@@ -195,7 +205,7 @@ describe('LoginJourney', () => {
       describe('when the user is a valid user', () => {
         describe('when the user has config', () => {
           it('lets the user launch their dashboard and sign out', async () => {
-            renderW();
+            await renderAndWaitForLoadingToFinish();
 
             insertValidToken();
             screen.getByRole('button', { name: /submit token/i }).click();
