@@ -6,25 +6,35 @@ export function loginOptions(bridge: IBridge): LoginOptions {
   return {
     services: {
       validateTokenPermissions: async ({ token }) =>
-        (await bridge.validateGithubToken(token ?? '')).match({
-          Ok: async () => Promise.resolve(),
-          Err: async (e) => Promise.reject(e),
+        (await bridge.validateAndStoreGithubToken(token ?? '')).match({
+          Ok: () => {},
+          Err: async (err) => Promise.reject(err),
         }),
-      fetchUser: async ({ token }) =>
-        (await bridge.getCurrentUser(token ?? '')).match({
+      fetchUser: async () =>
+        (await bridge.getCurrentUser()).match({
           Ok: (user) => user,
           Err: () => {
             throw new Error();
           },
         }),
-      loadConfig: async () => Promise.resolve(),
+      loadConfig: async () =>
+        (await bridge.loadUserConfig()).match({
+          Ok: (config) => config,
+          Err: () => {
+            throw new Error();
+          },
+        }),
     },
     actions: {
       storeUser: assign({
         user: (_, e) => {
-          assertEventType(e, 'done.invoke.fetchUser');
+          bridge.updateUserConfig({ user: e.data }).catch(() => {});
           return e.data;
         },
+      }),
+      storeConfig: assign((_, e) => {
+        assertEventType(e, 'done.invoke.loadConfig');
+        return e.data;
       }),
       clearUser: assign({
         user: (_) => undefined,
@@ -35,9 +45,12 @@ export function loginOptions(bridge: IBridge): LoginOptions {
       storeToken: assign({
         token: (_, { token }) => token,
       }),
+      deleteToken: assign({
+        token: (_) => undefined,
+      }),
     },
     guards: {
-      isAuth: (context) => Boolean(context.user),
+      isLoggedIn: (_, e) => Boolean(e.data.user),
     },
   };
 }

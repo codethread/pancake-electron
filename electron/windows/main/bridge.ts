@@ -4,11 +4,11 @@ import { reBuild, Result } from '@shared/Result';
 
 export function bridgeCreator(ipcRenderer: IpcRenderer): IBridge {
   return {
-    async getCurrentUser(...token) {
-      return invoker('getCurrentUser', token);
+    async getCurrentUser() {
+      return invoker('getCurrentUser', []);
     },
-    async validateGithubToken(...token) {
-      return invoker('validateGithubToken', token);
+    async validateAndStoreGithubToken(...token) {
+      return invoker('validateAndStoreGithubToken', token);
     },
     openGithubForTokenSetup() {
       ipcRenderer.send('openGithubForTokenSetup', []);
@@ -21,6 +21,13 @@ export function bridgeCreator(ipcRenderer: IpcRenderer): IBridge {
     },
     error(...params) {
       ipcRenderer.send('error', params);
+    },
+    async loadUserConfig() {
+      return invoker('loadUserConfig', []);
+    },
+
+    async updateUserConfig(...config) {
+      return invoker('updateUserConfig', config);
     },
   };
 

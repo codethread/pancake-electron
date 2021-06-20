@@ -3,7 +3,13 @@ import { Repositories } from '@electron/repositories';
 import { logger } from '@electron/services/logger';
 import { Result, strip } from '@shared/Result';
 import { Handlers, handlerMethods } from './handlers/Handlers';
-import { validateGithubToken, openGithubForTokenSetup, getCurrentUser } from './handlers';
+import {
+  validateAndStoreGithubToken,
+  openGithubForTokenSetup,
+  getCurrentUser,
+  loadUserConfig,
+  updateUserConfig,
+} from './handlers';
 
 export function setupIpcHandlers(ipcMain: IpcMain, repos: Repositories): void {
   const loadedHandlers = handlers(repos);
@@ -21,8 +27,9 @@ export function setupIpcHandlers(ipcMain: IpcMain, repos: Repositories): void {
 function handlers(repos: Repositories): Handlers {
   return {
     getCurrentUser: getCurrentUser(repos),
-    validateGithubToken: validateGithubToken(repos),
+    validateAndStoreGithubToken: validateAndStoreGithubToken(repos),
     openGithubForTokenSetup: openGithubForTokenSetup(repos),
+    loadUserConfig: loadUserConfig(repos),
     test: (_, msg) => {
       logger.info('IPC', ...msg);
     },
@@ -32,5 +39,6 @@ function handlers(repos: Repositories): Handlers {
     error: (_, msg) => {
       logger.error('IPC', ...msg);
     },
+    updateUserConfig: updateUserConfig(repos),
   };
 }

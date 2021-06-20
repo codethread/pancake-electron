@@ -1,6 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { createMachine, StateWithMatches } from '@xstate/compiled';
 import type { _User } from '@shared/graphql';
+import { UserStore } from '@shared/types';
 import { MachineOptions, MachineSend, Matches } from '../utils';
 
 export interface PageContext {
@@ -12,6 +13,7 @@ export type PageEvent =
   | { type: 'BACK' }
   | { type: 'CREATE_TOKEN' }
   | { type: 'done.invoke.fetchUser'; data: _User }
+  | { type: 'done.invoke.loadConfig'; data: UserStore }
   | { type: 'LAUNCH' }
   | { type: 'LOGOUT' }
   | { type: 'TOGGLE_HELP' }
@@ -29,15 +31,19 @@ export const loginMachine = createMachine<PageContext, PageEvent, 'login'>({
   context: {},
   states: {
     authorize: {
-      always: [
-        {
-          cond: 'isAuth',
-          target: 'loggedIn',
-        },
-        {
-          target: 'loggedOut',
-        },
-      ],
+      invoke: {
+        src: 'loadConfig',
+        onDone: [
+          {
+            cond: 'isLoggedIn',
+            target: 'loggedIn',
+          },
+          {
+            target: 'loggedOut',
+          },
+        ],
+      },
+      onExit: 'storeConfig',
     },
     loggedIn: {
       id: 'loggedIn',
@@ -107,6 +113,7 @@ export const loginMachine = createMachine<PageContext, PageEvent, 'login'>({
                 onDone: 'fetchingProfile',
                 onError: 'invalidToken',
               },
+              onExit: 'deleteToken',
             },
             invalidToken: {
               on: {
@@ -132,16 +139,10 @@ export const loginMachine = createMachine<PageContext, PageEvent, 'login'>({
             loadingConfig: {
               invoke: {
                 src: 'loadConfig',
-                onDone: 'hasConfig',
-                onError: 'noConfig',
+                onDone: 'readyToLaunch',
               },
             },
-            noConfig: {
-              on: {
-                LAUNCH: '#loggedIn',
-              },
-            },
-            hasConfig: {
+            readyToLaunch: {
               on: {
                 LAUNCH: '#loggedIn',
               },
