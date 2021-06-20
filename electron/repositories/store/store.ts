@@ -4,22 +4,9 @@ import { err, ok, Result } from '@shared/Result';
 import { logger } from '@electron/services';
 import { getKeyPathsAndValues } from './getKeyPathsAndValues';
 
-// type Scalar = boolean | number | string | null | undefined;
-
-// type ToNull<Type> = {
-//   [Property in keyof Type]?: Type[Property] extends Scalar ? null : ToNull<Type[Property]>;
-// };
-
-// export type AnyJson = JsonArray | JsonMap | boolean | number | string | null;
-// export interface JsonMap {
-//   [key: string]: AnyJson;
-// }
-// type JsonArray = Array<AnyJson>;
-
 export interface StoreRepository<T> {
   read(): Result<T>;
   update(value: DeepPartial<T>): Result<T>;
-  // reset(keyObject: ToNull<T>): Result<T>;
 }
 
 export interface StoreConfig<T> {
@@ -64,8 +51,5 @@ export const storeRepository = <T>(storeConfig: StoreConfig<T>): StoreRepository
         return err('failed to update');
       }
     },
-    // reset() {
-    //   return ok({} as T);
-    // },
   };
 };

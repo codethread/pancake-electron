@@ -12,7 +12,7 @@ export const updateUserConfig = ({
 }: ClientStoreRepository): Handlers['updateUserConfig'] => async (_, [config]) =>
   Promise.resolve(
     clientStoreRepository.update(config).match({
-      Err: () => ok(true),
-      Ok: () => ok(false),
+      Err: () => ok(false),
+      Ok: () => ok(true),
     })
   );
