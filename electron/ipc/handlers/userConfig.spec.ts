@@ -30,8 +30,8 @@ describe('loadUserConfig', () => {
 describe('updateUserConfig', () => {
   test.each`
     title                                  | response       | result
-    ${'returns false when update fails'}   | ${err('poop')} | ${ok(false)}
-    ${'returns true when update succeeds'} | ${ok('hi')}    | ${ok(true)}
+    ${'returns false when update fails'}   | ${err('poop')} | ${err('poop')}
+    ${'returns true when update succeeds'} | ${ok('hi')}    | ${ok('hi')}
   `('$title', async ({ response, result }: Test) => {
     const bridge = createFakeBridge({
       clientStoreRepository: {

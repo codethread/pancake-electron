@@ -28,7 +28,10 @@ export interface StoreConfig<T> {
 
 export const storeRepository = <T>(storeConfig: StoreConfig<T>): StoreRepository<T> => {
   const { name, cwd } = storeConfig;
+
+  /* istanbul ignore next */
   logger.info(`setting up Store Repo: name ${name}${cwd ? `cwd ${cwd}` : ''}`);
+
   const store = new Store<T>(storeConfig);
   return {
     read() {
@@ -44,6 +47,7 @@ export const storeRepository = <T>(storeConfig: StoreConfig<T>): StoreRepository
       } catch (e: unknown) {
         logger.warn(
           `failed to update store "${name}", err:\n${
+            /* istanbul ignore next */
             e instanceof Error ? e.message : 'unknownError'
           }`
         );
