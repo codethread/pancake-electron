@@ -4,8 +4,8 @@ import { reBuild, Result } from '@shared/Result';
 
 export function bridgeCreator(ipcRenderer: IpcRenderer): IBridge {
   return {
-    async getCurrentUser(...token) {
-      return invoker('getCurrentUser', token);
+    async getCurrentUser() {
+      return invoker('getCurrentUser', []);
     },
     async validateAndStoreGithubToken(...token) {
       return invoker('validateAndStoreGithubToken', token);
@@ -24,6 +24,10 @@ export function bridgeCreator(ipcRenderer: IpcRenderer): IBridge {
     },
     async loadUserConfig() {
       return invoker('loadUserConfig', []);
+    },
+
+    async updateUserConfig(...config) {
+      return invoker('updateUserConfig', config);
     },
   };
 

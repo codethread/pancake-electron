@@ -17,7 +17,8 @@ describe('bridgeCreator', () => {
     ${'error'}                       | ${[str, str]} | ${'send'}
     ${'openGithubForTokenSetup'}     | ${[]}         | ${'send'}
     ${'validateAndStoreGithubToken'} | ${[str]}      | ${'invoke'}
-    ${'getCurrentUser'}              | ${[str]}      | ${'invoke'}
+    ${'getCurrentUser'}              | ${[]}         | ${'invoke'}
+    ${'loadUserConfig'}              | ${[]}         | ${'invoke'}
   `(
     'bridge.$method sends args as an array to bridge method "$ipc"',
     async ({ method, args, ipc }: Test) => {

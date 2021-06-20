@@ -179,10 +179,9 @@ describe('LoginJourney', () => {
 
           await renderAndWaitForLoadingToFinish({ getCurrentUser });
 
-          const validToken = insertValidToken();
+          insertValidToken();
           screen.getByRole('button', { name: /submit token/i }).click();
           expect(await screen.findByText('no user')).toBeInTheDocument();
-          expect(getCurrentUser).toHaveBeenCalledWith(validToken);
 
           screen.getByRole('button', { name: /try again/i }).click();
           expect(await screen.findByText(userGreeting)).toBeInTheDocument();
@@ -203,25 +202,38 @@ describe('LoginJourney', () => {
       });
 
       describe('when the user is a valid user', () => {
-        describe('when the user has config', () => {
-          it('lets the user launch their dashboard and sign out', async () => {
-            await renderAndWaitForLoadingToFinish();
+        it('lets the user launch their dashboard and sign out', async () => {
+          await renderAndWaitForLoadingToFinish();
 
-            insertValidToken();
-            screen.getByRole('button', { name: /submit token/i }).click();
+          insertValidToken();
+          screen.getByRole('button', { name: /submit token/i }).click();
 
-            expect(await screen.findByText(userGreeting)).toBeInTheDocument();
-            expect(screen.queryByRole('button', { name: /submit token/i })).not.toBeInTheDocument();
+          expect(await screen.findByText(userGreeting)).toBeInTheDocument();
+          expect(screen.queryByRole('button', { name: /submit token/i })).not.toBeInTheDocument();
 
-            screen.getByRole('button', { name: /launch my dashboard/i }).click();
-            expect(await screen.findByText(/dashboard/i)).toBeInTheDocument();
+          screen.getByRole('button', { name: /launch my dashboard/i }).click();
+          expect(await screen.findByText(/dashboard/i)).toBeInTheDocument();
 
-            screen.getByRole('button', { name: /log out/i }).click();
-            expect(screen.queryByText(userGreeting)).not.toBeInTheDocument();
-            expect(screen.queryByText(/dashboard/i)).not.toBeInTheDocument();
-          });
+          screen.getByRole('button', { name: /log out/i }).click();
+          expect(screen.queryByText(userGreeting)).not.toBeInTheDocument();
+          expect(screen.queryByText(/dashboard/i)).not.toBeInTheDocument();
         });
       });
+    });
+  });
+
+  describe('when the user is already logged in', () => {
+    it("should display the user's dashboard", async () => {
+      renderW({
+        loadUserConfig: async () =>
+          Promise.resolve(
+            ok({
+              filters: [],
+              user: exampleUser,
+            })
+          ),
+      });
+      expect(await screen.findByText('dashboard')).toBeInTheDocument();
     });
   });
 });

@@ -14,10 +14,6 @@ export const bridge: IBridge = {
   openGithubForTokenSetup: jest.fn(),
   validateAndStoreGithubToken: async () => Promise.resolve(ok(true)),
   getCurrentUser: async () => Promise.resolve(ok(exampleUser)),
-  loadUserConfig: async () =>
-    Promise.resolve(
-      ok({
-        filters: [],
-      })
-    ),
+  loadUserConfig: async () => Promise.resolve(ok({ filters: [] })),
+  updateUserConfig: async () => Promise.resolve(ok(true)),
 };

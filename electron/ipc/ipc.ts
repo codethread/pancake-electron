@@ -8,6 +8,7 @@ import {
   openGithubForTokenSetup,
   getCurrentUser,
   loadUserConfig,
+  updateUserConfig,
 } from './handlers';
 
 export function setupIpcHandlers(ipcMain: IpcMain, repos: Repositories): void {
@@ -38,5 +39,6 @@ function handlers(repos: Repositories): Handlers {
     error: (_, msg) => {
       logger.error('IPC', ...msg);
     },
+    updateUserConfig: updateUserConfig(repos),
   };
 }
