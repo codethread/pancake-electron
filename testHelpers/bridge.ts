@@ -15,5 +15,5 @@ export const bridge: IBridge = {
   validateAndStoreGithubToken: async () => Promise.resolve(ok(true)),
   getCurrentUser: async () => Promise.resolve(ok(exampleUser)),
   loadUserConfig: async () => Promise.resolve(ok({ filters: [] })),
-  updateUserConfig: async () => Promise.resolve(ok(true)),
+  updateUserConfig: async () => Promise.resolve(ok({ filters: [], user: exampleUser })),
 };
