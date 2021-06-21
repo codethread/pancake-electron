@@ -7,6 +7,7 @@ import { getKeyPathsAndValues } from './getKeyPathsAndValues';
 export interface StoreRepository<T> {
   read(): Result<T>;
   update(value: DeepPartial<T>): Result<T>;
+  reset(): Result<T>;
 }
 
 export interface StoreConfig<T> {
@@ -35,6 +36,10 @@ export const storeRepository = <T>(storeConfig: StoreConfig<T>): StoreRepository
   const store = new Store<T>(storeConfig);
   return {
     read() {
+      return ok(store.store);
+    },
+    reset() {
+      store.clear();
       return ok(store.store);
     },
     update(updatedStore) {

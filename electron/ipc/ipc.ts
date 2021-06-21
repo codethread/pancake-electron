@@ -9,6 +9,7 @@ import {
   getCurrentUser,
   loadUserConfig,
   updateUserConfig,
+  resetUserConfig,
 } from './handlers';
 
 export function setupIpcHandlers(ipcMain: IpcMain, repos: Repositories): void {
@@ -26,10 +27,6 @@ export function setupIpcHandlers(ipcMain: IpcMain, repos: Repositories): void {
 
 function handlers(repos: Repositories): Handlers {
   return {
-    getCurrentUser: getCurrentUser(repos),
-    validateAndStoreGithubToken: validateAndStoreGithubToken(repos),
-    openGithubForTokenSetup: openGithubForTokenSetup(repos),
-    loadUserConfig: loadUserConfig(repos),
     test: (_, msg) => {
       logger.info('IPC', ...msg);
     },
@@ -39,6 +36,11 @@ function handlers(repos: Repositories): Handlers {
     error: (_, msg) => {
       logger.error('IPC', ...msg);
     },
+    getCurrentUser: getCurrentUser(repos),
+    validateAndStoreGithubToken: validateAndStoreGithubToken(repos),
+    openGithubForTokenSetup: openGithubForTokenSetup(repos),
+    loadUserConfig: loadUserConfig(repos),
     updateUserConfig: updateUserConfig(repos),
+    resetUserConfig: resetUserConfig(repos),
   };
 }

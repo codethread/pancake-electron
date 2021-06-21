@@ -19,14 +19,24 @@ export const LoginJourney: FC<ILoginJourney> = ({ machineOptions }) => {
   return (
     <div data-testid={TestIds.LOGIN_JOURNEY}>
       <LoginPage>
-        {state.matches('authorize') && <p>loading</p>}
+        {(state.matches('authorize') || state.matches('loggedIn.confirmed')) && <p>loading</p>}
 
-        {state.matches('loggedIn') && (
+        {state.matches('loggedIn.idle') && (
           <>
-            <button type="button" onClick={() => send({ type: 'LOGOUT' })}>
+            <button type="button" onClick={() => send({ type: 'LOGOUT_ATTEMPT' })}>
               log out
             </button>
             <div>dashboard</div>
+          </>
+        )}
+
+        {state.matches('loggedIn.confirmation') && (
+          <>
+            <p>are you sure you want to log out?</p>
+            <p>This will clear all your user data</p>
+            <button type="button" onClick={() => send({ type: 'LOGOUT_CONFIRM' })}>
+              Yes I am sure
+            </button>
           </>
         )}
 

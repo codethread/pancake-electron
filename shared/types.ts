@@ -34,6 +34,8 @@ export interface IBridge extends IClientLogger {
   loadUserConfig(): Promise<Result<UserStore>>;
 
   updateUserConfig(...userConfig: DeepPartial<UserStore>[]): Promise<Result<UserStore>>;
+
+  resetUserConfig(): Promise<Result<UserStore>>;
 }
 
 export type Partial2Deep<T> = {

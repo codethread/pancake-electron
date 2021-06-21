@@ -20,6 +20,7 @@ describe('bridgeCreator', () => {
     ${'getCurrentUser'}              | ${[]}         | ${'invoke'}
     ${'loadUserConfig'}              | ${[]}         | ${'invoke'}
     ${'updateUserConfig'}            | ${[str]}      | ${'invoke'}
+    ${'resetUserConfig'}             | ${[]}         | ${'invoke'}
   `(
     'bridge.$method sends args as an array to bridge method "$ipc"',
     async ({ method, args, ipc }: Test) => {
