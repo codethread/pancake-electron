@@ -58,4 +58,17 @@ describe('fakeStoreRepo', () => {
       expect(updateRes).toMatchResult(store.read());
     });
   });
+
+  describe('#reset', () => {
+    it('should clear the store and reset all values to defaults', () => {
+      const store = fakeStoreRepoFactory(defaultStoreOptions);
+      store.update({
+        a: 4,
+        foo: { ping: 'bye' },
+      });
+      const res = store.reset();
+
+      expect(res).toMatchResult(ok(schema));
+    });
+  });
 });
