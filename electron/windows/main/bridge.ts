@@ -25,9 +25,11 @@ export function bridgeCreator(ipcRenderer: IpcRenderer): IBridge {
     async loadUserConfig() {
       return invoker('loadUserConfig', []);
     },
-
     async updateUserConfig(...config) {
       return invoker('updateUserConfig', config);
+    },
+    async resetUserConfig() {
+      return invoker('resetUserConfig', []);
     },
   };
 

@@ -24,6 +24,13 @@ export function loginOptions(bridge: IBridge): LoginOptions {
             throw new Error();
           },
         }),
+      resetConfig: async () =>
+        (await bridge.resetUserConfig()).match({
+          Ok: (config) => config,
+          Err: () => {
+            throw new Error();
+          },
+        }),
     },
     actions: {
       storeUser: assign({
@@ -35,9 +42,6 @@ export function loginOptions(bridge: IBridge): LoginOptions {
       storeConfig: assign((_, e) => {
         assertEventType(e, 'done.invoke.loadConfig');
         return e.data;
-      }),
-      clearUser: assign({
-        user: (_) => undefined,
       }),
       openGithubForTokenSetup: () => {
         bridge.openGithubForTokenSetup();

@@ -10,3 +10,8 @@ export const updateUserConfig = ({
   clientStoreRepository,
 }: ClientStoreRepository): Handlers['updateUserConfig'] => async (_, [config]) =>
   Promise.resolve(clientStoreRepository.update(config));
+
+export const resetUserConfig = ({
+  clientStoreRepository,
+}: ClientStoreRepository): Handlers['resetUserConfig'] => async () =>
+  Promise.resolve(clientStoreRepository.reset());

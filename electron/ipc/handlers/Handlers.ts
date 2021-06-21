@@ -18,6 +18,7 @@ export interface Handlers {
   getCurrentUser: Handler<'getCurrentUser', 'invoke'>;
   loadUserConfig: Handler<'loadUserConfig', 'invoke'>;
   updateUserConfig: Handler<'updateUserConfig', 'invoke'>;
+  resetUserConfig: Handler<'resetUserConfig', 'invoke'>;
 }
 
 export const handlerMethods: Array<{ key: keyof IBridge; method: IpcMainMethods }> = [
@@ -29,4 +30,5 @@ export const handlerMethods: Array<{ key: keyof IBridge; method: IpcMainMethods 
   { key: 'getCurrentUser', method: 'handle' },
   { key: 'loadUserConfig', method: 'handle' },
   { key: 'updateUserConfig', method: 'handle' },
+  { key: 'resetUserConfig', method: 'handle' },
 ];

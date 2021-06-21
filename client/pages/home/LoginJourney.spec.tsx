@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 
 import { loginOptions } from '@client/machines';
 import { bridge } from '@test/bridge';
-import { IBridge } from '@shared/types';
+import { IBridge, UserStore } from '@shared/types';
 import { merge } from '@shared/merge';
 import { err, ok } from '@shared/Result';
 import { createMockFn } from '@test/createMockFn';
@@ -214,9 +214,7 @@ describe('LoginJourney', () => {
           screen.getByRole('button', { name: /launch my dashboard/i }).click();
           expect(await screen.findByText(/dashboard/i)).toBeInTheDocument();
 
-          screen.getByRole('button', { name: /log out/i }).click();
-          expect(screen.queryByText(userGreeting)).not.toBeInTheDocument();
-          expect(screen.queryByText(/dashboard/i)).not.toBeInTheDocument();
+          expect(screen.getByRole('button', { name: /log out/i })).toBeInTheDocument();
         });
       });
     });
@@ -233,7 +231,34 @@ describe('LoginJourney', () => {
             })
           ),
       });
+
       expect(await screen.findByText('dashboard')).toBeInTheDocument();
+    });
+
+    it('should allow the user to sign out', async () => {
+      let store: UserStore = {
+        filters: [],
+        user: exampleUser,
+      };
+
+      renderW({
+        loadUserConfig: async () => Promise.resolve(ok(store)),
+        resetUserConfig: async () => {
+          store = { filters: [] };
+          return Promise.resolve(ok(store));
+        },
+      });
+
+      expect(await screen.findByText('dashboard')).toBeInTheDocument();
+      expect(screen.queryByText('are you sure you want to log out?')).not.toBeInTheDocument();
+
+      screen.getByRole('button', { name: /log out/i }).click();
+
+      expect(screen.getByText('are you sure you want to log out?')).toBeInTheDocument();
+
+      screen.getByRole('button', { name: /yes I am sure/i }).click();
+
+      await screen.findByRole('button', { name: /Create token/i });
     });
   });
 });

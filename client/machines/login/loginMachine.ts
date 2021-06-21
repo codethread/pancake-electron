@@ -15,7 +15,9 @@ export type PageEvent =
   | { type: 'done.invoke.fetchUser'; data: _User }
   | { type: 'done.invoke.loadConfig'; data: UserStore }
   | { type: 'LAUNCH' }
-  | { type: 'LOGOUT' }
+  | { type: 'LOGOUT_ATTEMPT' }
+  | { type: 'LOGOUT_CANCEL' }
+  | { type: 'LOGOUT_CONFIRM' }
   | { type: 'TOGGLE_HELP' }
   | { type: 'TRY_AGAIN' }
   | { type: 'VALIDATE'; token: string };
@@ -47,12 +49,30 @@ export const loginMachine = createMachine<PageContext, PageEvent, 'login'>({
     },
     loggedIn: {
       id: 'loggedIn',
-      on: {
-        LOGOUT: {
-          target: 'loggedOut',
-          actions: ['clearUser'],
+      initial: 'idle',
+      states: {
+        idle: {
+          on: {
+            LOGOUT_ATTEMPT: 'confirmation',
+          },
+        },
+        confirmation: {
+          on: {
+            LOGOUT_CONFIRM: 'confirmed',
+            LOGOUT_CANCEL: 'idle',
+          },
+        },
+        confirmed: {
+          invoke: {
+            src: 'resetConfig',
+            onDone: 'completed',
+          },
+        },
+        completed: {
+          type: 'final',
         },
       },
+      onDone: 'authorize',
     },
     loggedOut: {
       id: 'loggedOut',
