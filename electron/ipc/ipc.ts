@@ -2,30 +2,44 @@ import { IpcMain } from '@electron/electron';
 import { Repositories } from '@electron/repositories';
 import { logger } from '@electron/services/logger';
 import { Result, strip } from '@shared/Result';
-import { Handlers, handlerMethods } from './handlers/Handlers';
+import { IpcHandlers } from '@shared/types';
+import { handlerMethods } from '@shared/ipcHandlerMethods';
 import {
-  validateAndStoreGithubToken,
-  openGithubForTokenSetup,
   getCurrentUser,
   loadUserConfig,
-  updateUserConfig,
+  openGithubForTokenSetup,
   resetUserConfig,
+  updateUserConfig,
+  validateAndStoreGithubToken,
 } from './handlers';
 
 export function setupIpcHandlers(ipcMain: IpcMain, repos: Repositories): void {
   const loadedHandlers = handlers(repos);
 
-  handlerMethods.forEach(({ key, method }) => {
-    // @ts-expect-error not sure how to type this
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    ipcMain[method](key, async (event, args) => {
-      const result: Result<unknown> | void = await loadedHandlers[key](event, args);
-      return result && strip(result);
-    });
+  Object.entries(handlerMethods).forEach(([key, { main }]) => {
+    switch (main) {
+      case 'handle':
+        ipcMain.handle(key, async (event, args) => {
+          // @ts-expect-error shouldn't ever get an error because of the IpcSetup type
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-assignment
+          const result: Result<unknown> = await loadedHandlers[key](event, args);
+          return strip(result);
+        });
+        break;
+      case 'on':
+        ipcMain.on(key, (event, args) => {
+          // @ts-expect-error shouldn't ever get an error because of the IpcSetup type
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+          loadedHandlers[key](event, args);
+        });
+        break;
+      default:
+        throw new Error('impossible missing method for ipc handler methods');
+    }
   });
 }
 
-function handlers(repos: Repositories): Handlers {
+function handlers(repos: Repositories): IpcHandlers {
   return {
     test: (_, msg) => {
       logger.info('IPC', ...msg);

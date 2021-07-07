@@ -1,11 +1,11 @@
 import { logger } from '@electron/services';
 import { ShellRepository } from '@electron/repositories';
-import { Handlers } from '@electron/ipc/handlers/Handlers';
 import { githubScopes } from '@shared/constants';
+import { IpcHandlers } from '@shared/types';
 
 export const openGithubForTokenSetup = ({
   shellRepository,
-}: ShellRepository): Handlers['openGithubForTokenSetup'] => () => {
+}: ShellRepository): IpcHandlers['openGithubForTokenSetup'] => () => {
   const url = new URL('https://github.com/settings/tokens/new');
   url.search = new URLSearchParams({
     description: 'Pancake PR dashboard',

@@ -1,17 +1,17 @@
 import { ClientStoreRepository } from '@electron/repositories';
-import { Handlers } from './Handlers';
+import { IpcHandlers } from '@shared/types';
 
 export const loadUserConfig = ({
   clientStoreRepository,
-}: ClientStoreRepository): Handlers['loadUserConfig'] => async () =>
+}: ClientStoreRepository): IpcHandlers['loadUserConfig'] => async () =>
   Promise.resolve(clientStoreRepository.read());
 
 export const updateUserConfig = ({
   clientStoreRepository,
-}: ClientStoreRepository): Handlers['updateUserConfig'] => async (_, [config]) =>
+}: ClientStoreRepository): IpcHandlers['updateUserConfig'] => async (_, [config]) =>
   Promise.resolve(clientStoreRepository.update(config));
 
 export const resetUserConfig = ({
   clientStoreRepository,
-}: ClientStoreRepository): Handlers['resetUserConfig'] => async () =>
+}: ClientStoreRepository): IpcHandlers['resetUserConfig'] => async () =>
   Promise.resolve(clientStoreRepository.reset());

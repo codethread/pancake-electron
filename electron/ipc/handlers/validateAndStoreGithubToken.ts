@@ -1,14 +1,14 @@
 import { GithubRepository, ServerStoreRepository } from '@electron/repositories';
 import { err, ok } from '@shared/Result';
 import { githubScopes } from '@shared/constants';
-import { Handlers } from './Handlers';
+import { IpcHandlers } from '@shared/types';
 
 export const errMessage = err<string, boolean>('missing scopes');
 
 export const validateAndStoreGithubToken = ({
   githubRepository,
   serverStoreRepository,
-}: GithubRepository & ServerStoreRepository): Handlers['validateAndStoreGithubToken'] => async (
+}: GithubRepository & ServerStoreRepository): IpcHandlers['validateAndStoreGithubToken'] => async (
   _,
   [token]
 ) => {

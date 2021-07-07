@@ -2,6 +2,7 @@ import { ElectronLog } from 'electron-log';
 import { Result } from '@shared/Result';
 import { _User } from '@shared/graphql';
 import { DeepPartial } from '@shared/tsHelpers';
+import { IpcMainEvent, IpcMainInvokeEvent } from '@electron/electron';
 
 export interface ILogger extends ElectronLog {
   errorWithContext(context: string): (err: Error | string) => void;
@@ -20,22 +21,83 @@ export interface ServerStore {
   githubToken?: string;
 }
 
-// TODO create a type to encapsulate this
-// All methods must return void or Result type
-export interface IBridge extends IClientLogger {
-  test(...msg: string[]): void;
+/**
+ * IpcBridge is a meta type to glue together the client and server through the bridge.
+ * This allows us to create methods which must then exist on subsequent types, but
+ * we can pick the relevant details from this object.
+ *
+ * See the derived types below
+ */
+interface IpcBridge {
+  updateUserConfig: {
+    param: [userConfig: DeepPartial<UserStore>];
+    response: Promise<Result<UserStore>>;
+  };
 
-  openGithubForTokenSetup(): void;
+  info: {
+    param: Parameters<ILogger['info']>;
+    response: ReturnType<ILogger['info']>;
+  };
 
-  validateAndStoreGithubToken(...token: string[]): Promise<Result<boolean>>;
+  error: {
+    param: Parameters<ILogger['error']>;
+    response: ReturnType<ILogger['error']>;
+  };
 
-  getCurrentUser(): Promise<Result<_User>>;
+  test: {
+    param: string[];
+    response: void;
+  };
 
-  loadUserConfig(): Promise<Result<UserStore>>;
+  openGithubForTokenSetup: {
+    param: never[];
+    response: void;
+  };
 
-  updateUserConfig(...userConfig: DeepPartial<UserStore>[]): Promise<Result<UserStore>>;
+  validateAndStoreGithubToken: {
+    param: [token: string];
+    response: Promise<Result<boolean>>;
+  };
 
-  resetUserConfig(): Promise<Result<UserStore>>;
+  getCurrentUser: {
+    param: never[];
+    response: Promise<Result<_User>>;
+  };
+
+  loadUserConfig: {
+    param: never[];
+    response: Promise<Result<UserStore>>;
+  };
+
+  resetUserConfig: {
+    param: never[];
+    response: Promise<Result<UserStore>>;
+  };
+}
+
+export type IBridge = {
+  [key in keyof IpcBridge]: (...args: IpcBridge[key]['param']) => IpcBridge[key]['response'];
+};
+
+export type IpcHandlers = {
+  [key in keyof IpcBridge]: (
+    event: IpcBridge[key]['response'] extends Promise<unknown> ? IpcMainInvokeEvent : IpcMainEvent,
+    args: IpcBridge[key]['param']
+  ) => IpcBridge[key]['response'];
+};
+
+export type IpcSetup = {
+  [key in keyof IpcBridge]: Handle | Send;
+};
+
+interface Send {
+  renderer: 'send';
+  main: 'on';
+}
+
+interface Handle {
+  renderer: 'invoke';
+  main: 'handle';
 }
 
 export type Partial2Deep<T> = {
