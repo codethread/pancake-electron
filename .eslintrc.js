@@ -166,6 +166,7 @@ module.exports = {
       files: ['*.stories.@(js|jsx|ts|tsx)'],
       rules: {
         '@typescript-eslint/consistent-type-assertions': 'off',
+        'react/jsx-props-no-spreading': 'off',
         'import/no-extraneous-dependencies': 'off',
       },
     },

@@ -3,7 +3,7 @@ import { Story, Meta } from '@storybook/react/types-6-0';
 
 import styled, { keyframes } from 'styled-components';
 import { Glass } from './index';
-import { H2, H3, lorem, P } from '..';
+import { H2, H3, lorem, P, Button } from '..';
 
 export default {
   title: 'Atoms/Glass',
@@ -12,8 +12,6 @@ export default {
     backgroundColor: { control: 'color' },
   },
 } as Meta;
-
-const Button = styled.button``;
 
 export const Empty: Story = () => <Glass />;
 
@@ -29,7 +27,7 @@ export const WithContent: Story = () => (
     <H3 align="center">The Pull Request Dashboard</H3>
     <P>{lorem}</P>
     <Button>With a button</Button>
-    <Button>With a button</Button>
+    <Button mode="secondary">With a button</Button>
     <Button>With a button</Button>
     <P>{lorem}</P>
     <Button>With a button</Button>

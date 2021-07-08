@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain } from '@electron/electron';
+import { app, BrowserWindow, ipcMain, session } from '@electron/electron';
 import { isIntegration } from '@shared/constants';
 import { fakeRepositories, productionRepositories } from './repositories';
 import { logger, checkForUpdates, setUpDevtools } from './services';
@@ -13,6 +13,15 @@ const repos = isIntegration ? fakeRepositories() : productionRepositories();
 
 app
   .on('ready', () => {
+    session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
+      callback({
+        responseHeaders: {
+          ...details.responseHeaders,
+          // 'Content-Security-Policy': ["default-src 'self' 'unsafe-inline' devtools: 'unsafe-eval'"],
+        },
+      });
+    });
+
     mainWindow = createWindow(logger);
 
     mainWindow.on('closed', closeWindow);

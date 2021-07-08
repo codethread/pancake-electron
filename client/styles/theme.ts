@@ -28,8 +28,8 @@ export const theme: DefaultTheme = {
     glass: 'rgba(39, 72, 80, 0.48)',
     gradients: {
       rainbow: () =>
-        `linear-gradient(91.71deg, rgba(236, 82, 119, 0.75) 2.59%, rgba(136, 126, 201, 0.75) 43.05%, rgba(48, 252, 204, 0.75) 95.08%)`,
-      secondary: `linear-gradient(91.71deg, rgba(15, 131, 104, 0.75) 2.59%, rgba(75, 58, 180, 0.75) 95.08%)`,
+        `linear-gradient(91.71deg, rgba(236, 82, 119, 1) 2.59%, rgba(136, 126, 201, 1) 43.05%, rgba(48, 252, 204, 1) 95.08%)`,
+      secondary: `linear-gradient(91.71deg, rgba(15, 131, 104, 1) 2.59%, rgba(75, 58, 180, 1) 95.08%)`,
       background: (deg = 70) => `linear-gradient(
         ${deg}deg,
         #000000 15.78%,
