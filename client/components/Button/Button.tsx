@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import styled from 'styled-components';
 import React, { ButtonHTMLAttributes, FC } from 'react';
 import { isTest } from '@shared/constants';
@@ -8,16 +7,26 @@ export interface IButton {
   fullWidth?: boolean;
   mode?: 'primary' | 'secondary' | 'tertiary';
   type?: ButtonHTMLAttributes<unknown>['type'];
+  onClick: ButtonHTMLAttributes<unknown>['onClick'];
 }
 
-const BaseButton = styled.button<IButton>`
-  min-width: 150px;
-  width: ${({ fullWidth }) => (fullWidth ? '100%' : 'auto')};
+interface IButtonStyle {
+  disabled?: boolean;
+  fullWidth?: boolean;
+}
 
+const ButtonContainer = styled.div<IButtonStyle>`
+  min-width: 150px;
   margin-bottom: ${({ theme }) => theme.spacing.large}px;
-  height: 40px;
+  width: ${({ fullWidth }) => (fullWidth ? '100%' : 'auto')};
+  min-height: 40px;
+  //border: thin solid hotpink;
+`;
+
+const BaseButton = styled.button<IButton>`
+  margin-bottom: ${({ theme }) => theme.spacing.large}px;
   border-radius: 20px;
-  // box-shadow: 0 1px 6px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.25);
   padding: 0 20px;
   ${({ theme }) => ({ ...theme.typography.h5 })};
   cursor: ${({ disabled }) => (disabled ? 'default' : 'pointer')};
@@ -25,9 +34,16 @@ const BaseButton = styled.button<IButton>`
 `;
 
 const PrimaryButton = styled(BaseButton)`
+  height: 100%;
+  width: 100%;
+
   transition: background-size 0.2s ease;
 
   background-size: 100%;
+  border: none;
+  background-image: ${({ theme, disabled }) =>
+    disabled ? 'none' : theme.palette.gradients.rainbow()};
+
   &:hover {
     background-size: 200%;
   }
@@ -37,23 +53,21 @@ const PrimaryButton = styled(BaseButton)`
   //   outline: none;
   //   box-shadow: 0 0 3pt 2pt ${({ theme }) => theme.palette.red};
   // }
-
-  border: none;
-  background-image: ${({ theme, disabled }) =>
-    disabled ? 'none' : theme.palette.gradients.rainbow()};
 `;
 
 const border = 2;
 
-const GradientBox = styled.div<IButton>`
-  width: ${({ fullWidth }) => (fullWidth ? '100%' : '150px')};
+const GradientBox = styled.div<IButtonStyle>`
+  height: 100%;
+  width: ${({ fullWidth }) => (fullWidth ? '100%' : 'auto')};
   box-shadow: 0 1px 6px rgba(0, 0, 0, 0.25);
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   position: relative;
   box-sizing: border-box;
-  height: 40px;
   background-image: ${(props) =>
     props.disabled
       ? 'linear-gradient(0deg, #253C38, #253C38)'
@@ -62,10 +76,12 @@ const GradientBox = styled.div<IButton>`
   border: solid ${border}px transparent;
   border-radius: 20px;
   transition: background-size 0.2s ease;
+
   &:hover,
   &:focus {
     background-size: 150%;
   }
+
   &:before {
     content: '';
     position: absolute;
@@ -84,7 +100,6 @@ const GradientBox = styled.div<IButton>`
 `;
 
 const Secondary = styled(BaseButton)`
-  // background-image: ${(props) => props.theme.palette.gradients.secondary};
   border: none;
   box-shadow: none;
   background-color: transparent;
@@ -99,25 +114,58 @@ const defaultProps = (props: IButton): Required<IButton> => ({
 });
 
 export const ButtonComp: FC<IButton> = ({ children, ...props }) => {
-  const propsWithDefaults = defaultProps(props);
+  const { fullWidth, type, disabled, mode, onClick } = defaultProps(props);
 
-  switch (propsWithDefaults.mode) {
-    case 'secondary':
-      return (
-        <GradientBox {...propsWithDefaults}>
-          <Secondary {...propsWithDefaults}>{children}</Secondary>
-        </GradientBox>
-      );
-    case 'tertiary':
-      return <PrimaryButton {...propsWithDefaults}>{children}</PrimaryButton>;
-    default:
-    case 'primary':
-      return <PrimaryButton {...propsWithDefaults}>{children}</PrimaryButton>;
-  }
+  return (
+    <div style={{ display: 'flex' }}>
+      <ButtonContainer fullWidth={fullWidth}>
+        {(() => {
+          switch (mode) {
+            case 'secondary':
+              return (
+                <GradientBox fullWidth={fullWidth} disabled={disabled}>
+                  <Secondary
+                    type={type}
+                    fullWidth={fullWidth}
+                    disabled={disabled}
+                    onClick={onClick}
+                  >
+                    {children}
+                  </Secondary>
+                </GradientBox>
+              );
+            case 'tertiary':
+              return (
+                <PrimaryButton
+                  type={type}
+                  fullWidth={fullWidth}
+                  disabled={disabled}
+                  onClick={onClick}
+                >
+                  {children}
+                </PrimaryButton>
+              );
+            default:
+            case 'primary':
+              return (
+                <PrimaryButton
+                  type={type}
+                  fullWidth={fullWidth}
+                  disabled={disabled}
+                  onClick={onClick}
+                >
+                  {children}
+                </PrimaryButton>
+              );
+          }
+        })()}
+      </ButtonContainer>
+    </div>
+  );
 };
 
 const ButtonStub: FC<IButton> = ({ children, ...props }) => (
-  // eslint-disable-next-line react/button-has-type
+  // eslint-disable-next-line react/button-has-type,react/jsx-props-no-spreading
   <button {...defaultProps(props)}>{children}</button>
 );
 

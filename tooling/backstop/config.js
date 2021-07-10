@@ -4,13 +4,18 @@ module.exports = {
   id: 'pancake_storybook',
   viewports: [
     {
-      label: 'phone',
-      width: 320,
-      height: 480,
+      label: 'thin',
+      width: 430,
+      height: 900,
     },
     {
-      label: 'tablet',
-      width: 1024,
+      label: 'half',
+      width: 1080,
+      height: 768,
+    },
+    {
+      label: 'full',
+      width: 1920,
       height: 768,
     },
   ],
