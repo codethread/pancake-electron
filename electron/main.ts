@@ -2,7 +2,7 @@ import { app, BrowserWindow, ipcMain, session } from '@electron/electron';
 import { isIntegration } from '@shared/constants';
 import { fakeRepositories, productionRepositories } from './repositories';
 import { logger, checkForUpdates, setUpDevtools } from './services';
-import { setupIpcHandlers } from './ipc';
+import { setupIpcHandlers, handlers } from './ipc';
 import { createWindow } from './windows/main/createWindow';
 
 let mainWindow: BrowserWindow | null;
@@ -27,7 +27,7 @@ app
     mainWindow.on('closed', closeWindow);
   })
   .whenReady()
-  .then(() => setupIpcHandlers(ipcMain, repos))
+  .then(() => setupIpcHandlers(ipcMain, handlers(repos)))
   .then(setUpDevtools(logger))
   .catch(logger.errorWithContext('main window creation'));
 

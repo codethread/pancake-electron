@@ -36,11 +36,12 @@
       "@electron/*": [
         "electron/*"
       ]
-    },
+    }
   },
   "include": [
     "./.eslintrc.js",
     "./jest.config.js",
+    "./README.md",
     "tooling",
     "client",
     "electron",

@@ -1,6 +1,6 @@
 import { mocked } from 'ts-jest/utils';
 import { logger as _logger } from '@electron/services/logger';
-import { createFakeBridge } from './handlers/createFakeBridge';
+import { createFakeBridge } from './createFakeBridge';
 
 jest.mock('@electron/services/logger');
 jest.mock('electron');

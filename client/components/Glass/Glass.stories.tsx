@@ -4,6 +4,7 @@ import { Story, Meta } from '@storybook/react/types-6-0';
 import styled, { keyframes } from 'styled-components';
 import { Glass } from './index';
 import { H2, H3, lorem, P, Button } from '..';
+import { IButton } from '../Button/Button';
 
 export default {
   title: 'Atoms/Glass',
@@ -11,7 +12,7 @@ export default {
   argTypes: {
     backgroundColor: { control: 'color' },
   },
-} as Meta;
+} as Meta<IButton>;
 
 export const Empty: Story = () => <Glass />;
 

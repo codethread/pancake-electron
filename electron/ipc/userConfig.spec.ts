@@ -1,5 +1,5 @@
 import { err, ok, Result } from '@shared/Result';
-import { createFakeBridge } from '@electron/ipc/handlers/createFakeBridge';
+import { createFakeBridge } from '@electron/ipc/createFakeBridge';
 import { UserStore } from '@shared/types';
 
 interface Test {

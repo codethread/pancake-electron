@@ -26,7 +26,7 @@ const LoginMachine: FC = () => {
     /* eslint-disable */
     // turning these off allows clicking through the state machine in storybook
     services: {} as any,
-    actions: {} as any,
+    // actions: {} as any,
     /* eslint-enable */
     devTools: true,
   });

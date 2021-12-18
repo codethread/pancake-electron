@@ -19,7 +19,8 @@ export const LoginJourney: FC<ILoginJourney> = ({ machineOptions }) => {
   return (
     <div data-testid={TestIds.LOGIN_JOURNEY}>
       <LoginPage>
-        {(state.matches('authorize') || state.matches('loggedIn.confirmed')) && <p>loading</p>}
+        {(state.matches('loggedOut.validateToken.profileFailure') ||
+          state.matches('loggedIn.confirmed')) && <p>loading</p>}
 
         {state.matches('loggedIn.idle') && (
           <>
