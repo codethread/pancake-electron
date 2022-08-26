@@ -1,0 +1,64 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`errorHandler when the user chooses to report the error and all details are provided by electron opens a github issue 1`] = `
+Array [
+  "https://github.com/AHDesigns/pancake-electron/issues/new",
+  Object {
+    "body": "**Describe the bug**
+Describe as best you can when the error occured, with steps leading up to it if possible.
+**Screenshots**
+If possible, add screenshots to help explain your problem.
+**Error Report:**
+Stacktrace: 
+\`\`\`
+error stack for poop
+\`\`\`
+OS: mac
+1
+pancake",
+    "labels": "to refine, bug",
+    "title": "Error report",
+  },
+]
+`;
+
+exports[`errorHandler when the user chooses to report the error and no details are provided by electron opens a github issue 1`] = `
+Array [
+  "https://github.com/AHDesigns/pancake-electron/issues/new",
+  Object {
+    "body": "**Describe the bug**
+Describe as best you can when the error occured, with steps leading up to it if possible.
+**Screenshots**
+If possible, add screenshots to help explain your problem.
+**Error Report:**
+Stacktrace: 
+\`\`\`
+error stack for poop
+\`\`\`
+OS: no OS detected
+no electron version
+no app version",
+    "labels": "to refine, bug",
+    "title": "Error report",
+  },
+]
+`;
+
+exports[`errorHandler when the user chooses to report the error and no stack trace is provided opens a github issue 1`] = `
+Array [
+  "https://github.com/AHDesigns/pancake-electron/issues/new",
+  Object {
+    "body": "**Describe the bug**
+Describe as best you can when the error occured, with steps leading up to it if possible.
+**Screenshots**
+If possible, add screenshots to help explain your problem.
+**Error Report:**
+No stacktrace
+OS: no OS detected
+no electron version
+no app version",
+    "labels": "to refine, bug",
+    "title": "Error report",
+  },
+]
+`;

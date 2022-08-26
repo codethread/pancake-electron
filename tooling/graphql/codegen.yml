@@ -1,0 +1,23 @@
+overwrite: true
+schema: 'tooling/graphql/github-schema.graphql'
+documents:
+  - electron/repositories/github/graphql/*.graphql
+generates:
+  shared/graphql.ts:
+    # https://www.graphql-code-generator.com/docs/plugins/index
+    plugins:
+      # Generate types for TypeScript - those are usually relevant for both client side and server side code
+      - 'typescript'
+      # Generate client specific TypeScript types (query, mutation, subscription, fragment)
+      - 'typescript-operations'
+      # This plugin generates TypeScript source (.ts) file from GraphQL files (.graphql).
+      - 'typescript-document-nodes'
+    config:
+      # force typescript-document-nodes to just use normal strings, not gql``
+      documentMode: string
+      # don't turn _User into _UserQuery
+      omitOperationSuffix: true
+      # don't need __typename in payloads for cache
+      skipTypename: true
+      # adds 'Request' to the end of the actual query strings, to distinguish types from strings
+      nameSuffix: 'Request'

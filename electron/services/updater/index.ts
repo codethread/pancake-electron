@@ -1,0 +1,1 @@
+export { checkForUpdates } from './updater';
