@@ -7,126 +7,126 @@ import { StoreRepo, storeRepository } from './store';
 jest.unmock('electron');
 
 describe('StoreRepository', () => {
-  const storeFilePath = `${process.cwd()}/temp`;
+	const storeFilePath = `${process.cwd()}/temp`;
 
-  interface Schema {
-    foo: {
-      bar: { baz: number };
-      ping?: string;
-    };
-    a: number;
-    b?: string;
-  }
+	type Schema = {
+		foo: {
+			bar: { baz: number };
+			ping?: string;
+		};
+		a: number;
+		b?: string;
+	};
 
-  const schema: Schema = {
-    foo: { bar: { baz: 3 } },
-    a: 1,
-    b: 'hi',
-  };
+	const schema: Schema = {
+		foo: { bar: { baz: 3 } },
+		a: 1,
+		b: 'hi',
+	};
 
-  const defaultStoreOptions: StoreRepo<Schema> = {
-    logger: createFakeLogger(),
-    storeConfig: {
-      defaults: schema,
-      name: 'test',
-      cwd: storeFilePath,
-    },
-  };
+	const defaultStoreOptions: StoreRepo<Schema> = {
+		logger: createFakeLogger(),
+		storeConfig: {
+			defaults: schema,
+			name: 'test',
+			cwd: storeFilePath,
+		},
+	};
 
-  afterEach((done) => {
-    fs.rm(storeFilePath, { recursive: true }, (e) => {
-      // eslint-disable-next-line no-console
-      if (e) console.error(e);
-      done();
-    });
-  });
+	afterEach((done) => {
+		fs.rm(storeFilePath, { recursive: true }, (e) => {
+			// eslint-disable-next-line no-console
+			if (e) console.error(e);
+			done();
+		});
+	});
 
-  describe('when created init', () => {
-    it('should log useful info', () => {
-      const infoSpy = jest.fn();
-      const debugSpy = jest.fn();
+	describe('when created init', () => {
+		it('should log useful info', () => {
+			const infoSpy = jest.fn();
+			const debugSpy = jest.fn();
 
-      storeRepository({
-        ...defaultStoreOptions,
-        logger: createFakeLogger({
-          info: infoSpy,
-          debug: debugSpy,
-        }),
-      });
+			storeRepository({
+				...defaultStoreOptions,
+				logger: createFakeLogger({
+					info: infoSpy,
+					debug: debugSpy,
+				}),
+			});
 
-      expect(infoSpy).toHaveBeenLastCalledWith(
-        `setting up Store Repo: name "test" cwd "${storeFilePath}"`
-      );
-      expect(debugSpy).toHaveBeenCalledWith(`${storeFilePath}/test.json`);
+			expect(infoSpy).toHaveBeenLastCalledWith(
+				`setting up Store Repo: name "test" cwd "${storeFilePath}"`
+			);
+			expect(debugSpy).toHaveBeenCalledWith(`${storeFilePath}/test.json`);
 
-      storeRepository({
-        storeConfig: {
-          ...defaultStoreOptions.storeConfig,
-          cwd: undefined,
-        },
-        logger: createFakeLogger({
-          info: infoSpy,
-          debug: debugSpy,
-        }),
-      });
-      expect(infoSpy).toHaveBeenLastCalledWith('setting up Store Repo: name "test"');
-    });
-  });
+			storeRepository({
+				storeConfig: {
+					...defaultStoreOptions.storeConfig,
+					cwd: undefined,
+				},
+				logger: createFakeLogger({
+					info: infoSpy,
+					debug: debugSpy,
+				}),
+			});
+			expect(infoSpy).toHaveBeenLastCalledWith('setting up Store Repo: name "test"');
+		});
+	});
 
-  describe('#read', () => {
-    it('should return the store contents', async () => {
-      const store = storeRepository(defaultStoreOptions);
-      const res = await store.storeRead();
+	describe('#read', () => {
+		it('should return the store contents', async () => {
+			const store = storeRepository(defaultStoreOptions);
+			const res = await store.storeRead();
 
-      expect(res).toMatchResult(ok(schema));
-    });
-  });
+			expect(res).toMatchResult(ok(schema));
+		});
+	});
 
-  describe('#update', () => {
-    describe('when update works', () => {
-      it('should update the store with the new value and return the result', async () => {
-        const store = storeRepository(defaultStoreOptions);
-        const updateRes = await store.storeUpdate({
-          a: 4,
-          foo: { ping: 'bye' },
-        });
+	describe('#update', () => {
+		describe('when update works', () => {
+			it('should update the store with the new value and return the result', async () => {
+				const store = storeRepository(defaultStoreOptions);
+				const updateRes = await store.storeUpdate({
+					a: 4,
+					foo: { ping: 'bye' },
+				});
 
-        expect(updateRes).toMatchResult(
-          ok({
-            foo: {
-              bar: { baz: 3 },
-              ping: 'bye',
-            },
-            a: 4,
-            b: 'hi',
-          })
-        );
-        expect(updateRes).toMatchResult(await store.storeRead());
-      });
-    });
+				expect(updateRes).toMatchResult(
+					ok({
+						foo: {
+							bar: { baz: 3 },
+							ping: 'bye',
+						},
+						a: 4,
+						b: 'hi',
+					})
+				);
+				expect(updateRes).toMatchResult(await store.storeRead());
+			});
+		});
 
-    describe('when update fails', () => {
-      it('should roll back to the initial state and return an error', async () => {
-        const store = storeRepository(defaultStoreOptions);
-        const initialStore = await store.storeRead();
-        const updateRes = await store.storeUpdate({ foo: { ping: 'bye' }, a: undefined });
+		describe('when update fails', () => {
+			it('should roll back to the initial state and return an error', async () => {
+				const store = storeRepository(defaultStoreOptions);
+				const initialStore = await store.storeRead();
+				const updateRes = await store.storeUpdate({ foo: { ping: 'bye' }, a: undefined });
 
-        expect(updateRes).toMatchResult(err('failed to update'));
-        expect(initialStore).toMatchResult(await store.storeRead());
-      });
-    });
-  });
+				expect(updateRes).toMatchResult(err('failed to update'));
+				expect(initialStore).toMatchResult(await store.storeRead());
+			});
+		});
+	});
 
-  describe('#reset', () => {
-    it('should clear the store and reset all values to defaults', async () => {
-      const store = storeRepository(defaultStoreOptions);
-      await store.storeUpdate({
-        a: 4,
-        foo: { ping: 'bye' },
-      });
-      const res = await store.storeReset();
+	describe('#reset', () => {
+		it('should clear the store and reset all values to defaults', async () => {
+			const store = storeRepository(defaultStoreOptions);
+			await store.storeUpdate({
+				a: 4,
+				foo: { ping: 'bye' },
+			});
+			const res = await store.storeReset();
 
-      expect(res).toMatchResult(ok(schema));
-    });
-  });
+			expect(res).toMatchResult(ok(schema));
+		});
+	});
 });

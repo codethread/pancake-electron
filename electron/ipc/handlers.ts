@@ -1,16 +1,19 @@
-import { IpcHandlers } from '@shared/types';
+import { IpcHandlers } from '@shared/types/ipc';
 import type { Repositories } from '@electron/repositories';
 import { handlerMethods } from '@electron/ipc/handlerMethods';
+import * as R from 'remeda';
 
 export function handlers(repos: Repositories): IpcHandlers {
-  return Object.keys(handlerMethods).reduce<IpcHandlers>(
-    (fns, key) => ({
-      ...fns,
-      // @ts-expect-error meh
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-return
-      [key]: (_, args) => repos[key](...args),
-    }),
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-    {} as IpcHandlers
-  );
+	return R.pipe(
+		handlerMethods,
+		R.keys.strict,
+		R.reduce(
+			(fns, key: keyof Repositories) => ({
+				...fns,
+				// eslint-disable-next-line
+				[key]: (_: unknown, args: [unknown]) => repos[key](...args),
+			}),
+			{} as IpcHandlers
+		)
+	);
 }

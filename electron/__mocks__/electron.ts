@@ -1,21 +1,21 @@
 export const app = {
-  getName: jest.fn(),
-  getVersion: jest.fn(),
-  quit: jest.fn(),
+	getName: jest.fn(),
+	getVersion: jest.fn(),
+	quit: jest.fn(),
 };
 
 export const dialog = {
-  showMessageBox: jest.fn().mockResolvedValue(null),
+	showMessageBox: jest.fn().mockResolvedValue(null),
 };
 
 export const ipcMain = {
-  on: jest.fn(),
+	on: jest.fn(),
 };
 
 export const nativeImage = {
-  createFromPath: jest.fn(),
+	createFromPath: jest.fn(),
 };
 
 export const contextBridge = {
-  exposeInMainWorld: jest.fn(),
+	exposeInMainWorld: jest.fn(),
 };

@@ -1,56 +1,28 @@
 /* eslint-disable react/jsx-filename-extension */
-import React, { useEffect, useState } from 'react';
-import { fakeRepositories } from '../../electron/repositories/fakes';
+import React from 'react';
+import { ErrorBoundary } from '../../client/components';
 import { BridgeProvider, LoggerProvider, MachinesProvider } from '../../client/hooks/providers';
-import { createFakeHooks } from '../../client/machines';
-import { ErrorBoundary, ScrollBar } from '../../client/components';
 import '../../client/index.css';
-import { useConfig } from '../../client/hooks';
-import { themes } from '../../client/theme';
+import fakeRepositories from '../../electron/repositories/fakes';
 
 export const parameters = {
-  actions: { argTypesRegex: '^on[A-Z].*' },
+	actions: { argTypesRegex: '^on[A-Z].*' },
 };
 
-export const globalTypes = {
-  theme: {
-    name: 'Theme',
-    description: 'Pomo colour theme',
-    defaultValue: themes[0],
-    toolbar: {
-      icon: 'paintbrush',
-      items: themes,
-    },
-  },
-};
+export const globalTypes = {};
 
 export const decorators = [
-  (Story, context) => (
-    <BridgeProvider bridge={fakeRepositories()}>
-      <LoggerProvider>
-        <MachinesProvider hooks={{ ...createFakeHooks() }}>
-          <ErrorBoundary>
-            <ScrollBar />
-            <div className="text-thmFg">
-              <Story />
-              <ThemeUpdater theme={context.globals.theme} />
-            </div>
-          </ErrorBoundary>
-        </MachinesProvider>
-      </LoggerProvider>
-    </BridgeProvider>
-  ),
+	(Story) => (
+		<BridgeProvider bridge={fakeRepositories()}>
+			<LoggerProvider>
+				<MachinesProvider>
+					<ErrorBoundary>
+						<div className="text-thmFg">
+							<Story />
+						</div>
+					</ErrorBoundary>
+				</MachinesProvider>
+			</LoggerProvider>
+		</BridgeProvider>
+	),
 ];
-
-function ThemeUpdater({ theme }) {
-  const { storeUpdate } = useConfig();
-  const [lastTheme, setLastTheme] = useState(theme);
-  useEffect(() => {
-    if (lastTheme !== theme) {
-      setLastTheme(theme);
-      storeUpdate({ theme });
-    }
-  }, [theme, storeUpdate, lastTheme, setLastTheme]);
-
-  return null;
-}

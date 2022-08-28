@@ -1,23 +1,21 @@
 import { merge } from '@shared/merge';
-import { emptyConfig } from '@shared/types';
 import { createFakeClientLogger } from '@electron/services/logger/createFakeLogger';
+import { emptyConfig } from '@shared/constants';
 import { fakeShell } from './shell/fakeShell';
-import { fakeSlackRepository } from './slack/fake';
 import { fakeStoreRepoFactory } from './store/fakeStore';
-import type { Repositories, RepositoryOverrides } from '.';
 import { metaRepo } from './meta';
+import { Repositories, RepositoryOverrides } from './production';
 
-export const fakeRepositories = (overrides?: RepositoryOverrides): Repositories =>
-  merge(
-    {
-      ...fakeSlackRepository(),
-      ...fakeShell(overrides),
-      ...fakeStoreRepoFactory({
-        name: 'client',
-        defaults: emptyConfig,
-      }),
-      ...createFakeClientLogger(),
-      ...metaRepo,
-    },
-    overrides
-  );
+export default (overrides?: RepositoryOverrides): Repositories =>
+	merge(
+		{
+			...fakeShell(overrides),
+			...fakeStoreRepoFactory({
+				name: 'client',
+				defaults: emptyConfig,
+			}),
+			...createFakeClientLogger(),
+			...metaRepo,
+		},
+		overrides
+	);

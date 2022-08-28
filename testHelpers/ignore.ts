@@ -29,21 +29,21 @@
  *   });
  * })
  */
-export function ignoreWarnings(reason: string, ...ignorePatterns: RegExp[]): void {
-  beforeAll(() => {
-    const ogWarn = console.warn;
+export function ignoreWarnings(_reason: string, ...ignorePatterns: RegExp[]): void {
+	beforeAll(() => {
+		const ogWarn = console.warn;
 
-    jest.spyOn(console, 'warn').mockImplementation((...args: string[]) => {
-      const [message = ''] = args;
-      if (!ignorePatterns.some((pat) => pat.test(message))) {
-        ogWarn(...args);
-      }
-    });
-  });
+		jest.spyOn(console, 'warn').mockImplementation((...args: string[]) => {
+			const [message = ''] = args;
+			if (!ignorePatterns.some((pat) => pat.test(message))) {
+				ogWarn(...args);
+			}
+		});
+	});
 
-  afterAll(() => {
-    (console.warn as jest.Mock).mockRestore();
-  });
+	afterAll(() => {
+		(console.warn as jest.Mock).mockRestore();
+	});
 }
 
 /**
@@ -76,18 +76,18 @@ export function ignoreWarnings(reason: string, ...ignorePatterns: RegExp[]): voi
  *   });
  * })
  */
-export function ignoreErrors(reason: string, ...ignorePatterns: RegExp[]): void {
-  beforeEach(() => {
-    const ogError = console.error;
-    jest.spyOn(console, 'error').mockImplementation((...args: string[]) => {
-      const [message = ''] = args;
-      if (!ignorePatterns.some((pat) => pat.test(message))) {
-        ogError(...args);
-      }
-    });
-  });
+export function ignoreErrors(_reason: string, ...ignorePatterns: RegExp[]): void {
+	beforeEach(() => {
+		const ogError = console.error;
+		jest.spyOn(console, 'error').mockImplementation((...args: string[]) => {
+			const [message = ''] = args;
+			if (!ignorePatterns.some((pat) => pat.test(message))) {
+				ogError(...args);
+			}
+		});
+	});
 
-  afterEach(() => {
-    // (console.error as jest.Mock).mockRestore();
-  });
+	afterEach(() => {
+		// (console.error as jest.Mock).mockRestore();
+	});
 }

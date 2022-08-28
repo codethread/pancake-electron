@@ -5,11 +5,11 @@ import { act } from '@testing-library/react';
  * @param duration
  */
 export function tick(duration: number): void {
-  act(() => {
-    jest.advanceTimersByTime(duration * 1000);
-  });
+	act(() => {
+		jest.advanceTimersByTime(duration * 1000);
+	});
 }
 
 export function ticks(duration: number): void {
-  jest.advanceTimersByTime(duration * 1000);
+	jest.advanceTimersByTime(duration * 1000);
 }

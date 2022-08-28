@@ -1,10 +1,11 @@
 import path from 'path';
 import type { Nodenv } from './asserts';
 import { assertValidNodenv } from './asserts';
+import { UserConfig } from './types/config';
 
-interface URLS {
-  readonly main: string;
-}
+type URLS = {
+	readonly main: string;
+};
 
 const nodenv = sanitiseNodenv(process.env.NODE_ENV);
 
@@ -33,20 +34,22 @@ const isTest = nodenv === 'test';
 const isIntegration = isProd && process.env.INTEGRATION === 'true';
 
 const urls: URLS = {
-  main: 'http://localhost:4000',
+	main: 'http://localhost:4000',
 };
 
 export { nodenv, isDev, isProd, isTest, isIntegration, urls };
 
 function sanitiseNodenv(env?: string): Nodenv {
-  if (!env) throw new Error('NODE_ENV is not defined');
-  const sanitisedNodenv = env.trim().toLocaleLowerCase();
-  assertValidNodenv(sanitisedNodenv);
-  return sanitisedNodenv;
+	if (!env) throw new Error('NODE_ENV is not defined');
+	const sanitisedNodenv = env.trim().toLocaleLowerCase();
+	assertValidNodenv(sanitisedNodenv);
+	return sanitisedNodenv;
 }
 
 export const githubScopes = ['repo', 'read:org'];
 
 export function asset(fileName: string): string {
-  return path.join(__dirname, fileName);
+	return path.join(__dirname, fileName);
 }
+
+export const emptyConfig: UserConfig = {};

@@ -1,41 +1,40 @@
 {
-  "compilerOptions": {
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true,
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
-    "noImplicitReturns": true,
-    "noUncheckedIndexedAccess": true,
-    "esModuleInterop": true,
-    "allowUnreachableCode": false,
-    "allowUnusedLabels": false,
-    "skipLibCheck": true,
-    "strictPropertyInitialization": true,
-    "resolveJsonModule": true,
-    "baseUrl": ".",
-    "types": ["jest"],
-    "paths": {
-      "@shared/*": ["shared/*"],
-      "@electron/*": ["electron/*"],
-      "@client/*": ["client/*"],
-      "@test/*": ["testHelpers/*"],
-      "@sb": ["client/storybook/*"]
-    },
-    "jsx": "react"
-  },
-  "include": [
-    "./.eslintrc.js",
-    "./jest.config.js",
-    "./jest.prettier.js",
-    "./playwright.config.ts",
-    "./tailwind.config.js",
-    "tooling",
-    "client",
-    "electron",
-    "shared",
-    "testHelpers",
-    "e2e"
-  ],
-  "exclude": ["node_modules"]
+	"compilerOptions": {
+		"strict": true,
+		"forceConsistentCasingInFileNames": true,
+		"noFallthroughCasesInSwitch": true,
+		"noUnusedLocals": false,
+		"noUnusedParameters": false,
+		"noImplicitReturns": true,
+		"noUncheckedIndexedAccess": true,
+		"esModuleInterop": true,
+		"allowUnreachableCode": false,
+		"allowUnusedLabels": false,
+		"skipLibCheck": true,
+		"strictPropertyInitialization": true,
+		"resolveJsonModule": true,
+		"baseUrl": ".",
+		"types": ["jest"],
+		"paths": {
+			"@shared/*": ["shared/*"],
+			"@electron/*": ["electron/*"],
+			"@client/*": ["client/*"],
+			"@test/*": ["testHelpers/*"],
+			"@sb": ["client/storybook/*"]
+		},
+		"jsx": "react"
+	},
+	"include": [
+		"./.eslintrc.js",
+		"./jest.config.js",
+		"./jest.prettier.js",
+		"./playwright.config.ts",
+		"./tailwind.config.js",
+		"tooling",
+		"client",
+		"electron",
+		"shared",
+		"testHelpers",
+		"e2e"
+	]
 }

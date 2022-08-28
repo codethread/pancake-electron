@@ -1,6 +1,6 @@
 const autoUpdater = {
-  logger: null,
-  checkForUpdatesAndNotify: jest.fn().mockResolvedValue(null),
+	logger: null,
+	checkForUpdatesAndNotify: jest.fn().mockResolvedValue(null),
 };
 
 export { autoUpdater };

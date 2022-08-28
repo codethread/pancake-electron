@@ -1,8 +1,8 @@
 import { shell } from '@electron/electron';
 
-export interface ShellRepository {
-  openExternal(href: string): Promise<void>;
-}
+export type ShellRepository = {
+	openExternal(href: string): Promise<void>;
+};
 
 /**
  * using the repository pattern here to create some side effect that

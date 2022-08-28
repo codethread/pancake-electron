@@ -14,22 +14,22 @@ const not = (bool: boolean): boolean => !bool;
  */
 /* istanbul ignore else */
 if (not(isIntegration)) {
-  exposeMinimalBridgeApiToClient();
+	exposeMinimalBridgeApiToClient();
 } else {
-  /**
-   * This mimics the behaviour of the context bridge to keep behaviour as prod-like as possible
-   */
-  window.bridge = deepFreeze(bridgeCreator(ipcRenderer));
+	/**
+	 * This mimics the behaviour of the context bridge to keep behaviour as prod-like as possible
+	 */
+	window.bridge = deepFreeze(bridgeCreator(ipcRenderer));
 
-  // eval('require') here stops webpack trying to work out what's being imported
-  // this removes some warnings and prevents `require` becoming webpack's own
-  // `_webpack_require`, which seemed to keep failing
+	// eval('require') here stops webpack trying to work out what's being imported
+	// this removes some warnings and prevents `require` becoming webpack's own
+	// `_webpack_require`, which seemed to keep failing
 
-  // @ts-expect-error just for spectron to have access to running electron
-  // eslint-disable-next-line no-eval,@typescript-eslint/no-unsafe-assignment
-  window.electronRequire = eval('require');
+	// @ts-expect-error just for spectron to have access to running electron
+	// eslint-disable-next-line no-eval,@typescript-eslint/no-unsafe-assignment
+	window.electronRequire = eval('require');
 }
 
 export function exposeMinimalBridgeApiToClient(): void {
-  contextBridge.exposeInMainWorld('bridge', bridgeCreator(ipcRenderer));
+	contextBridge.exposeInMainWorld('bridge', bridgeCreator(ipcRenderer));
 }

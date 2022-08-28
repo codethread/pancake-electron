@@ -3,19 +3,19 @@
 @tailwind utilities;
 
 @layer components {
-  .button {
-    @apply rounded p-2 outline-none;
-  }
+	.button {
+		@apply rounded p-2 outline-none;
+	}
 
-  .button:focus {
-    @apply ring ring-thmBright;
-  }
+	.button:focus {
+		@apply ring ring-thmBright;
+	}
 
-  .button[data-error='true'] {
-    @apply text-thmError ring-1 ring-thmError;
-  }
+	.button[data-error='true'] {
+		@apply text-thmError ring-1 ring-thmError;
+	}
 
-  .button[data-error='true']:focus {
-    @apply ring;
-  }
+	.button[data-error='true']:focus {
+		@apply ring;
+	}
 }
