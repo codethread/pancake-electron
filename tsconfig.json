@@ -1,5 +1,9 @@
 {
 	"compilerOptions": {
+		"target": "esnext",
+		"moduleResolution": "Node",
+		"module": "esnext",
+		"resolveJsonModule": true,
 		"strict": true,
 		"forceConsistentCasingInFileNames": true,
 		"noFallthroughCasesInSwitch": true,
@@ -12,7 +16,6 @@
 		"allowUnusedLabels": false,
 		"skipLibCheck": true,
 		"strictPropertyInitialization": true,
-		"resolveJsonModule": true,
 		"baseUrl": ".",
 		"types": ["jest"],
 		"paths": {

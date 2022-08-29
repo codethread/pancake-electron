@@ -2,6 +2,7 @@ import path from 'path';
 import type { Nodenv } from './asserts';
 import { assertValidNodenv } from './asserts';
 import { UserConfig } from './types/config';
+import { or } from './utils';
 
 type URLS = {
 	readonly main: string;
@@ -18,7 +19,7 @@ const isDev = nodenv === 'development';
  * Production mode
  * Set for how clients will interact with application.
  */
-const isProd = nodenv === 'production';
+const isProd = or(nodenv === 'production', nodenv === 'integration');
 /**
  * Test mode
  * Set for Unit tests via Jest
@@ -27,11 +28,9 @@ const isProd = nodenv === 'production';
 const isTest = nodenv === 'test';
 /**
  * Integration mode
- * Production like in all ways except that certain electron security features
- * are disabled to allow Spectron to interact with the electron process during
- * e2e tests.
+ * used for playwrite feature tests
  */
-const isIntegration = isProd && process.env.INTEGRATION === 'true';
+const isIntegration = process.env.INT !== 'false';
 
 const urls: URLS = {
 	main: 'http://localhost:4000',

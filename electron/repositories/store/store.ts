@@ -47,7 +47,7 @@ export const storeRepository = <T = UserConfig>({
 
 	return {
 		async storeRead() {
-			logger.info('reading store', store.store);
+			logger.info({ msg: 'reading store', data: store.store, tags: ['store', 'electron'] });
 			return Promise.resolve(ok(store.store));
 		},
 		async storeReset() {

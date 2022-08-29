@@ -27,3 +27,14 @@ export const metaRepo: MetaRepo = {
 		return Promise.resolve(ok(constants.isIntegration));
 	},
 };
+
+// export const fakeMetaRepo = (overrides?: Partial<MetaRepo>): MetaRepo =>
+// 	merge(
+//     metaRepo,
+//     {
+//       async isIntegration() {
+//         return Promise.resolve(ok())
+
+//       }
+//     }
+// 	);

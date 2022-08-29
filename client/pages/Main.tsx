@@ -1,6 +1,24 @@
 import React from 'react';
-import { useBridge } from '@client/hooks';
+import { useLogger } from '@client/hooks';
+import { Box, Button } from '@client/components';
 
-export function Pomodoro(): JSX.Element {
-	return <p className="">Hello!</p>;
+export function Main(): JSX.Element {
+	const log = useLogger();
+	return (
+		<Box>
+			<p className="">foo!</p>
+			<Button
+				data-testid="e2e-button"
+				onClick={() => {
+					log.info({
+						data: { hi: 'matt' },
+						msg: 'started',
+						tags: ['electron', 'foo'],
+					});
+				}}
+			>
+				click
+			</Button>
+		</Box>
+	);
 }

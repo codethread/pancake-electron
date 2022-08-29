@@ -20,6 +20,7 @@ module.exports = {
 		'react/prop-types': 'off',
 		'import/prefer-default-export': 'off',
 		'spaced-comment': ['error', 'always', { exceptions: ['-'] }],
+		'no-nested-ternary': 'off',
 	},
 	settings: {
 		react: {

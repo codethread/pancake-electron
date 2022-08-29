@@ -47,59 +47,25 @@ describe('constants', () => {
 			isProd: boolean;
 			isTest: boolean;
 			isDev: boolean;
+			isIntegration: boolean;
 		};
 
 		const collections: Collection[] = [
-			{ env: 'development', isProd: false, isTest: false, isDev: true },
-			{ env: 'test', isProd: false, isTest: true, isDev: false },
-			{ env: 'production', isProd: true, isTest: false, isDev: false },
+			{ env: 'development', isProd: false, isTest: false, isDev: true, isIntegration: false },
+			{ env: 'test', isProd: false, isTest: true, isDev: false, isIntegration: false },
+			{ env: 'production', isProd: true, isTest: false, isDev: false, isIntegration: false },
+			{ env: 'integration', isProd: true, isTest: false, isDev: false, isIntegration: true },
 		];
 
 		collections.forEach((collection) => {
 			it(`when env is "${collection.env} env flags are set correctly`, async () => {
 				jest.resetModules();
 				process.env.NODE_ENV = collection.env;
-				const { isDev, isProd, isTest } = await import('./constants');
+				const { isDev, isProd, isTest, isIntegration } = await import('./constants');
 				expect(isDev).toBe(collection.isDev);
 				expect(isProd).toBe(collection.isProd);
 				expect(isTest).toBe(collection.isTest);
-			});
-		});
-	});
-
-	describe('isIntegration', () => {
-		describe('when not in production mode', () => {
-			it('is always false', async () => {
-				process.env.NODE_ENV = 'development';
-				process.env.INTEGRATION = 'true';
-
-				jest.resetModules();
-				const { isIntegration } = await import('./constants');
-				expect(isIntegration).toBe(false);
-			});
-		});
-
-		describe('when in production mode', () => {
-			describe('when INTEGRATION is true', () => {
-				it('is is true', async () => {
-					process.env.NODE_ENV = 'production';
-					process.env.INTEGRATION = 'true';
-
-					jest.resetModules();
-					const { isIntegration } = await import('./constants');
-					expect(isIntegration).toBe(true);
-				});
-			});
-
-			describe('when INTEGRATION is false', () => {
-				it('is is true', async () => {
-					process.env.NODE_ENV = 'production';
-					process.env.INTEGRATION = 'false';
-
-					jest.resetModules();
-					const { isIntegration } = await import('./constants');
-					expect(isIntegration).toBe(false);
-				});
+				expect(isIntegration).toBe(collection.isIntegration);
 			});
 		});
 	});

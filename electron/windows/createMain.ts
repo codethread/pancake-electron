@@ -2,43 +2,17 @@ import { BrowserWindow } from '@electron/electron';
 import { ILogger } from '@shared/types/logger';
 import path from 'path';
 import url from 'url';
-import { isDev, isIntegration } from '@shared/constants';
+import { isDev, isProd } from '@shared/constants';
+import { not } from '@shared/utils';
 
 export function createMain(logger: ILogger): BrowserWindow {
-	/**
-	 * These options should be off in production and dev mode
-	 * They are only required for e2e testing with Spectron
-	 *
-	 * enableRemoteModule needs to be true to allow spectron to access information
-	 * about the running electron process
-	 *
-	 * contextIsolation needs to be disabled to give the browserWindow access to
-	 * require, which in turn is used to access `remote` as needed above
-	 */
-	const secureEnvs = isIntegration
-		? {
-				enableRemoteModule: true,
-				contextIsolation: false,
-		  }
-		: {
-				enableRemoteModule: false,
-				contextIsolation: true,
-		  };
-
-	logger.debug(secureEnvs);
-
 	const mainWindow = new BrowserWindow({
 		width: 1100,
 		height: 700,
 		backgroundColor: '#191622',
 		webPreferences: {
-			// ...secureEnvs,
-			// nodeIntegration: false,
-			// preload: path.join(__dirname, './preload.js'),
 			contextIsolation: true,
-			nodeIntegration: false,
-			backgroundThrottling: false, // needed to keep timers smooth
-			plugins: true,
+			plugins: not(isProd),
 			preload: path.join(__dirname, './preload.js'),
 		},
 	});

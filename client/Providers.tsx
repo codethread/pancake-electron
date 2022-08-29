@@ -3,6 +3,7 @@ import { BridgeProvider, LoggerProvider, MachinesProvider } from '@client/hooks/
 import { IBridge } from '@shared/types/ipc';
 import React, { useEffect, useState } from 'react';
 import { App } from './App';
+import { Main } from './pages/Main';
 
 type IProviders = {
 	bridge: IBridge;
@@ -27,7 +28,7 @@ export function Providers({ bridge }: IProviders): JSX.Element {
 				<MachinesProvider>
 					<ErrorBoundary>
 						<App shouldInspect={shouldInspect}>
-							<div>Hello!</div>
+							<Main />
 						</App>
 					</ErrorBoundary>
 				</MachinesProvider>

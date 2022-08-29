@@ -11,6 +11,8 @@ const logger = createLogger(log);
 
 checkForUpdates(logger);
 
+process.stdout.write('hey');
+
 app
 	.on('ready', () => {
 		logger.info('app ready');

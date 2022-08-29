@@ -1,7 +1,8 @@
-import { ILogger } from '@shared/types/logger';
-import _log, { LevelOption } from 'electron-log';
 import { Nodenv } from '@shared/asserts';
 import * as _constants from '@shared/constants';
+import { ILogger, LogMethods } from '@shared/types/logger';
+import _log from 'electron-log';
+import { last } from 'remeda';
 import { createLogger, loggerErrorHandler } from './createLogger';
 
 jest.mock('electron-log');
@@ -23,12 +24,12 @@ describe('createLogger', () => {
 
 	type Collection = {
 		nodenv: Nodenv;
-		fileLevel: LevelOption;
-		consoleLevel: LevelOption;
+		fileLevel: LogMethods | false;
+		consoleLevel: LogMethods | false;
 	};
 	const logLevels: Collection[] = [
-		{ nodenv: 'development', fileLevel: false, consoleLevel: 'silly' },
-		{ nodenv: 'test', fileLevel: false, consoleLevel: 'silly' },
+		{ nodenv: 'development', fileLevel: false, consoleLevel: 'debug' },
+		{ nodenv: 'test', fileLevel: false, consoleLevel: 'debug' },
 		{ nodenv: 'production', fileLevel: 'info', consoleLevel: false },
 		{ nodenv: 'impossible' as Nodenv, fileLevel: 'info', consoleLevel: 'info' },
 	];
@@ -79,6 +80,25 @@ describe('createLogger', () => {
 	});
 
 	it('logs the initialised state', () => {
-		expect(log.info).toHaveBeenCalledWith(expect.any(String), expect.any(String));
+		expect(last(log.info.mock.calls)).toMatchInlineSnapshot(`
+		Array [
+		  Object {
+		    "data": Object {
+		      "chrome": undefined,
+		      "console": "debug",
+		      "electron": undefined,
+		      "env": "test",
+		      "file": false,
+		      "integration": false,
+		      "node": "v16.9.1",
+		    },
+		    "msg": "Logger initialised",
+		    "tags": Array [
+		      "init",
+		      "electron",
+		    ],
+		  },
+		]
+	`);
 	});
 });

@@ -7,7 +7,7 @@ import { ignoreWarnings } from '@test/ignore';
 import { emptyConfig } from '@shared/constants';
 import { useConfig } from './useConfig';
 
-describe('useConfig', () => {
+describe.skip('useConfig', () => {
 	ignoreWarnings(
 		'xstate has a bug which logs a harmless warning for exit/entry actions https://github.com/statelyai/xstate/issues/1792',
 		/No implementation found for action type 'onStartHook'/

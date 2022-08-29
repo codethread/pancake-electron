@@ -11,7 +11,7 @@ export function handlers(repos: Repositories): IpcHandlers {
 			(fns, key: keyof Repositories) => ({
 				...fns,
 				// eslint-disable-next-line
-				[key]: (_: unknown, args: [unknown]) => repos[key](...args),
+				[key]: (_: unknown, args: [any]) => repos[key](...args),
 			}),
 			{} as IpcHandlers
 		)

@@ -1,4 +1,4 @@
-import { ILogger } from '@shared/types/logger';
+import { ILogger, ILogInfo, marshalInfo } from '@shared/types/logger';
 import { ElectronLog, LevelOption } from 'electron-log';
 import { isIntegration, nodenv } from '@shared/constants';
 import type { Nodenv } from '@shared/asserts';
@@ -7,7 +7,6 @@ import { errorHandler } from './errorHandler';
 // eslint-disable-next-line import/no-mutable-exports
 export let loggerErrorHandler: ReturnType<typeof errorHandler>;
 
-// TODO: add tags to logs
 type LogLevels = [Nodenv, LevelOption][];
 
 const fileLogLevels: LogLevels = [
@@ -17,8 +16,8 @@ const fileLogLevels: LogLevels = [
 ];
 
 const consoleLogLevels: LogLevels = [
-	['development', 'silly'],
-	['test', 'silly'],
+	['development', 'debug'],
+	['test', 'debug'],
 	['production', false],
 ];
 
@@ -38,10 +37,46 @@ export function createLogger(log: ElectronLog): ILogger {
 
 	const logger: ILogger = {
 		...log,
+		info(info) {
+			log.info(marshalInfo(info));
+		},
+		warn(info) {
+			log.warn(marshalInfo(info));
+		},
+		error(info) {
+			log.error(info instanceof Error ? { msg: info.message, data: info } : marshalInfo(info));
+		},
+		debug(info) {
+			log.debug(marshalInfo(info));
+		},
 		errorWithContext(context) {
 			return (err) => {
 				log.error(context, err);
 			};
+		},
+		b: {
+			serverSetup(info) {
+				return typeof info === 'string'
+					? {
+							tags: ['init', 'electron'],
+							msg: info,
+					  }
+					: {
+							msg: info.msg,
+							tags: Array.from(new Set((info.tags ?? []).concat('init', 'electron'))),
+					  };
+			},
+			clientSetup(info) {
+				return typeof info === 'string'
+					? {
+							tags: ['init', 'client'],
+							msg: info,
+					  }
+					: {
+							msg: info.msg,
+							tags: Array.from(new Set((info.tags ?? []).concat('init', 'client'))),
+					  };
+			},
 		},
 	};
 
@@ -52,9 +87,10 @@ export function createLogger(log: ElectronLog): ILogger {
 		onError: loggerErrorHandler,
 	});
 
-	logger.info(
-		'Logger initialised',
-		JSON.stringify({
+	logger.info({
+		tags: ['init', 'electron'],
+		msg: 'Logger initialised',
+		data: {
 			node: process.version,
 			chrome: process.versions.chrome,
 			electron: process.versions.electron,
@@ -62,8 +98,8 @@ export function createLogger(log: ElectronLog): ILogger {
 			integration: isIntegration,
 			file: log.transports.file.level,
 			console: log.transports.console.level,
-		})
-	);
+		},
+	});
 
 	return logger;
 }

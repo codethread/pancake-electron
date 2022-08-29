@@ -25,5 +25,6 @@ export function createFakeClientLogger(): IClientLogger {
 		error: () => {},
 		warn: () => {},
 		info: () => {},
+		debug: () => {},
 	};
 }

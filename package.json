@@ -16,7 +16,7 @@
 		"lint": "eslint --cache .",
 		"test": "jest",
 		"types": "tsc --noEmit",
-		"e2e": "INTEGRATION=true playwright test",
+		"e2e": "playwright test",
 		"e2e:approve": "yarn e2e --update-snapshots",
 		"docker-e2e": "docker build . -f Dockerfile -t pancake",
 		"build": "FORCE_COLOR=1 run-p --print-label build:electron build:react",

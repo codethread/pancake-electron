@@ -8,6 +8,7 @@ export const handlerMethods: IpcSetup = {
 	info: { main: 'on', renderer: 'send' },
 	warn: { main: 'on', renderer: 'send' },
 	error: { main: 'on', renderer: 'send' },
+	debug: { main: 'on', renderer: 'send' },
 	isIntegration: { main: 'handle', renderer: 'invoke' },
 	isDev: { main: 'handle', renderer: 'invoke' },
 	isTest: { main: 'handle', renderer: 'invoke' },

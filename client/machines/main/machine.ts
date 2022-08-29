@@ -21,17 +21,22 @@ export const mainMachineFactory = (_i: IMainMachine) =>
 			},
 			tsTypes: {} as import('./machine.typegen').Typegen0,
 			context: mainModel.initialContext,
-			initial: 'active',
+			initial: 'loading',
 			states: {
+				loading: {
+					always: {
+						actions: 'setLoaded',
+						target: 'active',
+					},
+				},
 				active: {},
 			},
 		},
 		{
 			actions: {
-				setLoaded: assign((_, { data }) => ({
-					config: data,
+				setLoaded: assign({
 					loaded: true,
-				})),
+				}),
 			},
 		}
 	);
