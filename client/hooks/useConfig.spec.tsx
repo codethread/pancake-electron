@@ -3,16 +3,10 @@ import React from 'react';
 import { renderHook } from '@testing-library/react-hooks';
 import { Providers, waitFor, act } from '@test/rtl';
 import { ok } from '@shared/Result';
-import { ignoreWarnings } from '@test/ignore';
 import { emptyConfig } from '@shared/constants';
 import { useConfig } from './useConfig';
 
-describe.skip('useConfig', () => {
-	ignoreWarnings(
-		'xstate has a bug which logs a harmless warning for exit/entry actions https://github.com/statelyai/xstate/issues/1792',
-		/No implementation found for action type 'onStartHook'/
-	);
-
+describe('useConfig', () => {
 	const config: UserConfig = {
 		...emptyConfig,
 	};
@@ -28,7 +22,10 @@ describe.skip('useConfig', () => {
 	it('should return loading false and config from disk', async () => {
 		const { result } = runTest();
 
-		await waitFor(() => expect(result.current.loading).toBe(false));
+		await waitFor(() => expect(result.current.loading).toBe(false), {
+			interval: 100,
+			timeout: 3000,
+		});
 
 		expect(result.current.config).toStrictEqual(config);
 	});

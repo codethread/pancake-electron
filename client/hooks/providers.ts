@@ -1,3 +1,3 @@
 export { BridgeProvider } from './useBridge';
-export { MachinesProvider } from './machines';
+export { MachinesProvider, type IMachinesProvider } from './useMachines';
 export { LoggerProvider } from './useLogger';

@@ -8,6 +8,7 @@ import {
 import { useInterpret, useSelector } from '@xstate/react';
 import React, { createContext, useContext, useEffect } from 'react';
 import { useBridge } from './useBridge';
+import { useLogger } from './useLogger';
 
 const machinesConfig = createContext<MainService | null>(null);
 
@@ -19,6 +20,7 @@ export type IMachinesProvider = {
 
 export function MachinesProvider({ children }: IMachinesProvider): JSX.Element {
 	const bridge = useBridge();
+	const logger = useLogger();
 
 	useEffect(() => {
 		bridge.info('client starting');
@@ -26,6 +28,14 @@ export function MachinesProvider({ children }: IMachinesProvider): JSX.Element {
 
 	const main = useInterpret(mainMachineFactory({ bridge }), {
 		devTools: true,
+	});
+
+	main.onTransition((e) => {
+		logger.debug({
+			tags: ['xstate', 'main', 'transition'],
+			msg: `main machine ${e.event.type}`,
+			data: { value: e.value, event: e.event },
+		});
 	});
 
 	return <Provider value={main}>{children}</Provider>;
@@ -44,5 +54,6 @@ export const useConfigService = (): ConfigActorRef => {
 	const config = useSelector(main, (c) => c.children[actorIds.CONFIG] as ConfigActorRef | null);
 
 	if (!config) throw new ActorError(main, actorIds.CONFIG);
+
 	return config;
 };

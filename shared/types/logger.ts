@@ -43,5 +43,6 @@ export function marshalInfo(
 ): ILogInfo {
 	return typeof info === 'string'
 		? { msg: info, tags: concat(['notag'], extra?.tags ?? []) }
-		: merge({ ...info, tags: info.tags ?? ['notag'] }, extra);
+		: // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+		  { msg: info.msg, tags: concat(info.tags ?? ['notag'], extra?.tags ?? []), data: info.data };
 }

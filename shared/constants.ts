@@ -30,7 +30,7 @@ const isTest = nodenv === 'test';
  * Integration mode
  * used for playwrite feature tests
  */
-const isIntegration = process.env.INT !== 'false';
+const isIntegration = process.env.INT === 'true';
 
 const urls: URLS = {
 	main: 'http://localhost:4000',

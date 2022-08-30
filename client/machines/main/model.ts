@@ -4,10 +4,7 @@ import { ContextFrom, EventFrom } from 'xstate';
 import { UserConfig } from '@shared/types/config';
 
 export const mainModel = createModel(
-	{
-		loaded: false,
-		config: {} as UserConfig,
-	},
+	{},
 	{
 		events: {
 			CONFIG_LOADED: (data: UserConfig) => ({ data }),

@@ -1,6 +1,5 @@
 import { App } from '@client/App';
 import { ErrorBoundary } from '@client/components';
-import { IMachinesProvider } from '@client/hooks/machines';
 import { BridgeProvider, LoggerProvider, MachinesProvider } from '@client/hooks/providers';
 import { createFakeBridge } from '@electron/ipc/createFakeBridge';
 import { IBridge } from '@shared/types/ipc';

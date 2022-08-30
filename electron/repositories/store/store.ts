@@ -51,10 +51,12 @@ export const storeRepository = <T = UserConfig>({
 			return Promise.resolve(ok(store.store));
 		},
 		async storeReset() {
+			logger.info({ msg: 'store reset', tags: ['store', 'electron'] });
 			store.clear();
 			return Promise.resolve(ok(store.store));
 		},
 		async storeUpdate(updatedStore) {
+			logger.info({ msg: 'store update', data: updatedStore, tags: ['store', 'electron'] });
 			const originalStore = store.store;
 			try {
 				getKeyPathsAndValues(updatedStore).forEach(([path, value]) => {

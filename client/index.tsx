@@ -43,5 +43,5 @@ function getElectronBridgeOrMock(): IBridge {
 function log(info: ILogInfo, method: LogMethods): void {
 	const d = marshalInfo(info, { tags: ['client'] });
 	console[method](d);
-	window.bridge?.[method](d);
+	window.bridge?.[method](JSON.stringify(d));
 }

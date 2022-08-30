@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import { ILogger, ILogInfo, marshalInfo } from '@shared/types/logger';
 import { ElectronLog, LevelOption } from 'electron-log';
 import { isIntegration, nodenv } from '@shared/constants';
@@ -10,13 +11,13 @@ export let loggerErrorHandler: ReturnType<typeof errorHandler>;
 type LogLevels = [Nodenv, LevelOption][];
 
 const fileLogLevels: LogLevels = [
-	['development', false],
+	['development', 'debug'],
 	['test', false],
 	['production', 'info'],
 ];
 
 const consoleLogLevels: LogLevels = [
-	['development', 'debug'],
+	['development', 'info'],
 	['test', 'debug'],
 	['production', false],
 ];
@@ -30,9 +31,8 @@ const consoleLogLevels: LogLevels = [
  * @param log
  */
 export function createLogger(log: ElectronLog): ILogger {
-	// eslint-disable-next-line no-param-reassign
 	log.transports.file.level = getLevel(fileLogLevels);
-	// eslint-disable-next-line no-param-reassign
+	log.transports.console.format = '{text}';
 	log.transports.console.level = isIntegration ? 'info' : getLevel(consoleLogLevels);
 
 	const logger: ILogger = {
@@ -98,6 +98,7 @@ export function createLogger(log: ElectronLog): ILogger {
 			integration: isIntegration,
 			file: log.transports.file.level,
 			console: log.transports.console.level,
+			location: log.transports.file.getFile().path,
 		},
 	});
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect } from 'react';
+import React, { useLayoutEffect } from 'react';
 import { inspect } from '@xstate/inspect';
 import { useSelector } from '@xstate/react';
 import { useMachines } from '@client/hooks';
@@ -17,28 +17,8 @@ export function App({ children, shouldInspect }: IApp): JSX.Element {
 			});
 		}
 	});
-	useEffect(() => {
-		fetch('http://localhost:4001', {
-			method: 'POST',
-			headers: {
-				'content-type': 'application/json',
-			},
-			body: JSON.stringify({
-				query: `
-query ExampleQuery($login: String!) {
-  user(login: $login) {
-    company
-  }
-}
-`,
-				variables: {
-					login: 'hello',
-				},
-			}),
-		});
-	}, []);
 	const main = useMachines();
-	const loaded = useSelector(main, (c) => c.context.loaded);
+	const loaded = useSelector(main, (c) => c.hasTag('loaded'));
 
 	// annoying workaround to make sure all child actors are ready
 	if (!loaded) {

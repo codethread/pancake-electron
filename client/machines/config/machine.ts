@@ -2,7 +2,6 @@ import { UserConfig } from '@shared/types/config';
 import { IBridge } from '@shared/types/ipc';
 import { ActorRefFrom, assign, createMachine, InterpreterFrom, sendParent } from 'xstate';
 import { respond } from 'xstate/lib/actions';
-import { actorIds } from '../constants';
 import { mainModel } from '../main/model';
 import { ConfigContext, configModel, ConfitEvents } from './model';
 
@@ -18,6 +17,7 @@ export function configMachineFactory({ bridge, configOverride }: IConfigMachine)
 	return createMachine(
 		{
 			id: 'config',
+			predictableActionArguments: true,
 			tsTypes: {} as import('./machine.typegen').Typegen0,
 			schema: {
 				context: {} as ConfigContext,
@@ -115,7 +115,7 @@ export function configMachineFactory({ bridge, configOverride }: IConfigMachine)
 						},
 					});
 				},
-				updateConfig: async (c, e) => {
+				updateConfig: async (_, e) => {
 					const res = await bridge.storeUpdate(e.data);
 					return res.match({
 						Ok: (config) => config,
