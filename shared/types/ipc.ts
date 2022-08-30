@@ -43,3 +43,7 @@ type Handle = {
 export type IChildren = {
 	children: React.ReactNode;
 };
+
+export type ICss = {
+	className?: string;
+};

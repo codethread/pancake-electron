@@ -114,6 +114,7 @@
 		"prettier-plugin-tailwindcss": "^0.1.11",
 		"react": "16.14.0",
 		"react-dom": "16.14.0",
+		"react-hook-form": "^7.34.2",
 		"react-is": "^18.0.0",
 		"remeda": "^1.0.1",
 		"style-loader": "2.0.0",

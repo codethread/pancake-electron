@@ -18,3 +18,4 @@ export * from './Inspector';
 export * from './Button/Button';
 export * from './Form';
 export * from './Bootloader';
+export * from './Card';
