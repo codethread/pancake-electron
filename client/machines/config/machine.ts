@@ -50,7 +50,7 @@ export function configMachineFactory({ bridge, configOverride }: IConfigMachine)
 					states: {
 						idle: {
 							tags: ['idle'],
-							entry: 'broadcastConfig',
+							entry: ['broadcastConfig', 'storeTokenForSession'],
 							on: {
 								UPDATE: 'updating',
 								RESET: 'resetting',
@@ -128,6 +128,11 @@ export function configMachineFactory({ bridge, configOverride }: IConfigMachine)
 			},
 			actions: {
 				broadcastConfig: sendParent((c) => mainModel.events.CONFIG_LOADED(c)),
+				storeTokenForSession: ({ token }) => {
+					if (token) {
+						sessionStorage.setItem('token', token);
+					}
+				},
 				respondWithConfig: respond((c) => mainModel.events.CONFIG_LOADED(c)),
 				storeConfig: assign((_, { data }) => data),
 			},

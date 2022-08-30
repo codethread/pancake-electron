@@ -1,4 +1,4 @@
-import { App } from '@client/App';
+import { Bootloader } from '@client/components/Bootloader';
 import { ErrorBoundary } from '@client/components';
 import { BridgeProvider, LoggerProvider, MachinesProvider } from '@client/hooks/providers';
 import { createFakeBridge } from '@electron/ipc/createFakeBridge';
@@ -46,7 +46,7 @@ export function Providers({ children, bridge }: Overrides): JSX.Element {
 			<LoggerProvider>
 				<ErrorBoundary>
 					<MachinesProvider>
-						<App shouldInspect={false}>{children}</App>
+						<Bootloader shouldInspect={false}>{children}</Bootloader>
 					</MachinesProvider>
 				</ErrorBoundary>
 			</LoggerProvider>

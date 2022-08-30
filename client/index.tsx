@@ -5,6 +5,7 @@ import { IBridge } from '@shared/types/ipc';
 import { IClientLogger, ILogInfo, LogMethods, marshalInfo } from '@shared/types/logger';
 import { Providers } from './Providers';
 import './index.css';
+import { Main } from './pages/Main';
 
 const mainElement = document.createElement('div');
 mainElement.setAttribute('id', 'root');
@@ -12,7 +13,12 @@ document.body.appendChild(mainElement);
 
 const bridge = getElectronBridgeOrMock();
 
-render(<Providers bridge={bridge} />, mainElement);
+render(
+	<Providers bridge={bridge}>
+		<Main />
+	</Providers>,
+	mainElement
+);
 
 function getElectronBridgeOrMock(): IBridge {
 	const logger: IClientLogger = {

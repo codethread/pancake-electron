@@ -1,15 +1,16 @@
-import { ErrorBoundary } from '@client/components';
+import { ApolloProvider } from '@apollo/client';
+import { ErrorBoundary, Bootloader } from '@client/components';
 import { BridgeProvider, LoggerProvider, MachinesProvider } from '@client/hooks/providers';
-import { IBridge } from '@shared/types/ipc';
-import React, { useEffect, useState } from 'react';
-import { App } from './App';
-import { Main } from './pages/Main';
+import { IBridge, IChildren } from '@shared/types/ipc';
+import { inspect } from '@xstate/inspect';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
+import { client } from './misc/apollo';
 
-type IProviders = {
+type IProviders = IChildren & {
 	bridge: IBridge;
 };
 
-export function Providers({ bridge }: IProviders): JSX.Element {
+export function Providers({ bridge, children }: IProviders): JSX.Element {
 	const [booting, setBooting] = useState(true);
 	const [shouldInspect, setShouldInspect] = useState(false);
 
@@ -20,18 +21,27 @@ export function Providers({ bridge }: IProviders): JSX.Element {
 		});
 	});
 
+	useLayoutEffect(() => {
+		if (shouldInspect) {
+			inspect({
+				iframe: false,
+				// url: 'http://localhost:3000/viz?inspect',
+			});
+		}
+	});
+
 	return booting ? (
 		<p>booting...</p>
 	) : (
 		<BridgeProvider bridge={bridge}>
 			<LoggerProvider>
-				<MachinesProvider>
-					<ErrorBoundary>
-						<App shouldInspect={shouldInspect}>
-							<Main />
-						</App>
-					</ErrorBoundary>
-				</MachinesProvider>
+				<ApolloProvider client={client}>
+					<MachinesProvider>
+						<ErrorBoundary>
+							<Bootloader>{children}</Bootloader>
+						</ErrorBoundary>
+					</MachinesProvider>
+				</ApolloProvider>
 			</LoggerProvider>
 		</BridgeProvider>
 	);

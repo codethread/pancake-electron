@@ -5,6 +5,7 @@ dist
 build
 reports
 .eslintcache
+client/hooks/graphql.ts
 
 .yarn/*
 !.yarn/cache

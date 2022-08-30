@@ -1,3 +1,11 @@
 module.exports = {
-	commonIgnore: ['node_modules', 'temp', 'build', 'reports', 'dist', 'publishingTools'],
+	commonIgnore: [
+		'node_modules',
+		'temp',
+		'build',
+		'reports',
+		'dist',
+		'publishingTools',
+		'client/hooks/graphql.ts',
+	],
 };
