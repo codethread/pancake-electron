@@ -22,10 +22,7 @@ describe('useConfig', () => {
 	it('should return loading false and config from disk', async () => {
 		const { result } = runTest();
 
-		await waitFor(() => expect(result.current.loading).toBe(false), {
-			interval: 100,
-			timeout: 3000,
-		});
+		await waitFor(() => expect(result.current.loading).toBe(false));
 
 		expect(result.current.config).toStrictEqual(config);
 	});
