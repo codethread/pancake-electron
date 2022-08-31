@@ -60,3 +60,7 @@
 	--color-warning: 235 203 139;
 	--color-good: 163 190 140;
 }
+
+.debug {
+	border: thin dotted coral;
+}

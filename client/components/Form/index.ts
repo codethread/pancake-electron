@@ -1,1 +1,1 @@
-export { FormItemPassword, FormItem, FormItemNumber } from './FormItem';
+export { FormItemPassword, FormItem, FormItemNumber, FormItemText } from './FormItem';

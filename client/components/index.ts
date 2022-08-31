@@ -2,13 +2,7 @@
 import { InputSelectFactory } from './Inputs';
 
 export { InputSelectFactory };
-export {
-	type IInputSelect,
-	type IInputNumber,
-	InputPassword,
-	type IInputPassword,
-	InputNumber,
-} from './Inputs';
+export { InputPassword } from './Inputs';
 
 export * as Icons from './Icons';
 export * from './Box';

@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
-import { useLogger, useReviewsQuery } from '@client/hooks';
+import { useConfig, useLogger, useReviewsQuery } from '@client/hooks';
 import { Box, Button } from '@client/components';
 import { not } from '@shared/utils';
-import { Settings, Settings2 } from './Settings';
+import { IRepoForm } from '@shared/types/config';
+import { Settings } from './Settings/Settings';
 
 export function Dash(): JSX.Element {
 	const log = useLogger();
 	const [settings, setSettings] = useState(true);
+	const { config } = useConfig();
 
 	return (
 		<div className="mx-4 flex w-full flex-col">
@@ -14,19 +16,18 @@ export function Dash(): JSX.Element {
 			{settings && (
 				<div className="flex w-full flex-row flex-wrap gap-3">
 					<Settings />
-					<Settings2 />
 				</div>
 			)}
-			<PR />
+			{!settings && config?.repos.map((repo, i) => <Repo {...repo} key={i} />)}
 		</div>
 	);
 }
 
-function PR(): JSX.Element {
+function Repo(repo: IRepoForm): JSX.Element {
 	const { data, error } = useReviewsQuery({
 		variables: {
-			name: 'foo',
-			owner: 'bar',
+			name: repo.name,
+			owner: repo.owner,
 		},
 	});
 
@@ -40,7 +41,7 @@ function PR(): JSX.Element {
 	return (
 		<Box className="m-4 rounded border border-thmFgDim p-4">
 			<p>
-				{data?.repository?.owner?.login} / {data?.repository?.name}
+				{repo.owner} / {repo.name}
 			</p>
 			{data?.repository?.pullRequests.nodes?.map((pr) => (
 				<Box key={pr?.id} className="m-4 border border-thmPrimary">

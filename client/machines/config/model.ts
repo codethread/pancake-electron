@@ -9,6 +9,7 @@ export const configModel = createModel(emptyConfig, {
 		RESET: () => ({}),
 		REQUEST_CONFIG: () => ({}),
 		UPDATE: (data: DeepPartial<UserConfig>) => ({ data }),
+		REPLACE: (data: DeepPartial<UserConfig>) => ({ data }),
 	},
 });
 

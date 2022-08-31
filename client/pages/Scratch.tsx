@@ -16,13 +16,17 @@ type MyForm = {
 	age: number;
 };
 
+const onSubmit = (data: any): void => console.log(data);
+
+// we can pass register directly
+// pros: simple, effecient
+// cons: repetative
 export function Settings(): JSX.Element {
 	const {
 		register,
 		handleSubmit,
 		formState: { errors },
 	} = useForm<MyForm>({});
-	const onSubmit = (data) => console.log(data);
 	return (
 		<div className="flex flex-row flex-wrap">
 			<Card className="gap-5">
@@ -36,24 +40,6 @@ export function Settings(): JSX.Element {
 					<FormItemNumber register={register} label="age" min={5} max={10} errors={errors.age} />
 					<input type="submit" />
 				</form>
-			</Card>
-		</div>
-	);
-}
-
-export function Settings2(): JSX.Element {
-	const methods = useForm<MyForm>({});
-	const onSubmit = (data) => console.log(data);
-	return (
-		<div className="flex flex-row flex-wrap">
-			<Card className="gap-5">
-				<FormProvider {...methods}>
-					<form onSubmit={methods.handleSubmit(onSubmit)}>
-						<FormItemNumber2 label="name" required="pass and art" />
-						<FormItemNumber2 label="age" min={5} max={10} />
-						<input type="submit" />
-					</form>
-				</FormProvider>
 			</Card>
 		</div>
 	);
@@ -79,6 +65,32 @@ function FormItemNumber<A extends FieldValues>({
 	);
 }
 
+/* ----------------------------- */ /* ----------------------------- */ /* ----------------------------- */
+/* ----------------------------- */ /* ----------------------------- */ /* ----------------------------- */
+
+// we can use context to grab info from context
+// pros: simple component interfaces, easy to scale
+// cons: less efficient, as all fields will update - perhaps use except for virtual lists
+export function Settings2(): JSX.Element {
+	const methods = useForm<MyForm>({});
+	console.log({
+		errors: methods.formState.errors,
+	});
+	return (
+		<div className="flex flex-row flex-wrap">
+			<Card className="gap-5">
+				<FormProvider {...methods}>
+					<form onSubmit={methods.handleSubmit(onSubmit)}>
+						<FormItemNumber2 label="name" required="pass and art" />
+						<FormItemNumber2 label="age" min={5} max={{ value: 10, message: 'hey too big!' }} />
+						<input type="submit" />
+					</form>
+				</FormProvider>
+			</Card>
+		</div>
+	);
+}
+
 function FormItemNumber2<A extends FieldValues>({
 	label,
 	...rest
@@ -88,7 +100,6 @@ function FormItemNumber2<A extends FieldValues>({
 	const id = `${label}form-input`;
 	const { register, getFieldState } = useFormContext<A>();
 	const { error } = getFieldState(label);
-	console.log({ error });
 	return (
 		<div className="flex max-w-md flex-col gap-1">
 			<label htmlFor={id}>{label}</label>

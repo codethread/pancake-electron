@@ -18,7 +18,7 @@ export type IButton = ButtonProps & {
 // );
 const colors =
 	'transition transition-all hover:brightness-125 disabled:hover:brightness-100 disabled:cursor-not-allowed active:brightness-150';
-const common = 'flex items-center button w-fit p-2 px-4 shadow-3xl';
+const common = 'flex items-center button p-2 px-4 shadow-3xl';
 
 export function Button({
 	children,

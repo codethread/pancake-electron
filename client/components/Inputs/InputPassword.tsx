@@ -8,11 +8,10 @@ export type IInputPassword = Omit<
 	Required<Pick<React.InputHTMLAttributes<HTMLInputElement>, 'id' | 'placeholder'>> & {
 		hasError?: boolean;
 		type?: 'password' | 'text';
-		onChange(n: string): void;
 	};
 
 export const InputPassword = React.forwardRef<HTMLInputElement, IInputPassword>(
-	({ id, hasError, value, onChange, className, type = 'password', ...props }, ref) => (
+	({ id, hasError, value, className, type = 'password', ...props }, ref) => (
 		<input
 			ref={ref}
 			data-error={hasError}
@@ -23,9 +22,6 @@ export const InputPassword = React.forwardRef<HTMLInputElement, IInputPassword>(
 				'aria-describedby': `${id}-error`,
 			})}
 			value={value}
-			onChange={({ target: { value: n } }) => {
-				onChange(n);
-			}}
 			{...props}
 		/>
 	)

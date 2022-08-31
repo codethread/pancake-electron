@@ -46,7 +46,7 @@ export function Providers({ children, bridge }: Overrides): JSX.Element {
 			<LoggerProvider>
 				<ErrorBoundary>
 					<MachinesProvider>
-						<Bootloader shouldInspect={false}>{children}</Bootloader>
+						<Bootloader>{children}</Bootloader>
 					</MachinesProvider>
 				</ErrorBoundary>
 			</LoggerProvider>

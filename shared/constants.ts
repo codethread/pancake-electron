@@ -51,4 +51,6 @@ export function asset(fileName: string): string {
 	return path.join(__dirname, fileName);
 }
 
-export const emptyConfig: UserConfig = {};
+export const emptyConfig: UserConfig = {
+	repos: [],
+};
