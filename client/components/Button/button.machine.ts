@@ -1,11 +1,13 @@
 import { assign, createMachine } from 'xstate';
+
 export const buttonMachine = createMachine(
 	{
 		id: 'button',
+		predictableActionArguments: true,
 		tsTypes: {} as import('./button.machine.typegen').Typegen0,
 		schema: {
 			context: {} as { waited: boolean },
-			events: {} as { type: 'loading' } | { type: 'success' } | { type: 'error' },
+			events: {} as { type: 'error' } | { type: 'loading' } | { type: 'success' },
 		},
 		context: { waited: false },
 		initial: 'idle',

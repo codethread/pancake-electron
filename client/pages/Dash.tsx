@@ -3,10 +3,10 @@ import { useConfig, useLogger, useReviewsQuery } from '@client/hooks';
 import { Box, Button } from '@client/components';
 import { not } from '@shared/utils';
 import { IRepoForm } from '@shared/types/config';
-import { Settings } from './Settings/Settings';
 import { RefreshIcon } from '@heroicons/react/outline';
 import classNames from 'classnames';
 import { NetworkStatus } from '@apollo/client';
+import { Settings } from './Settings/Settings';
 
 export function Dash(): JSX.Element {
 	const log = useLogger();
