@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useConfig, useLogger, useReviewsQuery } from '@client/hooks';
 import { Box, Button } from '@client/components';
 import { not } from '@shared/utils';
 import { IRepoForm } from '@shared/types/config';
 import { Settings } from './Settings/Settings';
+import { RefreshIcon } from '@heroicons/react/outline';
+import classNames from 'classnames';
+import { NetworkStatus } from '@apollo/client';
 
 export function Dash(): JSX.Element {
 	const log = useLogger();
-	const [settings, setSettings] = useState(true);
+	const [settings, setSettings] = useState(false);
 	const { config } = useConfig();
 
 	return (
@@ -24,15 +27,27 @@ export function Dash(): JSX.Element {
 }
 
 function Repo(repo: IRepoForm): JSX.Element {
-	const { data, error } = useReviewsQuery({
+	const { config } = useConfig();
+	const { data, error, refetch, networkStatus } = useReviewsQuery({
 		variables: {
-			name: repo.name,
-			owner: repo.owner,
+			name: repo.Name,
+			owner: repo.Owner,
 		},
+		notifyOnNetworkStatusChange: true,
 	});
 
+	useEffect(() => {
+		const timer = setInterval(() => {
+			if (networkStatus === NetworkStatus.ready) {
+				refetch();
+			}
+		}, config?.refreshRate ?? 60000);
+
+		return () => clearInterval(timer);
+	}, [refetch, config?.refreshRate]);
+
 	if (error) {
-		throw error;
+		return <p>oh dear, there was an error {error.message}</p>;
 	}
 
 	if (not(data)) {
@@ -40,16 +55,25 @@ function Repo(repo: IRepoForm): JSX.Element {
 	}
 	return (
 		<Box className="m-4 rounded border border-thmFgDim p-4">
-			<p>
-				{repo.owner} / {repo.name}
-			</p>
+			<Box row>
+				<p>
+					{repo.Owner} / {repo.Name}
+				</p>
+				<Button variant="secondary" onClick={() => void refetch()}>
+					<RefreshIcon
+						className={classNames('w-6', {
+							'animate-spin': networkStatus === NetworkStatus.refetch,
+						})}
+					/>
+				</Button>
+			</Box>
 			{data?.repository?.pullRequests.nodes?.map((pr) => (
 				<Box key={pr?.id} className="m-4 border border-thmPrimary">
 					<p>img: {pr?.author?.login}</p>
 					<p>title: {pr?.title}</p>
 					<p>labels</p>
 					<Box className="flex flex-row">
-						{pr?.labels?.nodes.map((label) => (
+						{pr?.labels?.nodes?.map((label) => (
 							<p key={label?.id}>{label?.name}</p>
 						))}
 					</Box>

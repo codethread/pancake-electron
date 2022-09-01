@@ -1,29 +1,41 @@
 import { Box, Button } from '@client/components';
-import { useConfig } from '@client/hooks';
+import { useConfig, useLogger } from '@client/hooks';
 import * as Icons from '@heroicons/react/solid';
-import { useMachine, useInterpret, useSelector } from '@xstate/react';
-import React, { useCallback, useMemo } from 'react';
+import { useMachine } from '@xstate/react';
+import React, { useEffect } from 'react';
 import { Page, repoMachine, RepoSend } from './repo.machine';
 import { RepoForm } from './RepoForm';
 import { RepoInfo } from './RepoInfo';
+import { User } from './User';
 
 export function Settings(): JSX.Element {
 	const { storeUpdate, config } = useConfig();
-	const [state, send] = useMachine(() => repoMachine.withContext({ repos: config?.repos ?? [] }), {
-		devTools: true,
-		actions: {
-			sendReposToConfig({ repos }) {
-				storeUpdate({ repos });
+	const { debug } = useLogger();
+	const [state, send, service] = useMachine(
+		() => repoMachine.withContext({ repos: config?.repos ?? [] }),
+		{
+			devTools: true,
+			actions: {
+				sendReposToConfig({ repos }) {
+					storeUpdate({ repos });
+				},
 			},
-		},
-	});
+		}
+	);
+
+	useEffect(() => {
+		service.onEvent((e) => {
+			debug({ data: e, msg: 'repo machine' });
+		});
+	}, [service]);
+
 	return (
 		<Box row>
 			<div className="m-2 flex flex-col items-stretch justify-start gap-4">
 				<IconButton icon="UserIcon" title="User" send={send} />
-				<IconButton icon="UserGroupIcon" title="Teams" send={send} />
+				{/* <IconButton icon="UserGroupIcon" title="Teams" send={send} /> */}
 				<IconButton icon="CodeIcon" title="Repos" send={send} />
-				<IconButton icon="BellIcon" title="Notifications" send={send} />
+				{/* <IconButton icon="BellIcon" title="Notifications" send={send} /> */}
 			</div>
 			<Box className="flex-grow flex-wrap" row>
 				{(() => {
@@ -39,12 +51,12 @@ export function Settings(): JSX.Element {
 									{state.context.repos.map((repo) => (
 										<RepoInfo
 											{...repo}
-											key={`${repo.owner}/${repo.name}`}
+											key={`${repo.Owner}/${repo.Name}`}
 											onClick={() => {
-												send({ type: 'delete repo', data: repo });
+												send({ type: 'delete repo', data: repo.id });
 											}}
 											onSubmit={(data) => {
-												send({ type: 'update repo', data: repo });
+												send({ type: 'update repo', data });
 											}}
 										/>
 									))}
@@ -52,7 +64,7 @@ export function Settings(): JSX.Element {
 							);
 						case state.matches('user'):
 						default:
-							return <p>hi!</p>;
+							return <User />;
 					}
 				})()}
 			</Box>

@@ -4,16 +4,14 @@ import * as Icons from '@heroicons/react/solid';
 import { IRepoForm } from '@shared/types/config';
 import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { mapKeys } from 'remeda';
+import { merge } from 'remeda';
 
 export function RepoInfo({
-	name,
-	owner,
-	prCount,
-	reviewCount,
 	onClick,
 	onSubmit,
+	...repo
 }: IRepoForm & { onClick(): void; onSubmit(repo: IRepoForm): void }): JSX.Element {
+	const { id, Name: name, Owner: owner, 'PR Count': prCount, 'Review Count': reviewCount } = repo;
 	const Icon = Icons.XIcon;
 	const methods = useForm<IRepoForm>({
 		defaultValues: {
@@ -30,8 +28,7 @@ export function RepoInfo({
 					className="flex flex-col gap-4"
 					onSubmit={methods.handleSubmit((data) => {
 						logger.debug({ data, msg: 'repo updated', tags: ['client', 'settings'] });
-						onSubmit(mapKeys(data, (k) => k.toLowerCase()));
-						methods.reset();
+						onSubmit(merge(repo, data));
 					})}
 				>
 					<p className="text-2xl">

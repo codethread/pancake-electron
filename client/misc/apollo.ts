@@ -5,13 +5,14 @@ const authMiddleware = new ApolloLink((operation, forward) => {
 	operation.setContext(({ headers = {} }) => ({
 		headers: {
 			...headers,
-			authorization: sessionStorage.getItem('token') ?? null,
+			Authorization: `bearer ${sessionStorage.getItem('token') ?? ''}`,
 		},
 	}));
 
 	return forward(operation);
 });
 const httpLink = new HttpLink({ uri: 'http://localhost:4001' });
+// const httpLink = new HttpLink({ uri: 'https://api.github.com/graphql' });
 
 export const client = new ApolloClient({
 	cache: new InMemoryCache({}),

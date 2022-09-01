@@ -2,7 +2,7 @@ import { IRepoForm } from '@shared/types/config';
 import { and, not } from '@shared/utils';
 import { assign, createMachine, EventFrom, actions, InterpreterFrom } from 'xstate';
 
-export type Page = 'User' | 'Teams' | 'Repos' | 'Notifications';
+export type Page = 'Notifications' | 'Repos' | 'Teams' | 'User';
 export const repoMachine = createMachine(
 	{
 		id: 'repo',
@@ -12,9 +12,9 @@ export const repoMachine = createMachine(
 			context: {} as { repos: IRepoForm[] },
 			events: {} as
 				| { type: 'add repo'; data: IRepoForm }
-				| { type: 'update repo'; data: IRepoForm }
+				| { type: 'delete repo'; data: IRepoForm['id'] }
 				| { type: 'navigate'; page: Page }
-				| { type: 'delete repo'; data: Pick<IRepoForm, 'name' | 'owner'> },
+				| { type: 'update repo'; data: IRepoForm },
 		},
 		initial: 'repos',
 		on: {
@@ -34,13 +34,11 @@ export const repoMachine = createMachine(
 	{
 		actions: {
 			deleteRepo: assign({
-				repos: (c, { data: { owner, name } }) =>
-					c.repos.filter((r) => not(and(r.name === name, r.owner === owner))),
+				repos: (c, { data }) => c.repos.filter((r) => r.id !== data),
 			}),
 			storeRepo: assign({ repos: (c, { data }) => c.repos.concat(data) }),
 			updateRepo: assign({
-				repos: (c, { data }) =>
-					c.repos.map((r) => (and(r.name === data.name, r.owner === data.owner) ? data : r)),
+				repos: (c, { data }) => c.repos.map((r) => (data.id === r.id ? data : r)),
 			}),
 		},
 	}

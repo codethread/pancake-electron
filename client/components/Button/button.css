@@ -4,7 +4,14 @@
 
 @layer components {
 	.button {
-		@apply rounded p-2 outline-none;
+	}
+
+	.button-outline {
+		@apply flex items-center rounded p-2 px-4 shadow-2xl outline-none;
+	}
+
+	.button-colors {
+		@apply transition hover:brightness-125 active:brightness-150 disabled:cursor-not-allowed disabled:hover:brightness-100;
 	}
 
 	.button:focus {
@@ -17,5 +24,12 @@
 
 	.button[data-error='true']:focus {
 		@apply ring;
+	}
+
+	.button[data-loading='true'] {
+		@apply hue-rotate-90;
+	}
+	.button[data-success='true'] {
+		@apply -hue-rotate-90;
 	}
 }

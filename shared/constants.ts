@@ -53,4 +53,5 @@ export function asset(fileName: string): string {
 
 export const emptyConfig: UserConfig = {
 	repos: [],
+	refreshRate: 30000,
 };

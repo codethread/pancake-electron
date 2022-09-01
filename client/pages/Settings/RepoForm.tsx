@@ -3,11 +3,10 @@ import { useLogger } from '@client/hooks';
 import { IRepoForm } from '@shared/types/config';
 import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { mapKeys } from 'remeda';
 
 export function RepoForm({ onSubmit }: { onSubmit(repo: IRepoForm): void }): JSX.Element {
 	const logger = useLogger();
-	const methods = useForm<IRepoForm>({});
+	const methods = useForm<Omit<IRepoForm, 'id'>>({});
 	return (
 		<Card>
 			<FormProvider {...methods}>
@@ -15,7 +14,7 @@ export function RepoForm({ onSubmit }: { onSubmit(repo: IRepoForm): void }): JSX
 					className="flex flex-col gap-4"
 					onSubmit={methods.handleSubmit((data) => {
 						logger.debug({ data, msg: 'repo submitted', tags: ['client', 'settings'] });
-						onSubmit(mapKeys(data, (k) => k.toLowerCase()));
+						onSubmit({ ...data, id: idFromRepo(data) });
 						methods.reset();
 					})}
 				>
@@ -50,4 +49,7 @@ export function RepoForm({ onSubmit }: { onSubmit(repo: IRepoForm): void }): JSX
 			</FormProvider>
 		</Card>
 	);
+}
+function idFromRepo(data: Omit<IRepoForm, 'id'>): string {
+	return `${data.Owner}/${data.Name}`;
 }
