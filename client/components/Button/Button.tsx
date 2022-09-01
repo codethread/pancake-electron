@@ -1,5 +1,5 @@
 /* eslint-disable react/button-has-type */
-import { CheckCircleIcon, RefreshIcon } from '@heroicons/react/outline';
+import { CheckCircleIcon, RefreshIcon, XCircleIcon } from '@heroicons/react/outline';
 import { assertUnreachable } from '@shared/asserts';
 import { IChildren } from '@shared/types/ipc';
 import { useMachine } from '@xstate/react';
@@ -120,19 +120,21 @@ export function Button({
 	}
 }
 
-function Fill({ transition, children }: IChildren & Pick<IButton, 'transition'>): JSX.Element {
-	return (
-		<>
-			{transition === 'loading' ? (
-				<Box row>
-					<RefreshIcon className="mr-4 w-6 animate-spin" />
-					loading
-				</Box>
-			) : transition === 'success' ? (
-				<CheckCircleIcon className="mx-6 h-full" />
-			) : (
-				children
-			)}
-		</>
-	);
+const map: Record<NonNullable<IButton['transition']>, JSX.Element> = {
+	loading: (
+		<Box row>
+			<RefreshIcon className="mr-4 w-6 animate-spin" />
+			loading
+		</Box>
+	),
+	success: <CheckCircleIcon className="mx-6 h-full" />,
+	error: <XCircleIcon className="mx-6 w-6" />,
+	none: <span />,
+};
+function Fill({
+	transition = 'none',
+	children,
+}: IChildren & Pick<IButton, 'transition'>): JSX.Element {
+	// eslint-disable-next-line react/jsx-no-useless-fragment
+	return transition === 'none' ? <>{children}</> : map[transition];
 }

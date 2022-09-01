@@ -18,8 +18,11 @@
 		@apply ring ring-thmBright;
 	}
 
+	/* .button[data-error='true'] { */
+	/* 	@apply text-thmError ring-1 ring-thmError; */
+	/* } */
 	.button[data-error='true'] {
-		@apply text-thmError ring-1 ring-thmError;
+		@apply bg-thmError text-thmFg;
 	}
 
 	.button[data-error='true']:focus {

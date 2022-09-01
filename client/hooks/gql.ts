@@ -36,6 +36,8 @@ gql`
 				number
 				baseRefName
 				headRefName
+				additions
+				deletions
 				labels(first: 10) {
 					nodes {
 						id

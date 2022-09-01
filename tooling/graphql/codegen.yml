@@ -1,7 +1,7 @@
 overwrite: true
 schema: 'http://localhost:4001'
 documents:
-  - 'client/hooks/queries.ts'
+  - 'client/hooks/gql.ts'
 generates:
   client/hooks/graphql.ts:
     - 'typescript'

@@ -13,3 +13,4 @@ export * from './Button/Button';
 export * from './Form';
 export * from './Bootloader';
 export * from './Card';
+export * from './Page';

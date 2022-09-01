@@ -64,3 +64,7 @@
 .debug {
 	border: thin dotted coral;
 }
+
+pre {
+	@apply inline-block text-thmPrimary;
+}
