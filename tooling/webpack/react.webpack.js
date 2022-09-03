@@ -87,6 +87,6 @@ module.exports = (_, options = {}) => {
 					viewport: 'width=device-width, initial-scale=1.0',
 				},
 			}),
-		],
+		].filter(Boolean),
 	};
 };
