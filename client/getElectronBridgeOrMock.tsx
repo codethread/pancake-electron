@@ -1,7 +1,11 @@
 import { IBridge } from '@shared/types/ipc';
 import { ILogInfo, IClientLogger, LogMethods, marshalInfo } from '@shared/types/logger';
 
+let bridge: IBridge | null = null;
+
 export function getElectronBridgeOrMock(): IBridge {
+	if (bridge) return bridge;
+
 	const logger: IClientLogger = {
 		info(info) {
 			log(info, 'info');
@@ -18,10 +22,11 @@ export function getElectronBridgeOrMock(): IBridge {
 	};
 
 	if (window.bridge) {
-		return {
+		bridge = {
 			...window.bridge,
 			...logger,
 		};
+		return bridge;
 	}
 
 	throw new Error('no bridge');

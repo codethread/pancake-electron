@@ -51,7 +51,7 @@ export function FormItemNumber<A extends FieldValues>({
 				{...(hasError && {
 					'aria-describedby': `${id}-error`,
 				})}
-				{...register(label, rest)}
+				{...register(label, { valueAsNumber: true, ...rest })}
 			/>
 		</FormItem>
 	);

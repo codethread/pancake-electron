@@ -1,6 +1,5 @@
 import classNames from 'classnames';
 import React, { useState } from 'react';
-import './checkbox.css';
 
 export type ICheckbox = {
 	id: string;
