@@ -25,55 +25,57 @@ export function User(): JSX.Element {
 		},
 	});
 	return (
-		<Card>
-			<FormProvider {...methods}>
-				<form
-					className="flex flex-col gap-4"
-					onSubmit={methods.handleSubmit((data) => {
-						logger.debug({ data, msg: 'user info submitted', tags: ['client', 'settings'] });
-						storeUpdate({ token: data.token });
-					})}
-				>
-					<FormItemPassword
-						label="token"
-						required="Please provide a github token"
-						placeholder="0oiwejf"
-					/>
-					<p>
-						Need a new Github token?{' '}
-						<Button
-							variant="tertiary"
-							onClick={() => {
-								openExternal(githubUrl.href).catch(logger.warn);
-							}}
-						>
-							Create one here
-						</Button>
-					</p>
-					<Box row>
-						<Button
-							type="submit"
-							transition={
-								methods.formState.isSubmitting
-									? 'loading'
-									: methods.formState.isSubmitted
-									? 'success'
-									: 'none'
-							}
-						>
-							Submit!
-						</Button>
-						<Button
-							variant="secondary"
-							onClick={() => {
-								methods.reset();
-							}}
-						>
-							Reset
-						</Button>
-					</Box>
-				</form>
-			</FormProvider>
-		</Card>
+		<Box className="flex-grow">
+			<Card clamp>
+				<FormProvider {...methods}>
+					<form
+						className="flex flex-col gap-4"
+						onSubmit={methods.handleSubmit((data) => {
+							logger.debug({ data, msg: 'user info submitted', tags: ['client', 'settings'] });
+							storeUpdate({ token: data.token });
+						})}
+					>
+						<FormItemPassword
+							label="token"
+							required="Please provide a github token"
+							placeholder="0oiwejf"
+						/>
+						<p>
+							Need a new Github token?{' '}
+							<Button
+								variant="tertiary"
+								onClick={() => {
+									openExternal(githubUrl.href).catch(logger.warn);
+								}}
+							>
+								Create one here
+							</Button>
+						</p>
+						<Box row>
+							<Button
+								type="submit"
+								transition={
+									methods.formState.isSubmitting
+										? 'loading'
+										: methods.formState.isSubmitted
+										? 'success'
+										: 'none'
+								}
+							>
+								Submit!
+							</Button>
+							<Button
+								variant="secondary"
+								onClick={() => {
+									methods.reset();
+								}}
+							>
+								Reset
+							</Button>
+						</Box>
+					</form>
+				</FormProvider>
+			</Card>
+		</Box>
 	);
 }

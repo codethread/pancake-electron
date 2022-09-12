@@ -3,11 +3,11 @@ import { IChildren } from '@shared/types/ipc';
 import classNames from 'classnames';
 import React from 'react';
 
-interface ILink extends IChildren {
+type ILink = IChildren & {
 	className?: string;
-	url: string;
+	href: string;
 }
-export function Link({ url, children, className }: ILink): JSX.Element {
+export function Link({ href: url, children, className }: ILink): JSX.Element {
 	const { openExternal } = useBridge();
 	return (
 		<button

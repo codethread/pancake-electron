@@ -9,5 +9,5 @@ export type IRepoForm = {
 	Owner: string;
 	Name: string;
 	'PR Count'?: number;
-	'Review Count'?: number;
+	// 'Review Count'?: number;
 };

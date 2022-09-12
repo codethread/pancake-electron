@@ -5,10 +5,6 @@
 /* --------------------------------------------------------------------------
 * Builtins
 * ------------------------------------------------------------------------ */
-pre {
-	@apply inline-block text-thmPrimary;
-}
-
 input[type='checkbox']::before {
 	content: '';
 	width: 0.8em;
@@ -97,6 +93,10 @@ input[type='checkbox']:checked::before {
 
 .debug {
 	border: thin dotted coral;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+	display: none;
 }
 
 @layer components {

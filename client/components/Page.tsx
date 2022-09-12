@@ -4,7 +4,7 @@ import React from 'react';
 export function Page({ children, center }: IChildren & { center?: true }): JSX.Element {
 	return (
 		<div
-			className={`flex max-w-full flex-col items-stretch bg-thmBackground p-4 ${
+			className={`flex w-fit min-w-full flex-col items-stretch bg-thmBackground p-4 ${
 				center ? 'h-full justify-center' : 'justify-start'
 			}`}
 		>

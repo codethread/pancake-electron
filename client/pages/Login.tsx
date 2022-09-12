@@ -26,7 +26,8 @@ export function Login(): JSX.Element {
 				<p className="mb-6 text-center text-lg">The Pull Request Dashboard</p>
 				<p className="mb-6 text-thmFgDim">
 					Pancake needs to be able to make request to Github on your behalf, so you'll need to
-					provide a valid token with the <pre>repo</pre> and <pre>org:read</pre> permissions.
+					provide a valid token with the <code className="text-thmPrimary">repo</code> and{' '}
+					<code className="text-thmPrimary">org:read</code> permissions.
 				</p>
 				<p className="mb-6">
 					Don't have a token?{' '}

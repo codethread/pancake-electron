@@ -21,6 +21,7 @@ gql`
 			owner {
 				login
 			}
+			url
 			...pullRequests
 		}
 	}

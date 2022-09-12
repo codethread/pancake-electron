@@ -15,8 +15,8 @@ function isObject(value: unknown) {
 
 function transformArr<A, B>(arr: A[], evaluate: Fn<A, B>): B[] {
 	const newArr: B[] = [];
-	var i = 0,
-		len = arr.length;
+	let i = 0;
+		const len = arr.length;
 	while (i < len) {
 		const v = arr[i] as A;
 		if (v !== undefined && v !== null) {
@@ -31,8 +31,8 @@ function transformObj<A, B>(obj: A, evaluate: Fn<A, any>) {
 	const newO = {} as B;
 	const entries = Object.entries(obj);
 
-	var i = 0,
-		len = entries.length;
+	let i = 0;
+		const len = entries.length;
 	while (i < len) {
 		const [key, value] = entries[i] as [keyof B, any];
 		newO[key] = evaluate(value);
@@ -44,7 +44,7 @@ function transformObj<A, B>(obj: A, evaluate: Fn<A, any>) {
 function transform(value: any, func: Fn): any {
 	if (isObject(value)) {
 		return transformObj(value, (v) => transform(v, func));
-	} else if (Array.isArray(value)) {
+	} if (Array.isArray(value)) {
 		return transformArr(value, (v) => transform(v, func));
 	}
 
