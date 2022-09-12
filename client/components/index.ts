@@ -14,3 +14,4 @@ export * from './Form';
 export * from './Bootloader';
 export * from './Card';
 export * from './Page';
+export * from './Link';

@@ -6,7 +6,6 @@ import { useMachine } from '@xstate/react';
 import classNames from 'classnames';
 import React, { ButtonHTMLAttributes, useEffect } from 'react';
 import { Box } from '../Box';
-import './button.css';
 import { buttonMachine } from './button.machine';
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> &

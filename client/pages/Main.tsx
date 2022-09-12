@@ -1,17 +1,18 @@
-import { Box, Button, Page } from '@client/components';
+import { Page } from '@client/components';
 import { useConfig } from '@client/hooks';
-import { CodeIcon, CogIcon, DocumentDownloadIcon } from '@heroicons/react/outline';
+import { DocumentDownloadIcon } from '@heroicons/react/outline';
 import { not } from '@shared/utils';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Dash } from './Dash';
 import { Login } from './Login';
+import { Nav, IPage } from './Nav';
 import { Settings } from './Settings/Settings';
-
-type IPage = 'dash' | 'settings';
+import { User } from './Settings/User';
 
 const pages: Record<IPage, JSX.Element> = {
 	dash: <Dash />,
 	settings: <Settings />,
+	user: <User />,
 };
 
 export function Main(): JSX.Element {
@@ -44,34 +45,5 @@ export function Main(): JSX.Element {
 				{pages[page]}
 			</div>
 		</Page>
-	);
-}
-
-function Nav({ navigate, page }: { page: IPage; navigate(page: IPage): void }): JSX.Element {
-	return (
-		<div className="sticky top-0 bg-thmBackgroundSubtle">
-			{page !== 'settings' && (
-				<button
-					type="button"
-					className="rounded-full border-2 border-thmPrimary p-2 text-thmPrimary transition-colors hover:bg-thmBackgroundSubtle hover:brightness-90"
-					onClick={() => {
-						navigate('settings');
-					}}
-				>
-					<CogIcon className="inline-block w-8" />
-				</button>
-			)}
-			{page !== 'dash' && (
-				<button
-					type="button"
-					onClick={() => {
-						navigate('dash');
-					}}
-					className="rounded-full border-2 border-thmPrimary p-2 text-thmPrimary transition-colors hover:bg-thmBackgroundSubtle hover:brightness-90"
-				>
-					<CodeIcon className="inline-block w-6" />
-				</button>
-			)}
-		</div>
 	);
 }

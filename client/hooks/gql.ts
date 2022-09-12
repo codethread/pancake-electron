@@ -21,18 +21,25 @@ gql`
 			owner {
 				login
 			}
+			url
 			...pullRequests
 		}
 	}
 
 	fragment pullRequests on Repository {
-		pullRequests(first: $prCount, states: [OPEN], after: $after) {
+		pullRequests(
+			first: $prCount
+			states: [OPEN]
+			after: $after
+			orderBy: { field: UPDATED_AT, direction: DESC }
+		) {
 			pageInfo {
 				hasNextPage
 				endCursor
 			}
 
 			nodes {
+				id
 				number
 				baseRefName
 				headRefName
@@ -46,14 +53,6 @@ gql`
 						description
 					}
 				}
-				repository {
-					id
-					name
-					owner {
-						login
-					}
-				}
-				updatedAt
 				id
 				createdAt
 				url

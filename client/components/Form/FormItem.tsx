@@ -28,12 +28,13 @@ import { FieldValues, Path, useFormContext, UseFormRegister } from 'react-hook-f
 // }
 
 type IFormItem<A extends FieldValues> = ICss &
-	Omit<IFormItemContainer<A>, 'children'> & { placeholder?: string };
+	Omit<IFormItemContainer<A>, 'children'> & { placeholder?: string } & { errord?: any };
 
 export function FormItemNumber<A extends FieldValues>({
 	label,
 	className,
 	placeholder,
+	errord,
 	...rest
 }: IFormItem<A>): JSX.Element {
 	const id = `${label}-${useId()}`;
@@ -51,7 +52,7 @@ export function FormItemNumber<A extends FieldValues>({
 				{...(hasError && {
 					'aria-describedby': `${id}-error`,
 				})}
-				{...register(label, rest)}
+				{...register(label, { valueAsNumber: true, ...rest })}
 			/>
 		</FormItem>
 	);
@@ -61,6 +62,7 @@ export function FormItemText<A extends FieldValues>({
 	label,
 	className,
 	placeholder,
+	errord,
 	...rest
 }: IFormItem<A>): JSX.Element {
 	const id = `${label}-${useId()}`;
@@ -87,6 +89,7 @@ export function FormItemText<A extends FieldValues>({
 export function FormItemPassword<A extends FieldValues>({
 	label,
 	placeholder,
+	errord,
 	...rest
 }: Omit<IFormItem<A>, 'children'> & { placeholder?: string }): JSX.Element {
 	const [isVisible, setIsVisible] = useState(false);

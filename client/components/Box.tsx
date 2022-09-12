@@ -13,14 +13,10 @@ export function Box({ children, className, style, row }: IBox): JSX.Element {
 	return (
 		<div
 			style={style}
-			className={classNames(
-				'flex',
-				{
-					'flex-col items-stretch justify-center': not(row),
-					'flex-row justify-between': row,
-				},
-				className
-			)}
+			className={classNames(className, 'flex', {
+				'flex-col items-stretch justify-center': not(row),
+				'flex-row justify-between': row,
+			})}
 		>
 			{children}
 		</div>

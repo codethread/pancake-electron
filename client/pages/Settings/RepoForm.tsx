@@ -1,14 +1,19 @@
 import { Box, Button, Card, FormItemNumber, FormItemText } from '@client/components';
 import { useLogger } from '@client/hooks';
 import { IRepoForm } from '@shared/types/config';
+import { ICss } from '@shared/types/ipc';
 import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
-export function RepoForm({ onSubmit }: { onSubmit(repo: IRepoForm): void }): JSX.Element {
+export function RepoForm({
+	onSubmit,
+	className,
+}: ICss & { onSubmit(repo: IRepoForm): void }): JSX.Element {
 	const logger = useLogger();
 	const methods = useForm<Omit<IRepoForm, 'id'>>({});
+	const { Name, Owner, 'PR Count': prCount } = methods.formState.errors;
 	return (
-		<Card>
+		<Card className={className}>
 			<FormProvider {...methods}>
 				<form
 					className="flex flex-col gap-4"
@@ -18,22 +23,30 @@ export function RepoForm({ onSubmit }: { onSubmit(repo: IRepoForm): void }): JSX
 						methods.reset();
 					})}
 				>
-					<FormItemText label="Owner" required="Please specify an owner" placeholder="Octocat" />
 					<FormItemText
+						label="Owner"
+						required="Please specify an owner"
+						placeholder="Octocat"
+						errord={Owner}
+					/>
+					<FormItemText
+						errord={Name}
 						label="Name"
 						required="Please specify a repository"
 						placeholder="MyFirstRepository"
 					/>
 					<FormItemNumber
+						errord={prCount}
 						label="PR Count"
+						required="Please specify a number of PRs to retrieve"
 						min={{ value: 1, message: 'You must request at least one PR' }}
 						max={{ value: 100, message: 'Max 100' }}
 					/>
-					<FormItemNumber
-						label="Review Count"
-						min={{ value: 1, message: 'You must request at least one review' }}
-						max={{ value: 10, message: 'Max 10' }}
-					/>
+					{/* <FormItemNumber */}
+					{/* 	label="Review Count" */}
+					{/* 	min={{ value: 1, message: 'You must request at least one review' }} */}
+					{/* 	max={{ value: 10, message: 'Max 10' }} */}
+					{/* /> */}
 					<Box row>
 						<Button type="submit">Submit!</Button>
 						<Button

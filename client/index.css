@@ -2,6 +2,32 @@
 @tailwind components;
 @tailwind utilities;
 
+/* --------------------------------------------------------------------------
+* Builtins
+* ------------------------------------------------------------------------ */
+input[type='checkbox']::before {
+	content: '';
+	width: 0.8em;
+	height: 0.8em;
+	transform: scale(0);
+	transition: 80ms transform ease-in-out;
+	box-shadow: inset 1em 1em rgb(var(--color-bright));
+	transform-origin: bottom left;
+	clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+}
+
+input[type='checkbox']:disabled::before {
+	/*color: rgb(var(--color-backgroundBrightest));*/
+	box-shadow: inset 1em 1em rgb(var(--color-backgroundBrightest));
+}
+
+input[type='checkbox']:checked::before {
+	transform: scale(1);
+}
+
+/* --------------------------------------------------------------------------
+* Theme
+* ------------------------------------------------------------------------ */
 :root {
 	--col-null: 255 0 198;
 
@@ -61,10 +87,66 @@
 	--color-good: 163 190 140;
 }
 
+/* --------------------------------------------------------------------------
+* Utils
+* ------------------------------------------------------------------------ */
+
 .debug {
 	border: thin dotted coral;
 }
 
-pre {
-	@apply inline-block text-thmPrimary;
+.hide-scrollbar::-webkit-scrollbar {
+	display: none;
+}
+
+@layer components {
+	.button {
+	}
+
+	.button-outline {
+		@apply flex items-center rounded p-2 px-4 shadow-2xl outline-none;
+	}
+
+	.button-colors {
+		@apply transition hover:brightness-125 active:brightness-150 disabled:cursor-not-allowed disabled:hover:brightness-100;
+	}
+
+	.button:focus {
+		@apply ring ring-thmBright;
+	}
+
+	/* .button[data-error='true'] { */
+	/* 	@apply text-thmError ring-1 ring-thmError; */
+	/* } */
+	.button[data-error='true'] {
+		@apply bg-thmError text-thmFg;
+	}
+
+	.button[data-error='true']:focus {
+		@apply ring;
+	}
+
+	.button[data-loading='true'] {
+		@apply hue-rotate-90;
+	}
+	.button[data-success='true'] {
+		@apply -hue-rotate-90;
+	}
+
+	/* input */
+	.input {
+		@apply rounded border border-thmBackgroundSubtle bg-thmBackgroundBright p-2 text-thmFg outline-none;
+	}
+
+	.input:focus {
+		@apply ring ring-thmBright;
+	}
+
+	.input[data-error='true'] {
+		@apply text-thmError ring-1 ring-thmError;
+	}
+
+	.input[data-error='true']:focus {
+		@apply ring;
+	}
 }
