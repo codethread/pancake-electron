@@ -6,7 +6,7 @@ gql`
 		$name: String!
 		$owner: String!
 		$prCount: Int = 5
-		$reviewsCount: Int = 5
+		$reviewsCount: Int = 10
 		$after: String
 	) {
 		rateLimit {
