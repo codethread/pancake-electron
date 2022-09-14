@@ -43,7 +43,7 @@ export const storeRepository = <T = UserConfig>({
 	logger.info(`setting up Store Repo: name "${name}"${cwd ? ` cwd "${cwd}"` : ''}`);
 
 	const store = new Store<T>(storeConfig);
-	logger.debug(store.path);
+	logger.info({ msg: `store path ${store.path}`, tags: ['store', 'electron'] });
 
 	return {
 		async storeRead() {

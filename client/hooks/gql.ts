@@ -6,7 +6,7 @@ gql`
 		$name: String!
 		$owner: String!
 		$prCount: Int = 5
-		$reviewsCount: Int = 10
+		$reviewsCount: Int = 15
 		$after: String
 	) {
 		rateLimit {
@@ -84,7 +84,7 @@ gql`
 					}
 				}
 
-				reviews(first: $reviewsCount, states: [CHANGES_REQUESTED, APPROVED]) {
+				reviews(first: $reviewsCount, states: [CHANGES_REQUESTED, APPROVED, DISMISSED]) {
 					nodes {
 						url
 						createdAt

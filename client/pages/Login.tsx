@@ -5,9 +5,11 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { useLogger, useConfig, useBridge } from '@client/hooks';
 import { not } from '@shared/utils';
 import { githubUrl } from '@client/misc/githubUrl';
+import { FormItemCheckbox } from '@client/components/Form/FormItem';
 
 type UserForm = {
 	token?: string;
+	'remember me'?: boolean;
 };
 
 export function Login(): JSX.Element {
@@ -17,6 +19,7 @@ export function Login(): JSX.Element {
 	const methods = useForm<UserForm>({
 		defaultValues: {
 			token: config?.token ?? '',
+			'remember me': true,
 		},
 	});
 	return (
@@ -44,13 +47,21 @@ export function Login(): JSX.Element {
 					className="flex flex-col gap-4"
 					onSubmit={methods.handleSubmit((data) => {
 						logger.debug({ data, msg: 'user info submitted', tags: ['client', 'settings'] });
-						storeUpdate({ token: data.token });
+						if (data['remember me']) {
+							storeUpdate({ token: data.token });
+						} else if (data.token) {
+							sessionStorage.setItem('token', data.token);
+						}
 					})}
 				>
 					<FormItemPassword
 						label="token"
 						required="Please provide a github token"
 						placeholder="e.g. ghp_oi9823jlsf"
+					/>
+					<FormItemCheckbox
+						label="remember me"
+						smallPrint="When checked, Pancake will store your token in a plain text file on your machine. If left unchecked, you will need to provide a token each time you restart the app."
 					/>
 					<Box row className="my-6 justify-around">
 						<Button

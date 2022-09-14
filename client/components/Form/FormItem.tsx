@@ -1,4 +1,4 @@
-import { Checkbox, ICheckbox, InputPassword } from '@client/components';
+import { InputPassword } from '@client/components';
 import { EyeClosed, EyeOpen } from '@client/components/Icons';
 import { useId } from '@client/hooks';
 import { IChildren, ICss } from '@shared/types/ipc';
@@ -6,29 +6,61 @@ import classNames from 'classnames';
 import React, { useRef, useState } from 'react';
 import { FieldValues, Path, useFormContext, UseFormRegister } from 'react-hook-form';
 
-// type IFormCheckbox = IFormItem & {
-// 	checkbox: Omit<ICheckbox, 'children' | 'hasError' | 'id'>;
-// };
+type ICheckbox = {
+	disabled?: boolean;
+	ariaLabel?: string;
+	smallPrint?: string;
+};
 
-// export function FormItemCheckbox({ checkbox, id: _id, label, error }: IFormCheckbox): JSX.Element {
-// 	const id = _id ?? `${label}form-input`;
-// 	return (
-// 		<div className="flex max-w-md flex-col gap-3 ">
-// 			{/* <label htmlFor={id} aria-label={ariaLabel} className="leading-8"> */}
-// 			<Checkbox {...checkbox} id={id} hasError={Boolean(error)}>
-// 				<p>{label}</p>
-// 			</Checkbox>
-// 			{error && (
-// 				<ErrorMsg id={`${id}-error`} aria-live="polite">
-// 					{error}
-// 				</ErrorMsg>
-// 			)}
-// 		</div>
-// 	);
-// }
+export function FormItemCheckbox<A>({
+	label,
+	className,
+	errord,
+	disabled,
+	ariaLabel,
+	smallPrint,
+	...rest
+}: ICheckbox & IFormItem<A>): JSX.Element {
+	const id = `${label}form-input`;
+	const { register, getFieldState } = useFormContext<FieldValues>();
+	const { error } = getFieldState(label);
+	// todo required
+	return (
+		<div className="flex max-w-md flex-col gap-3">
+			<label
+				htmlFor={id}
+				className={classNames(
+					'flex cursor-pointer items-center space-x-2',
+					{
+						'text-thmBackgroundBrightest': disabled,
+						'cursor-not-allowed': disabled,
+						'text-thmError': Boolean(error?.message),
+					},
+					className
+				)}
+				aria-label={ariaLabel}
+			>
+				<input
+					disabled={disabled}
+					className="m-0 grid h-5 w-5 cursor-pointer appearance-none place-content-center rounded bg-thmBackgroundBrightest outline-none transition-all focus:ring focus:ring-thmBright disabled:cursor-not-allowed disabled:bg-thmBackgroundSubtle disabled:text-thmBackgroundBright"
+					id={id}
+					type="checkbox"
+					{...register(label, rest)}
+				/>
+				<p>{label}</p>
+			</label>
+			{smallPrint ? <p className="text-xs">{smallPrint}</p> : null}
+			{error?.message && (
+				<ErrorMsg id={`${id}-error`} aria-live="polite">
+					{error.message}
+				</ErrorMsg>
+			)}
+		</div>
+	);
+}
 
 type IFormItem<A extends FieldValues> = ICss &
-	Omit<IFormItemContainer<A>, 'children'> & { placeholder?: string } & { errord?: any };
+	Omit<IFormItemContainer<A>, 'children'> & { errord?: any } & { placeholder?: string };
 
 export function FormItemNumber<A extends FieldValues>({
 	label,

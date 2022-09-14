@@ -1,5 +1,6 @@
 import { Box, Link } from '@client/components';
 import { Tooltip } from '@client/components/Tooltip';
+import { useLogger } from '@client/hooks';
 import {
 	ICommitsFragment,
 	IMergeableState,
@@ -13,8 +14,10 @@ import classNames from 'classnames';
 import React from 'react';
 
 export function Pull(pr: IPR): JSX.Element {
+	const { debug } = useLogger();
 	const { url, status } = getStatus(pr.commits.nodes, pr.url);
 	const reviews = getReviews(pr);
+	debug({ msg: `pr ${pr.title}`, data: { pr, reviews, status }, tags: ['gql'] });
 	return (
 		<Box className="gap-1 bg-thmBackground bg-opacity-50 p-4">
 			<Box row>

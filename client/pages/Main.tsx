@@ -30,6 +30,7 @@ export function Main(): JSX.Element {
 		);
 	}
 
+	// need to move token into private machine/context
 	if (not(Boolean(config.token))) {
 		return (
 			<Page center>
