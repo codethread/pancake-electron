@@ -1,6 +1,11 @@
 import { ApolloProvider } from '@apollo/client';
 import { ErrorBoundary, Bootloader } from '@client/components';
-import { BridgeProvider, LoggerProvider, MachinesProvider } from '@client/hooks/providers';
+import {
+	BridgeProvider,
+	LoggerProvider,
+	MachinesProvider,
+	TokenProvider,
+} from '@client/hooks/providers';
 import { IBridge, IChildren } from '@shared/types/ipc';
 import { inspect } from '@xstate/inspect';
 import React, { useEffect, useLayoutEffect, useState } from 'react';
@@ -37,9 +42,11 @@ export function Providers({ bridge, children }: IProviders): JSX.Element {
 			<LoggerProvider>
 				<ApolloProvider client={client}>
 					<MachinesProvider>
-						<ErrorBoundary>
-							<Bootloader>{children}</Bootloader>
-						</ErrorBoundary>
+						<TokenProvider>
+							<ErrorBoundary>
+								<Bootloader>{children}</Bootloader>
+							</ErrorBoundary>
+						</TokenProvider>
 					</MachinesProvider>
 				</ApolloProvider>
 			</LoggerProvider>

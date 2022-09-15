@@ -1,22 +1,23 @@
 import { Page } from '@client/components';
-import { useConfig } from '@client/hooks';
+import { useConfig, useToken } from '@client/hooks';
 import { DocumentDownloadIcon } from '@heroicons/react/outline';
 import { not } from '@shared/utils';
-import React, { useEffect, useState } from 'react';
-import { Dash } from './Dash';
+import React, { FC, useEffect, useState } from 'react';
+import { PullRequests } from './PullRequests';
 import { Login } from './Login';
 import { Nav, IPage } from './Nav';
-import { Settings } from './Settings/Settings';
+import { RepoSettings } from './Settings/Repo';
 import { User } from './Settings/User';
 
-const pages: Record<IPage, JSX.Element> = {
-	dash: <Dash />,
-	settings: <Settings />,
-	user: <User />,
+const pages: Record<IPage, FC> = {
+	dash: PullRequests,
+	settings: RepoSettings,
+	user: User,
 };
 
 export function Main(): JSX.Element {
 	const { config, loading } = useConfig();
+	const { token } = useToken();
 	const [page, setPage] = useState<IPage>('dash');
 
 	if (loading) {
@@ -30,8 +31,7 @@ export function Main(): JSX.Element {
 		);
 	}
 
-	// need to move token into private machine/context
-	if (not(Boolean(config.token))) {
+	if (not(Boolean(token))) {
 		return (
 			<Page center>
 				<Login />
@@ -39,11 +39,12 @@ export function Main(): JSX.Element {
 		);
 	}
 
+	const View = pages[page];
 	return (
 		<Page>
 			<div className="block sm:flex sm:flex-row">
 				<Nav navigate={setPage} page={page} />
-				{pages[page]}
+				<View />
 			</div>
 		</Page>
 	);

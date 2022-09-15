@@ -1,20 +1,16 @@
-import { Box, Button } from '@client/components';
-import { useConfig, useLogger } from '@client/hooks';
-import * as Icons from '@heroicons/react/solid';
+import React from 'react';
+import { Box } from '@client/components';
+import { useConfig, useMachineLogger } from '@client/hooks';
 import { useMachine } from '@xstate/react';
-import React, { useEffect } from 'react';
-import { Page, repoMachine, RepoSend } from './repo.machine';
-import { RepoForm } from './RepoForm';
-import { RepoInfo } from './RepoInfo';
-import { User } from './User';
+import { repoMachine, RepoSend, RepoState } from './repo/repo.machine';
+import { RepoForm } from './repo/RepoForm';
+import { RepoInfo } from './repo/RepoInfo';
 
-export function Settings(): JSX.Element {
+const useRepoSettings = (): { state: RepoState; send: RepoSend } => {
 	const { storeUpdate, config } = useConfig();
-	const { debug } = useLogger();
 	const [state, send, service] = useMachine(
 		() => repoMachine.withContext({ repos: config?.repos ?? [] }),
 		{
-			devTools: true,
 			actions: {
 				sendReposToConfig({ repos }) {
 					storeUpdate({ repos });
@@ -23,11 +19,16 @@ export function Settings(): JSX.Element {
 		}
 	);
 
-	useEffect(() => {
-		service.onEvent((e) => {
-			debug({ data: e, msg: 'repo machine' });
-		});
-	}, [service, debug]);
+	useMachineLogger(service);
+
+	return {
+		state,
+		send,
+	};
+};
+
+export function RepoSettings(): JSX.Element {
+	const { send, state } = useRepoSettings();
 
 	return (
 		<div className="flex flex-grow flex-col gap-4 md:flex-row">

@@ -26,9 +26,7 @@ export function MachinesProvider({ children }: IMachinesProvider): JSX.Element {
 		bridge.info('client starting');
 	}, [bridge]);
 
-	const main = useInterpret(mainMachineFactory({ bridge }), {
-		devTools: true,
-	});
+	const main = useInterpret(mainMachineFactory({ bridge }));
 
 	main.onTransition((e) => {
 		logger.debug({

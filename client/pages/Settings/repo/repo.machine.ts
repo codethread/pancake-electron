@@ -1,8 +1,6 @@
 import { IRepoForm } from '@shared/types/config';
-import { and, not } from '@shared/utils';
-import { assign, createMachine, EventFrom, actions, InterpreterFrom } from 'xstate';
+import { assign, createMachine, EventFrom, InterpreterFrom, StateFrom } from 'xstate';
 
-export type Page = 'Notifications' | 'Repos' | 'Teams' | 'User';
 export const repoMachine = createMachine(
 	{
 		id: 'repo',
@@ -13,14 +11,18 @@ export const repoMachine = createMachine(
 			events: {} as
 				| { type: 'add repo'; data: IRepoForm }
 				| { type: 'delete repo'; data: IRepoForm['id'] }
-				| { type: 'navigate'; page: Page }
 				| { type: 'update repo'; data: IRepoForm },
 		},
-		initial: 'repos',
-		on: {
-			navigate: [{ cond: (_, { page }) => page === 'User', target: 'user' }, 'repos'],
-		},
+		initial: 'init',
 		states: {
+			init: {
+				always: [{ cond: 'hasRepos', target: 'repos' }, { target: 'noRepos' }],
+			},
+			noRepos: {
+				on: {
+					'add repo': { actions: ['storeRepo', 'sendReposToConfig'], target: 'repos' },
+				},
+			},
 			repos: {
 				on: {
 					'add repo': { actions: ['storeRepo', 'sendReposToConfig'] },
@@ -28,7 +30,6 @@ export const repoMachine = createMachine(
 					'delete repo': { actions: ['deleteRepo', 'sendReposToConfig'] },
 				},
 			},
-			user: {},
 		},
 	},
 	{
@@ -41,11 +42,13 @@ export const repoMachine = createMachine(
 				repos: (c, { data }) => c.repos.map((r) => (data.id === r.id ? data : r)),
 			}),
 		},
+		guards: {
+			hasRepos: (c) => c.repos.length > 0,
+		},
 	}
 );
 
 type M = typeof repoMachine;
 export type RepoEvents = EventFrom<M>;
-export type RepoInterpreter = InterpreterFrom<M>;
 export type RepoSend = InterpreterFrom<M>['send'];
-export type RepoState = InterpreterFrom<M>['state'];
+export type RepoState = StateFrom<M>;

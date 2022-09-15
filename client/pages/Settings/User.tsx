@@ -1,8 +1,8 @@
 import React from 'react';
-import { Box, Card, Button, FormItemPassword } from '@client/components';
+import { Box, Card, Button, FormItemPassword, FormItemCheckbox } from '@client/components';
 import { mapKeys } from 'remeda';
 import { FormProvider, useForm } from 'react-hook-form';
-import { useLogger, useConfig, useBridge } from '@client/hooks';
+import { useLogger, useConfig, useBridge, useToken } from '@client/hooks';
 import { githubScopes } from '@shared/constants';
 
 const githubUrl = new URL('https://github.com/settings/tokens/new');
@@ -13,15 +13,18 @@ githubUrl.search = new URLSearchParams({
 
 type UserForm = {
 	token?: string;
+	'remember me'?: boolean;
 };
 
 export function User(): JSX.Element {
 	const logger = useLogger();
 	const { openExternal } = useBridge();
-	const { config, storeUpdate } = useConfig();
+	const { storeUpdate, config } = useConfig();
+	const { token, setToken } = useToken();
 	const methods = useForm<UserForm>({
 		defaultValues: {
-			token: config?.token ?? '',
+			token: token ?? '',
+			'remember me': Boolean(config?.token),
 		},
 	});
 	return (
@@ -32,7 +35,13 @@ export function User(): JSX.Element {
 						className="flex flex-col gap-4"
 						onSubmit={methods.handleSubmit((data) => {
 							logger.debug({ data, msg: 'user info submitted', tags: ['client', 'settings'] });
-							storeUpdate({ token: data.token });
+							if (!data.token) throw new Error('form error, no token');
+
+							if (data['remember me']) {
+								storeUpdate({ token: data.token });
+							} else {
+								setToken(data.token);
+							}
 						})}
 					>
 						<FormItemPassword
@@ -51,6 +60,10 @@ export function User(): JSX.Element {
 								Create one here
 							</Button>
 						</p>
+						<FormItemCheckbox
+							label="remember me"
+							smallPrint="When checked, Pancake will store your token in a plain text file on your machine. If left unchecked, you will need to provide a token each time you restart the app."
+						/>
 						<Box row>
 							<Button
 								type="submit"

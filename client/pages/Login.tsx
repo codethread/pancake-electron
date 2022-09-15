@@ -1,11 +1,10 @@
 import React from 'react';
-import { Box, Card, Button, FormItemPassword } from '@client/components';
+import { Box, Card, Button, FormItemPassword, FormItemCheckbox } from '@client/components';
 import { mapKeys } from 'remeda';
 import { FormProvider, useForm } from 'react-hook-form';
-import { useLogger, useConfig, useBridge } from '@client/hooks';
+import { useLogger, useConfig, useBridge, useToken } from '@client/hooks';
 import { not } from '@shared/utils';
 import { githubUrl } from '@client/misc/githubUrl';
-import { FormItemCheckbox } from '@client/components/Form/FormItem';
 
 type UserForm = {
 	token?: string;
@@ -16,9 +15,10 @@ export function Login(): JSX.Element {
 	const logger = useLogger();
 	const { openExternal } = useBridge();
 	const { config, storeUpdate } = useConfig();
+	const { token, setToken } = useToken();
 	const methods = useForm<UserForm>({
 		defaultValues: {
-			token: config?.token ?? '',
+			token: token ?? '',
 			'remember me': true,
 		},
 	});
@@ -47,10 +47,12 @@ export function Login(): JSX.Element {
 					className="flex flex-col gap-4"
 					onSubmit={methods.handleSubmit((data) => {
 						logger.debug({ data, msg: 'user info submitted', tags: ['client', 'settings'] });
+						if (!data.token) throw new Error('form error, no token');
+
 						if (data['remember me']) {
 							storeUpdate({ token: data.token });
-						} else if (data.token) {
-							sessionStorage.setItem('token', data.token);
+						} else {
+							setToken(data.token);
 						}
 					})}
 				>

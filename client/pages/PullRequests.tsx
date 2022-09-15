@@ -1,8 +1,8 @@
 import { useConfig } from '@client/hooks';
 import React from 'react';
-import { Repo } from './Repo';
+import { Repo } from './pull-requests/Repo';
 
-export function Dash(): JSX.Element {
+export function PullRequests(): JSX.Element {
 	const { config } = useConfig();
 
 	return (

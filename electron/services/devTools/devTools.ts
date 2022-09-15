@@ -5,7 +5,7 @@ import installExtension, { REACT_DEVELOPER_TOOLS } from 'electron-devtools-insta
 export function setUpDevtools(logger: ILogger): void {
 	if (isDev) {
 		logger.info('Installing extensions');
-		installExtension(REACT_DEVELOPER_TOOLS)
+		installExtension([REACT_DEVELOPER_TOOLS])
 			.then((name) => {
 				logger.info(`Added Extension: "${name}"`);
 			})
