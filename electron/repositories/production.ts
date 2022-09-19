@@ -17,6 +17,11 @@ export default ({ logger }: RepoArgs): Repositories => ({
 		storeConfig: {
 			name: 'client',
 			defaults: emptyConfig,
+			migrations: {
+				'>=0.1.7': (store) => {
+					store.set('rememberMe', true);
+				},
+			},
 		},
 		logger,
 	}),

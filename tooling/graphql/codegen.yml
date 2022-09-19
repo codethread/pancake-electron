@@ -4,7 +4,7 @@ schema:
       headers:
         Authorization: 'bearer ${GH_TOKEN}'
 documents:
-  - 'client/hooks/gql.ts'
+  - 'client/hooks/gql/*.ts'
 generates:
   client/hooks/graphql.ts:
     plugins:

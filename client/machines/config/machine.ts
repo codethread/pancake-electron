@@ -1,9 +1,10 @@
 import { UserConfig } from '@shared/types/config';
 import { IBridge } from '@shared/types/ipc';
+import { DeepPartial } from '@shared/types/util';
+import * as R from 'remeda';
 import { ActorRefFrom, assign, createMachine, InterpreterFrom, sendParent } from 'xstate';
 import { respond } from 'xstate/lib/actions';
-import { mainModel } from '../main/model';
-import { ConfigContext, configModel, ConfitEvents } from './model';
+import { ConfigContext, configModel, ConfigEvents } from './model';
 
 export type IConfigMachine = {
 	bridge: IBridge;
@@ -21,15 +22,20 @@ export function configMachineFactory({ bridge, configOverride }: IConfigMachine)
 			tsTypes: {} as import('./machine.typegen').Typegen0,
 			schema: {
 				context: {} as ConfigContext,
-				events: {} as ConfitEvents,
+				events: {} as ConfigEvents,
 				services: {} as {
 					loadConfig: { data: UserConfig };
 					updateConfig: { data: UserConfig };
 					resetConfig: { data: UserConfig };
+					deleteConfig: { data: UserConfig };
 				},
 			},
 			context: configModel.initialContext,
 			initial: 'loading',
+			on: {
+				'*': { actions: [(...args) => console.log('ahhh', args)] },
+			},
+
 			states: {
 				loading: {
 					tags: ['loading'],
@@ -55,6 +61,21 @@ export function configMachineFactory({ bridge, configOverride }: IConfigMachine)
 								UPDATE: 'updating',
 								RESET: 'resetting',
 								REQUEST_CONFIG: { actions: 'respondWithConfig' },
+								DELETE: 'deleting',
+							},
+						},
+						deleting: {
+							tags: ['updating'],
+							invoke: {
+								id: 'deleteConfig',
+								src: 'deleteConfig',
+								onDone: {
+									actions: 'storeConfig',
+									target: 'idle',
+								},
+								onError: {
+									target: 'idle',
+								},
 							},
 						},
 						updating: {
@@ -105,6 +126,16 @@ export function configMachineFactory({ bridge, configOverride }: IConfigMachine)
 						},
 					});
 				},
+				deleteConfig: async (_, e) => {
+					const r = await bridge.storeDelete(e.data);
+					return r.match({
+						Ok: (config) => ({ ...config, [e.data]: undefined }),
+						Err: (er) => {
+							bridge.warn(er);
+							throw new Error();
+						},
+					});
+				},
 				resetConfig: async () => {
 					const res = await bridge.storeReset();
 					return res.match({
@@ -115,10 +146,12 @@ export function configMachineFactory({ bridge, configOverride }: IConfigMachine)
 						},
 					});
 				},
-				updateConfig: async (_, e) => {
-					const res = await bridge.storeUpdate(e.data);
+				updateConfig: async (c, e) => {
+					console.log(c, e);
+					const storeableConfig = prep(c, e.data);
+					const res = await bridge.storeUpdate(storeableConfig);
 					return res.match({
-						Ok: (config) => config,
+						Ok: (config) => merge(config, e.data),
 						Err: (er) => {
 							bridge.warn(er);
 							throw new Error();
@@ -127,14 +160,16 @@ export function configMachineFactory({ bridge, configOverride }: IConfigMachine)
 				},
 			},
 			actions: {
-				broadcastConfig: sendParent((c) => mainModel.events.CONFIG_LOADED(c)),
+				broadcastConfig: sendParent((c) => ({ type: 'CONFIG_LOADED', data: c })),
 				storeTokenForSession: ({ token }) => {
 					if (token) {
 						sessionStorage.setItem('token', token);
+					} else {
+						sessionStorage.removeItem('token');
 					}
 				},
-				respondWithConfig: respond((c) => mainModel.events.CONFIG_LOADED(c)),
-				storeConfig: assign((_, { data }) => data),
+				// respondWithConfig: respond((c) => mainModel.events.CONFIG_LOADED(c)),
+				storeConfig: assign((_, e) => e.data),
 			},
 		}
 	);
@@ -143,3 +178,7 @@ export function configMachineFactory({ bridge, configOverride }: IConfigMachine)
 type ConfigMachine = ReturnType<typeof configMachineFactory>;
 export type ConfigService = InterpreterFrom<ConfigMachine>;
 export type ConfigActorRef = ActorRefFrom<ConfigMachine>;
+
+function prep(config: UserConfig, data: DeepPartial<UserConfig>): DeepPartial<UserConfig> {
+	return data.rememberMe ?? config.rememberMe ? data : R.omit(data, ['token']);
+}

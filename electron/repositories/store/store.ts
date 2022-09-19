@@ -1,4 +1,3 @@
-import { UserConfig } from '@shared/types/config';
 import { ILogger } from '@shared/types/logger';
 import { DeepPartial } from '@shared/types/util';
 import Store, { type Options } from 'electron-store';
@@ -9,6 +8,7 @@ export type StoreRepository<T> = {
 	storeRead(): Promise<Result<T>>;
 	storeUpdate(value: DeepPartial<T>): Promise<Result<T>>;
 	storeReset(): Promise<Result<T>>;
+	storeDelete(key: keyof T): Promise<Result<T>>;
 };
 
 export type StoreConfig<T> = {
@@ -25,7 +25,7 @@ export type StoreConfig<T> = {
 	/**
 	 * Initial values for config, if no config file exists
 	 */
-	defaults: T;
+	readonly defaults: T;
 	migrations?: Options<T>['migrations'];
 };
 
@@ -34,10 +34,7 @@ export type StoreRepo<T> = {
 	logger: ILogger;
 };
 
-export const storeRepository = <T = UserConfig>({
-	logger,
-	storeConfig,
-}: StoreRepo<T>): StoreRepository<T> => {
+export const storeRepository = <T>({ logger, storeConfig }: StoreRepo<T>): StoreRepository<T> => {
 	const { name, cwd } = storeConfig;
 
 	logger.info(`setting up Store Repo: name "${name}"${cwd ? ` cwd "${cwd}"` : ''}`);
@@ -54,6 +51,18 @@ export const storeRepository = <T = UserConfig>({
 			logger.info({ msg: 'store reset', tags: ['store', 'electron'] });
 			store.clear();
 			return Promise.resolve(ok(store.store));
+		},
+		async storeDelete(key) {
+			logger.info({ msg: 'store delete', data: key, tags: ['store', 'electron'] });
+			return new Promise((resolve) => {
+				const unsubscribe = store.onDidChange(key, (o, n) => {
+					unsubscribe();
+					const s = store.store;
+					console.log({ o, n, s });
+					resolve(ok(store.store));
+				});
+				store.delete(key);
+			});
 		},
 		async storeUpdate(updatedStore) {
 			logger.info({ msg: 'store update', data: updatedStore, tags: ['store', 'electron'] });

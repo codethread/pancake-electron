@@ -1,33 +1,32 @@
 import { Tooltip } from '@client/components/Tooltip';
 import classNames from 'classnames';
-import { useBridge } from '@client/hooks';
+import { useBridge, usePage } from '@client/hooks';
 import { CodeIcon, CogIcon, ExclamationIcon, UserIcon } from '@heroicons/react/outline';
 import React, { ComponentProps } from 'react';
 
-export type IPage = 'dash' | 'settings' | 'user';
-
-export function Nav({ navigate, page }: { page: IPage; navigate(page: IPage): void }): JSX.Element {
+export function Nav(): JSX.Element {
 	const { openExternal } = useBridge();
+	const { page, setPage } = usePage();
 	return (
 		<div className="sticky top-0">
 			<div className="z-50 mb-4 flex flex-row items-center justify-center gap-8 bg-thmBackground py-4 sm:sticky sm:top-0 sm:mt-[30vh] sm:flex-col sm:pr-4">
 				<NavButton
 					onClick={() => {
-						navigate('dash');
+						setPage('dash');
 					}}
 					Icon={CodeIcon}
 					active={page === 'dash'}
 				/>
 				<NavButton
 					onClick={() => {
-						navigate('settings');
+						setPage('settings');
 					}}
 					Icon={CogIcon}
 					active={page === 'settings'}
 				/>
 				<NavButton
 					onClick={() => {
-						navigate('user');
+						setPage('user');
 					}}
 					Icon={UserIcon}
 					active={page === 'user'}

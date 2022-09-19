@@ -1,4 +1,5 @@
 export type UserConfig = {
+	rememberMe: boolean;
 	token?: string;
 	refreshRate: number;
 	repos: IRepoForm[];

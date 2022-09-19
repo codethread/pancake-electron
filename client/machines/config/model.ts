@@ -10,8 +10,9 @@ export const configModel = createModel(emptyConfig, {
 		REQUEST_CONFIG: () => ({}),
 		UPDATE: (data: DeepPartial<UserConfig>) => ({ data }),
 		REPLACE: (data: DeepPartial<UserConfig>) => ({ data }),
+		DELETE: (data: keyof UserConfig) => ({ data }),
 	},
 });
 
 export type ConfigContext = ContextFrom<typeof configModel>;
-export type ConfitEvents = EventFrom<typeof configModel>;
+export type ConfigEvents = EventFrom<typeof configModel>;

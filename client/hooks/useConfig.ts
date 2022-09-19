@@ -2,11 +2,12 @@ import { configModel } from '@client/machines';
 import { UserConfig } from '@shared/types/config';
 import { DeepPartial } from '@shared/types/util';
 import { useActor } from '@xstate/react';
-import { useMemo, useCallback } from 'react';
+import { useCallback } from 'react';
 import { useConfigService } from './useMachines';
 
 type ConfigUpdaters = {
 	storeUpdate(config: DeepPartial<UserConfig>): void;
+	storeDelete(key: keyof UserConfig): void;
 	storeReset(): void;
 };
 
@@ -32,9 +33,16 @@ export const useConfig = (): ConfigMaybe => {
 		},
 		[send]
 	);
+	const storeDelete = useCallback(
+		(key: keyof UserConfig) => {
+			send(configModel.events.DELETE(key));
+		},
+		[send]
+	);
 
 	return {
 		storeUpdate,
+		storeDelete,
 		storeReset: () => {
 			send(configModel.events.RESET());
 		},

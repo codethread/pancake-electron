@@ -1,9 +1,8 @@
-import React from 'react';
-import { Box, Card, Button, FormItemPassword, FormItemCheckbox } from '@client/components';
-import { mapKeys } from 'remeda';
-import { FormProvider, useForm } from 'react-hook-form';
-import { useLogger, useConfig, useBridge, useToken } from '@client/hooks';
+import { Box, Button, Card, FormItemCheckbox, FormItemPassword } from '@client/components';
+import { useBridge, useConfig, useLogger } from '@client/hooks';
 import { githubScopes } from '@shared/constants';
+import React from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
 
 const githubUrl = new URL('https://github.com/settings/tokens/new');
 githubUrl.search = new URLSearchParams({
@@ -19,17 +18,16 @@ type UserForm = {
 export function User(): JSX.Element {
 	const logger = useLogger();
 	const { openExternal } = useBridge();
-	const { storeUpdate, config } = useConfig();
-	const { token, setToken } = useToken();
+	const { storeUpdate, config, storeDelete } = useConfig();
 	const methods = useForm<UserForm>({
 		defaultValues: {
-			token: token ?? '',
-			'remember me': Boolean(config?.token),
+			token: config?.token ?? '',
+			'remember me': config?.rememberMe,
 		},
 	});
 	return (
 		<Box className="flex-grow">
-			<Card clamp>
+			<Card clamp className="mb-8">
 				<FormProvider {...methods}>
 					<form
 						className="flex flex-col gap-4"
@@ -37,11 +35,10 @@ export function User(): JSX.Element {
 							logger.debug({ data, msg: 'user info submitted', tags: ['client', 'settings'] });
 							if (!data.token) throw new Error('form error, no token');
 
-							if (data['remember me']) {
-								storeUpdate({ token: data.token });
-							} else {
-								setToken(data.token);
-							}
+							storeUpdate({
+								token: data.token,
+								rememberMe: data['remember me'],
+							});
 						})}
 					>
 						<FormItemPassword
@@ -88,6 +85,20 @@ export function User(): JSX.Element {
 						</Box>
 					</form>
 				</FormProvider>
+			</Card>
+			<Card clamp>
+				<Box>
+					<Button
+						className="border-thmWarn text-thmWarn"
+						variant="secondary"
+						fullWidth
+						onClick={() => {
+							storeDelete('token');
+						}}
+					>
+						<p className="w-full text-center">Log Out</p>
+					</Button>
+				</Box>
 			</Card>
 		</Box>
 	);

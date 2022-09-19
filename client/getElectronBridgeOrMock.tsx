@@ -1,5 +1,6 @@
 import { IBridge } from '@shared/types/ipc';
 import { ILogInfo, IClientLogger, LogMethods, marshalInfo } from '@shared/types/logger';
+import fakeRepositories from '@electron/repositories/fakes';
 
 let bridge: IBridge | null = null;
 
@@ -29,7 +30,15 @@ export function getElectronBridgeOrMock(): IBridge {
 		return bridge;
 	}
 
-	throw new Error('no bridge');
+	return {
+		...fakeRepositories({
+			...logger,
+			openExternal: async (url) => {
+				window.open(url);
+				return Promise.resolve();
+			},
+		}),
+	};
 }
 
 function log(info: ILogInfo, method: LogMethods): void {

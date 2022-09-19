@@ -5,6 +5,7 @@ export const handlerMethods: IpcSetup = {
 	storeRead: { main: 'handle', renderer: 'invoke' },
 	storeReset: { main: 'handle', renderer: 'invoke' },
 	storeUpdate: { main: 'handle', renderer: 'invoke' },
+	storeDelete: { main: 'handle', renderer: 'invoke' },
 	info: { main: 'on', renderer: 'send' },
 	warn: { main: 'on', renderer: 'send' },
 	error: { main: 'on', renderer: 'send' },

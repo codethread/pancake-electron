@@ -1,9 +1,22 @@
 import { UserConfig } from '@shared/types/config';
 import { IBridge } from '@shared/types/ipc';
-import { assign, createMachine, InterpreterFrom } from 'xstate';
-import { configMachineFactory } from '../config/machine';
-import { actorIds } from '../constants';
-import { mainModel, MainEvents, MainContext } from './model';
+import { createMachine, forwardTo, InterpreterFrom, send } from 'xstate';
+import { ConfigActorRef, configMachineFactory } from './config/machine';
+import { LoginActorRef, loginMachine } from './login.machine';
+import { PageActorRef, pageMachine } from './page.machine';
+import { MainEvents, actorIds } from './shared';
+
+export type ActorSystem = {
+	actors: Actors;
+};
+
+export type Actors = {
+	CONFIG: ConfigActorRef;
+	PAGE: PageActorRef;
+	LOGIN: LoginActorRef;
+};
+
+export type MainContext = { hello: string };
 
 export type IMainMachine = {
 	bridge: IBridge;
@@ -22,8 +35,8 @@ export const mainMachineFactory = ({ bridge, configOverride }: IMainMachine) =>
 				context: {} as MainContext,
 				events: {} as MainEvents,
 			},
-			tsTypes: {} as import('./machine.typegen').Typegen0,
-			context: mainModel.initialContext,
+			tsTypes: {} as import('./main.machine.typegen').Typegen0,
+			context: { hello: 'today' },
 			type: 'parallel',
 			states: {
 				main: {
@@ -31,7 +44,10 @@ export const mainMachineFactory = ({ bridge, configOverride }: IMainMachine) =>
 					states: {
 						loading: {
 							on: {
-								CONFIG_LOADED: 'loaded',
+								CONFIG_LOADED: {
+									actions: [forwardTo(actorIds.PAGE), forwardTo(actorIds.LOGIN)],
+									target: 'loaded',
+								},
 							},
 						},
 						loaded: {
@@ -45,14 +61,23 @@ export const mainMachineFactory = ({ bridge, configOverride }: IMainMachine) =>
 						active: {
 							invoke: [
 								{ id: actorIds.CONFIG, src: configMachineFactory({ bridge, configOverride }) },
+								{ id: actorIds.PAGE, src: pageMachine },
+								{ id: actorIds.LOGIN, src: loginMachine },
 							],
 						},
+					},
+					on: {
+						'send to': { actions: ['redirect'] },
 					},
 				},
 			},
 		},
 		{
-			actions: {},
+			actions: {
+				redirect: send((_, e) => e.event, {
+					to: actorIds.CONFIG,
+				}),
+			},
 		}
 	);
 

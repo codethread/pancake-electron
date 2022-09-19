@@ -1,11 +1,13 @@
-import { Page } from '@client/components';
-import { useConfig, useToken } from '@client/hooks';
+import { Box, Page } from '@client/components';
+import { useConfig, useMachines, usePage } from '@client/hooks';
+import { useLoginService } from '@client/hooks/useMachines';
+import { IPage } from '@client/machines';
 import { DocumentDownloadIcon } from '@heroicons/react/outline';
-import { not } from '@shared/utils';
-import React, { FC, useEffect, useState } from 'react';
-import { PullRequests } from './PullRequests';
+import { useActor } from '@xstate/react';
+import React, { FC } from 'react';
 import { Login } from './Login';
-import { Nav, IPage } from './Nav';
+import { Nav } from './Nav';
+import { PullRequests } from './PullRequests';
 import { RepoSettings } from './Settings/Repo';
 import { User } from './Settings/User';
 
@@ -13,39 +15,31 @@ const pages: Record<IPage, FC> = {
 	dash: PullRequests,
 	settings: RepoSettings,
 	user: User,
+	loading: Loading,
+	login: Login,
 };
 
 export function Main(): JSX.Element {
-	const { config, loading } = useConfig();
-	const { token } = useToken();
-	const [page, setPage] = useState<IPage>('dash');
-
-	if (loading) {
-		return (
-			<Page center>
-				<span className="text-center">
-					<DocumentDownloadIcon className="mb-4 inline-block h-8 w-8 animate-pulse" />
-					<p>loading config ...</p>
-				</span>
-			</Page>
-		);
-	}
-
-	if (not(Boolean(token))) {
-		return (
-			<Page center>
-				<Login />
-			</Page>
-		);
-	}
+	const { page } = usePage();
 
 	const View = pages[page];
 	return (
 		<Page>
 			<div className="block sm:flex sm:flex-row">
-				<Nav navigate={setPage} page={page} />
+				<Nav />
 				<View />
 			</div>
 		</Page>
+	);
+}
+
+function Loading(): JSX.Element {
+	return (
+		<Box className="h-full w-full">
+			<span className="text-center">
+				<DocumentDownloadIcon className="mb-4 inline-block h-8 w-8 animate-pulse" />
+				<p>loading config ...</p>
+			</span>
+		</Box>
 	);
 }

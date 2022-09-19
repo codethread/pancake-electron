@@ -2,8 +2,10 @@ import {
 	ActorError,
 	actorIds,
 	ConfigActorRef,
+	LoginActorRef,
 	mainMachineFactory,
 	MainService,
+	PageActorRef,
 } from '@client/machines';
 import { useInterpret, useSelector } from '@xstate/react';
 import React, { createContext, useContext, useEffect } from 'react';
@@ -26,7 +28,7 @@ export function MachinesProvider({ children }: IMachinesProvider): JSX.Element {
 		bridge.info('client starting');
 	}, [bridge]);
 
-	const main = useInterpret(mainMachineFactory({ bridge }));
+	const main = useInterpret(mainMachineFactory({ bridge }), { devTools: true });
 
 	main.onTransition((e) => {
 		logger.debug({
@@ -54,4 +56,22 @@ export const useConfigService = (): ConfigActorRef => {
 	if (!config) throw new ActorError(main, actorIds.CONFIG);
 
 	return config;
+};
+
+export const usePageService = (): PageActorRef => {
+	const main = useMachines();
+	const pageMachine = useSelector(main, (c) => c.children[actorIds.PAGE] as PageActorRef | null);
+
+	if (!pageMachine) throw new ActorError(main, actorIds.PAGE);
+
+	return pageMachine;
+};
+
+export const useLoginService = (): LoginActorRef => {
+	const main = useMachines();
+	const pageMachine = useSelector(main, (c) => c.children[actorIds.LOGIN] as LoginActorRef | null);
+
+	if (!pageMachine) throw new ActorError(main, actorIds.LOGIN);
+
+	return pageMachine;
 };

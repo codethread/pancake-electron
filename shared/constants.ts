@@ -52,6 +52,7 @@ export function asset(fileName: string): string {
 }
 
 export const emptyConfig: UserConfig = {
+	rememberMe: true,
 	repos: [],
 	refreshRate: 30000,
 };

@@ -5,4 +5,4 @@ export { useLogger } from './useLogger';
 export { useReviewsQuery } from './graphql';
 export { useId } from './useId';
 export { useMachineLogger } from './useMachineLogger';
-export { useToken } from './useToken';
+export * from './usePage';
