@@ -1,9 +1,7 @@
 import { Box, Button, Card, FormItemCheckbox, FormItemPassword, Page } from '@client/components';
-import { useBridge, useConfig, useLogger } from '@client/hooks';
-import { useLoginService } from '@client/hooks/useMachines';
+import { useBridge, useLogger, useLogin } from '@client/hooks';
 import { githubUrl } from '@client/misc/githubUrl';
 import { not } from '@shared/utils';
-import { useActor } from '@xstate/react';
 import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
@@ -15,34 +13,19 @@ type UserForm = {
 export function Login(): JSX.Element {
 	const logger = useLogger();
 	const { openExternal } = useBridge();
-	const { config, storeUpdate } = useConfig();
+	const { send, data } = useLogin();
 
-	const lm = useLoginService();
-	const [state, send] = useActor(lm);
-	console.log(state.value);
+	const { rememberMe, token } = data ?? {};
 
 	const methods = useForm<UserForm>({
 		defaultValues: {
-			token: config?.token ?? '',
-			'remember me': config?.rememberMe,
+			token: token ?? '',
+			'remember me': rememberMe ?? false,
 		},
 	});
 	return (
 		<Page center>
 			<Card clamp>
-				<Button
-					onClick={() => {
-						send({
-							type: 'LOG_IN',
-							data: {
-								rememberMe: false,
-								token: 'oiwejf',
-							},
-						});
-					}}
-				>
-					Test
-				</Button>
 				<FormProvider {...methods}>
 					<p className="mb-6 text-center text-3xl">Welcome to Pancake!</p>
 					<p className="mb-6 text-center text-lg">The Pull Request Dashboard</p>
@@ -64,13 +47,21 @@ export function Login(): JSX.Element {
 					</p>
 					<form
 						className="flex flex-col gap-4"
-						onSubmit={methods.handleSubmit((data) => {
-							logger.debug({ data, msg: 'user info submitted', tags: ['client', 'settings'] });
-							if (!data.token) throw new Error('form error, no token');
+						onSubmit={methods.handleSubmit((formData) => {
+							logger.debug({
+								data: formData,
+								msg: 'user info submitted',
+								tags: ['client', 'settings'],
+							});
+							// TODO bring in ZOD
+							if (!formData.token) throw new Error('form error, no token');
 
-							storeUpdate({
-								token: data.token,
-								rememberMe: data['remember me'],
+							send({
+								type: 'LOG_IN',
+								data: {
+									token: formData.token,
+									rememberMe: formData['remember me'] ?? false,
+								},
 							});
 						})}
 					>

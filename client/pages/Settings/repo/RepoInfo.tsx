@@ -1,20 +1,17 @@
 import { Box, Button, Card, FormItemNumber } from '@client/components';
 import { useLogger } from '@client/hooks';
-import * as Icons from '@heroicons/react/solid';
+import { RepoUnActorRef } from '@client/machines';
+import { XIcon } from '@heroicons/react/solid';
 import { IRepoForm } from '@shared/types/config';
 import { ICss } from '@shared/types/ipc';
+import { useActor } from '@xstate/react';
 import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { merge } from 'remeda';
 
-export function RepoInfo({
-	onClick,
-	onSubmit,
-	className,
-	...repo
-}: ICss & IRepoForm & { onClick(): void; onSubmit(repo: IRepoForm): void }): JSX.Element {
-	const { Name: name, Owner: owner, 'PR Count': prCount } = repo;
-	const Icon = Icons.XIcon;
+export function RepoInfo({ className, actRef }: ICss & { actRef: RepoUnActorRef }): JSX.Element {
+	const [state, send] = useActor(actRef);
+
+	const { name, reviewCount, prCount, owner, id } = state.context.githubVars;
 	const methods = useForm<IRepoForm>({
 		defaultValues: {
 			// 'Review Count': reviewCount,
@@ -22,6 +19,8 @@ export function RepoInfo({
 		},
 	});
 	const logger = useLogger();
+	const { cost, limit } = state.context.data?.rateLimit ?? {};
+	const fetching = state.hasTag('fetching');
 
 	return (
 		<Card className={className}>
@@ -30,7 +29,16 @@ export function RepoInfo({
 					className="flex flex-col gap-4"
 					onSubmit={methods.handleSubmit((data) => {
 						logger.debug({ data, msg: 'repo updated', tags: ['client', 'settings'] });
-						onSubmit(merge(repo, data));
+						send({
+							type: 'updateInfo',
+							data: {
+								id,
+								owner,
+								prCount: data['PR Count'] ?? prCount,
+								reviewCount,
+								name,
+							},
+						});
 					})}
 				>
 					<p className="text-2xl">
@@ -59,10 +67,23 @@ export function RepoInfo({
 					</Box>
 				</form>
 			</FormProvider>
-			<Button variant="secondary" fullWidth onClick={onClick} className="mt-4 text-thmError">
-				<Icon className="mr-2 inline-flex w-5" />
+			<Button
+				variant="secondary"
+				fullWidth
+				onClick={() => {
+					send({ type: 'DELETE' });
+				}}
+				className="mt-4 mb-4 text-thmError"
+			>
+				<XIcon className="mr-2 inline-flex w-5" />
 				Delete
 			</Button>
+			{fetching && <p className="text-xs text-thmFgDim">calculating cost...</p>}
+			{cost ? (
+				<p className="text-xs text-thmFgDim">
+					current requests are costing {cost} out of {limit} per hour
+				</p>
+			) : null}
 		</Card>
 	);
 }

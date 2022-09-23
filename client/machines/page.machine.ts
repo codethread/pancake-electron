@@ -1,14 +1,15 @@
 import { ActorRefFrom, assign, createMachine, InterpreterFrom, StateFrom } from 'xstate';
-import { SharedEvents } from './main/model';
+import { PageOutsideEvents, sendToRepo } from './shared';
 
-export type IPage = 'dash' | 'settings' | 'user' | 'login' | 'loading';
-export type ISetablePage = Exclude<IPage, 'login' | 'loading'>;
+export type IPage = 'loading' | 'login' | 'repos' | 'settings' | 'user';
+export type ISetablePage = Exclude<IPage, 'loading' | 'login'>;
 
-type PageEvents = SharedEvents | { type: 'navigate'; page: IPage };
+type PageEvents = PageOutsideEvents | { type: 'navigate'; page: ISetablePage };
 
 export const pageMachine = createMachine(
 	{
 		id: 'page',
+		predictableActionArguments: true,
 		tsTypes: {} as import('./page.machine.typegen').Typegen0,
 		schema: {
 			context: {} as { page: IPage },
@@ -20,34 +21,37 @@ export const pageMachine = createMachine(
 		initial: 'loading',
 		states: {
 			loading: {
+				entry: [assign({ page: 'loading' })],
 				on: {
-					CONFIG_LOADED: [{ cond: 'isLoggedIn', target: 'loggedIn' }, { target: 'loggedOut' }],
+					'logged out': 'loggingIn',
+					'logged in': 'redirectingAfterLogin',
 				},
 			},
-			loggedIn: {
-				entry: 'setInitialLoginPage',
+			loggingIn: {
+				entry: [assign({ page: 'login' })],
 				on: {
-					navigate: { actions: 'navigateToPage' },
+					'logged in': 'redirectingAfterLogin',
 				},
 			},
-			loggedOut: {
-				entry: 'navigateToLogin',
+			redirectingAfterLogin: {
+				entry: 'askIfReposConfigured',
 				on: {
-					navigate: { actions: 'navigateToPage' },
+					'has repos configured': { target: 'navigable', actions: [assign({ page: 'repos' })] },
+					'no repos configured': { target: 'navigable', actions: [assign({ page: 'settings' })] },
+				},
+			},
+			navigable: {
+				on: {
+					navigate: { actions: 'navigate' },
+					'logged out': 'loggingIn',
 				},
 			},
 		},
 	},
 	{
-		guards: {
-			isLoggedIn: (_, e) => Boolean(e.data.token),
-		},
 		actions: {
-			setInitialLoginPage: assign({
-				page: (_, { data }) => (data.repos.length > 0 ? 'dash' : 'settings'),
-			}),
-			navigateToLogin: assign({ page: (_) => 'login' }),
-			navigateToPage: assign({
+			askIfReposConfigured: sendToRepo(() => ({ type: 'ask if repos configured' }), 'PAGE'),
+			navigate: assign({
 				page: (_, { page }) => page,
 			}),
 		},

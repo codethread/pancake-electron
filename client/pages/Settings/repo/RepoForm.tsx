@@ -5,10 +5,12 @@ import { ICss } from '@shared/types/ipc';
 import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
-export function RepoForm({
-	onSubmit,
-	className,
-}: ICss & { onSubmit(repo: IRepoForm): void }): JSX.Element {
+type IRepoFormC = ICss & {
+	existingRepos: string[];
+	onSubmit(repo: IRepoForm): void;
+};
+
+export function RepoForm({ onSubmit, className, existingRepos }: IRepoFormC): JSX.Element {
 	const logger = useLogger();
 	const methods = useForm<Omit<IRepoForm, 'id'>>({});
 	const { Name, Owner, 'PR Count': prCount } = methods.formState.errors;
@@ -19,8 +21,14 @@ export function RepoForm({
 					className="flex flex-col gap-4"
 					onSubmit={methods.handleSubmit((data) => {
 						logger.debug({ data, msg: 'repo submitted', tags: ['client', 'settings'] });
-						onSubmit({ ...data, id: idFromRepo(data) });
-						methods.reset();
+						const id = idFromRepo(data);
+						if (existingRepos.includes(id)) {
+							methods.setError('Name', { message: 'A repo with this name exists' });
+							methods.setError('Owner', { message: 'A repo with this owner exists' });
+						} else {
+							onSubmit({ ...data, id: idFromRepo(data) });
+							methods.reset();
+						}
 					})}
 				>
 					<FormItemText

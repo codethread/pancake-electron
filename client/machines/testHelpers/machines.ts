@@ -1,5 +1,5 @@
 import { AnyStateMachine, createMachine } from 'xstate';
-import { actorIds } from '../constants';
+import { actorIds } from '../shared';
 
 type Parent<A> = {
 	parentEvents: string[];

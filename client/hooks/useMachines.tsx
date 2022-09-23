@@ -1,14 +1,6 @@
-import {
-	ActorError,
-	actorIds,
-	ConfigActorRef,
-	LoginActorRef,
-	mainMachineFactory,
-	MainService,
-	PageActorRef,
-} from '@client/machines';
-import { useInterpret, useSelector } from '@xstate/react';
 import React, { createContext, useContext, useEffect } from 'react';
+import { useInterpret, useSelector } from '@xstate/react';
+import { actorIds, mainMachineFactory, MainService } from '@client/machines';
 import { useBridge } from './useBridge';
 import { useLogger } from './useLogger';
 
@@ -49,29 +41,31 @@ export const useMachines = (): MainService => {
 	return context;
 };
 
-export const useConfigService = (): ConfigActorRef => {
+/**
+ * Get a child actor from the Main machine, throws an error if not found
+ */
+export function useActorService<ActorRef>(id: keyof typeof actorIds): ActorRef {
 	const main = useMachines();
-	const config = useSelector(main, (c) => c.children[actorIds.CONFIG] as ConfigActorRef | null);
+	const service = useSelector(main, (c) => c.children[id] as unknown as ActorRef | null);
 
-	if (!config) throw new ActorError(main, actorIds.CONFIG);
+	if (!service) throw new ActorError(main, id);
+	return service;
+}
 
-	return config;
-};
+/**
+ * An error which is intended to be used when extracting an actor from another actor.
+ * At present, xstate does not type the children of an actor, so we must assert the type, and it's
+ * possible that the programmer makes a mistake at this point. This error should only show up in
+ * tests or during development, if you see it during runtime, you have a rather large hole in
+ * testing!
+ */
+export class ActorError extends Error {
+	constructor(actor: MainService, id: keyof typeof actorIds) {
+		const msg = `programmer error, "${id}}" not found in machine. Actor refs found: "${Array.from(
+			// little bit of massaging here as we're treating everything as a service, even though the types are actor refs (they are fundamentally the same thing, but have some api differences).
+			actor.children.keys()
+		).join(',')}"`;
 
-export const usePageService = (): PageActorRef => {
-	const main = useMachines();
-	const pageMachine = useSelector(main, (c) => c.children[actorIds.PAGE] as PageActorRef | null);
-
-	if (!pageMachine) throw new ActorError(main, actorIds.PAGE);
-
-	return pageMachine;
-};
-
-export const useLoginService = (): LoginActorRef => {
-	const main = useMachines();
-	const pageMachine = useSelector(main, (c) => c.children[actorIds.LOGIN] as LoginActorRef | null);
-
-	if (!pageMachine) throw new ActorError(main, actorIds.LOGIN);
-
-	return pageMachine;
-};
+		super(msg);
+	}
+}

@@ -1,20 +1,10 @@
+import { createMachine, InterpreterFrom, send } from 'xstate';
 import { UserConfig } from '@shared/types/config';
 import { IBridge } from '@shared/types/ipc';
-import { createMachine, forwardTo, InterpreterFrom, send } from 'xstate';
-import { ConfigActorRef, configMachineFactory } from './config/machine';
-import { LoginActorRef, loginMachine } from './login.machine';
-import { PageActorRef, pageMachine } from './page.machine';
-import { MainEvents, actorIds } from './shared';
-
-export type ActorSystem = {
-	actors: Actors;
-};
-
-export type Actors = {
-	CONFIG: ConfigActorRef;
-	PAGE: PageActorRef;
-	LOGIN: LoginActorRef;
-};
+import { loginMachine } from './login.machine';
+import { pageMachine } from './page.machine';
+import { repoMachine } from './repos.machine';
+import { actorIds, OutsideEvent, SharedEvents } from './shared';
 
 export type MainContext = { hello: string };
 
@@ -33,49 +23,29 @@ export const mainMachineFactory = ({ bridge, configOverride }: IMainMachine) =>
 			predictableActionArguments: true,
 			schema: {
 				context: {} as MainContext,
-				events: {} as MainEvents,
+				events: {} as OutsideEvent<SharedEvents> | SharedEvents,
 			},
 			tsTypes: {} as import('./main.machine.typegen').Typegen0,
 			context: { hello: 'today' },
-			type: 'parallel',
+			on: {
+				'send to': { actions: ['redirect'] },
+			},
+			initial: 'active',
 			states: {
-				main: {
-					initial: 'loading',
-					states: {
-						loading: {
-							on: {
-								CONFIG_LOADED: {
-									actions: [forwardTo(actorIds.PAGE), forwardTo(actorIds.LOGIN)],
-									target: 'loaded',
-								},
-							},
-						},
-						loaded: {
-							tags: ['loaded'],
-						},
-					},
-				},
-				config: {
-					initial: 'active',
-					states: {
-						active: {
-							invoke: [
-								{ id: actorIds.CONFIG, src: configMachineFactory({ bridge, configOverride }) },
-								{ id: actorIds.PAGE, src: pageMachine },
-								{ id: actorIds.LOGIN, src: loginMachine },
-							],
-						},
-					},
-					on: {
-						'send to': { actions: ['redirect'] },
-					},
+				active: {
+					tags: ['loaded'],
+					invoke: [
+						{ id: actorIds.PAGE, src: pageMachine },
+						{ id: actorIds.LOGIN, src: loginMachine({ bridge }) },
+						{ id: actorIds.REPO, src: repoMachine({ bridge }) },
+					],
 				},
 			},
 		},
 		{
 			actions: {
 				redirect: send((_, e) => e.event, {
-					to: actorIds.CONFIG,
+					to: (_, e) => e.target,
 				}),
 			},
 		}

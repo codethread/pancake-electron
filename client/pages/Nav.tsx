@@ -3,34 +3,39 @@ import classNames from 'classnames';
 import { useBridge, usePage } from '@client/hooks';
 import { CodeIcon, CogIcon, ExclamationIcon, UserIcon } from '@heroicons/react/outline';
 import React, { ComponentProps } from 'react';
+import { not } from '@shared/utils';
 
 export function Nav(): JSX.Element {
 	const { openExternal } = useBridge();
-	const { page, setPage } = usePage();
+	const { page, setPage, canNavigate } = usePage();
 	return (
 		<div className="sticky top-0">
 			<div className="z-50 mb-4 flex flex-row items-center justify-center gap-8 bg-thmBackground py-4 sm:sticky sm:top-0 sm:mt-[30vh] sm:flex-col sm:pr-4">
-				<NavButton
-					onClick={() => {
-						setPage('dash');
-					}}
-					Icon={CodeIcon}
-					active={page === 'dash'}
-				/>
-				<NavButton
-					onClick={() => {
-						setPage('settings');
-					}}
-					Icon={CogIcon}
-					active={page === 'settings'}
-				/>
-				<NavButton
-					onClick={() => {
-						setPage('user');
-					}}
-					Icon={UserIcon}
-					active={page === 'user'}
-				/>
+				{not(canNavigate) ? null : (
+					<>
+						<NavButton
+							onClick={() => {
+								setPage('repos');
+							}}
+							Icon={CodeIcon}
+							active={page === 'repos'}
+						/>
+						<NavButton
+							onClick={() => {
+								setPage('settings');
+							}}
+							Icon={CogIcon}
+							active={page === 'settings'}
+						/>
+						<NavButton
+							onClick={() => {
+								setPage('user');
+							}}
+							Icon={UserIcon}
+							active={page === 'user'}
+						/>
+					</>
+				)}
 				<Tooltip Tip="Report an Issue">
 					<NavButton
 						onClick={() => {

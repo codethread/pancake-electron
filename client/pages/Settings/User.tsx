@@ -1,5 +1,5 @@
 import { Box, Button, Card, FormItemCheckbox, FormItemPassword } from '@client/components';
-import { useBridge, useConfig, useLogger } from '@client/hooks';
+import { useBridge, useLogger, useLogin } from '@client/hooks';
 import { githubScopes } from '@shared/constants';
 import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -18,11 +18,12 @@ type UserForm = {
 export function User(): JSX.Element {
 	const logger = useLogger();
 	const { openExternal } = useBridge();
-	const { storeUpdate, config, storeDelete } = useConfig();
+	const { send, data } = useLogin();
+
 	const methods = useForm<UserForm>({
 		defaultValues: {
-			token: config?.token ?? '',
-			'remember me': config?.rememberMe,
+			token: data?.token ?? '',
+			'remember me': data?.rememberMe ?? false,
 		},
 	});
 	return (
@@ -31,13 +32,21 @@ export function User(): JSX.Element {
 				<FormProvider {...methods}>
 					<form
 						className="flex flex-col gap-4"
-						onSubmit={methods.handleSubmit((data) => {
-							logger.debug({ data, msg: 'user info submitted', tags: ['client', 'settings'] });
-							if (!data.token) throw new Error('form error, no token');
+						onSubmit={methods.handleSubmit((formData) => {
+							logger.debug({
+								data: formData,
+								msg: 'user info submitted',
+								tags: ['client', 'settings'],
+							});
+							if (!formData.token || !formData['remember me'])
+								throw new Error('form error, no token');
 
-							storeUpdate({
-								token: data.token,
-								rememberMe: data['remember me'],
+							send({
+								type: 'LOG_IN',
+								data: {
+									token: formData.token,
+									rememberMe: formData['remember me'],
+								},
 							});
 						})}
 					>
@@ -93,7 +102,7 @@ export function User(): JSX.Element {
 						variant="secondary"
 						fullWidth
 						onClick={() => {
-							storeDelete('token');
+							send({ type: 'LOG_OUT' });
 						}}
 					>
 						<p className="w-full text-center">Log Out</p>

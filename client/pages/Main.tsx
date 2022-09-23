@@ -1,9 +1,7 @@
 import { Box, Page } from '@client/components';
-import { useConfig, useMachines, usePage } from '@client/hooks';
-import { useLoginService } from '@client/hooks/useMachines';
+import { usePage } from '@client/hooks';
 import { IPage } from '@client/machines';
 import { DocumentDownloadIcon } from '@heroicons/react/outline';
-import { useActor } from '@xstate/react';
 import React, { FC } from 'react';
 import { Login } from './Login';
 import { Nav } from './Nav';
@@ -12,7 +10,7 @@ import { RepoSettings } from './Settings/Repo';
 import { User } from './Settings/User';
 
 const pages: Record<IPage, FC> = {
-	dash: PullRequests,
+	repos: PullRequests,
 	settings: RepoSettings,
 	user: User,
 	loading: Loading,
