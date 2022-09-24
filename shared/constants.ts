@@ -51,6 +51,37 @@ export function asset(fileName: string): string {
 	return path.join(__dirname, fileName);
 }
 
+function bugBody(err: string): string {
+	const body = `
+**To Reproduce**
+
+Steps to reproduce the behavior:
+
+1. Go to '...'
+2. Click on '....'
+3. Scroll down to '....'
+4. See error
+
+**Additional context**
+
+Add any other context about the problem here.
+
+<details>
+  <summary>Error</summary>
+  
+  \`\`\`
+  ${err}
+  \`\`\`
+</details>`;
+	return encodeURIComponent(body);
+}
+export const errorUrl = ({ body }: { body?: string } = {}): string => {
+	const bug = body && bugBody(body);
+	return `https://github.com/codethread/pancake-electron/issues/new?assignees=&labels=bug%2C+to+refine&template=bug_report.md&title=Error${
+		bug ? `&body=${bug}` : ''
+	}`;
+};
+
 export const emptyConfig: UserConfig = {
 	rememberMe: true,
 	repos: [],

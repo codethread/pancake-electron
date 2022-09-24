@@ -32,9 +32,16 @@ export type StoreConfig<T> = {
 export type StoreRepo<T> = {
 	storeConfig: StoreConfig<T>;
 	logger: ILogger;
+	obfuscate: Obfuscate<DeepPartial<T>>;
 };
 
-export const storeRepository = <T>({ logger, storeConfig }: StoreRepo<T>): StoreRepository<T> => {
+export type Obfuscate<T> = (store: T) => T;
+
+export const storeRepository = <T>({
+	logger,
+	storeConfig,
+	obfuscate,
+}: StoreRepo<T>): StoreRepository<T> => {
 	const { name, cwd } = storeConfig;
 
 	logger.info(`setting up Store Repo: name "${name}"${cwd ? ` cwd "${cwd}"` : ''}`);
@@ -44,7 +51,11 @@ export const storeRepository = <T>({ logger, storeConfig }: StoreRepo<T>): Store
 
 	return {
 		async storeRead() {
-			logger.info({ msg: 'reading store', data: store.store, tags: ['store', 'electron'] });
+			logger.info({
+				msg: 'reading store',
+				data: obfuscate(store.store),
+				tags: ['store', 'electron'],
+			});
 			return Promise.resolve(ok(store.store));
 		},
 		async storeReset() {
@@ -55,17 +66,19 @@ export const storeRepository = <T>({ logger, storeConfig }: StoreRepo<T>): Store
 		async storeDelete(key) {
 			logger.info({ msg: 'store delete', data: key, tags: ['store', 'electron'] });
 			return new Promise((resolve) => {
-				const unsubscribe = store.onDidChange(key, (o, n) => {
+				const unsubscribe = store.onDidChange(key, () => {
 					unsubscribe();
-					const s = store.store;
-					console.log({ o, n, s });
 					resolve(ok(store.store));
 				});
 				store.delete(key);
 			});
 		},
 		async storeUpdate(updatedStore) {
-			logger.info({ msg: 'store update', data: updatedStore, tags: ['store', 'electron'] });
+			logger.info({
+				msg: 'store update',
+				data: obfuscate(updatedStore),
+				tags: ['store', 'electron'],
+			});
 			const originalStore = store.store;
 			try {
 				getKeyPathsAndValues(updatedStore).forEach(([path, value]) => {

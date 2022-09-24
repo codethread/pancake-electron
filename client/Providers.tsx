@@ -37,7 +37,7 @@ export function Providers({ bridge, children }: IProviders): JSX.Element {
 			<LoggerProvider>
 				<ApolloProvider client={client}>
 					<MachinesProvider>
-						<ErrorBoundary>
+						<ErrorBoundary bridge={bridge}>
 							<Bootloader>{children}</Bootloader>
 						</ErrorBoundary>
 					</MachinesProvider>

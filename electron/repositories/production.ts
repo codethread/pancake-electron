@@ -14,6 +14,13 @@ export type RepoArgs = {
 export default ({ logger }: RepoArgs): Repositories => ({
 	...shellRepository,
 	...storeRepository({
+		obfuscate: (s) => {
+			const { token, ...rest } = s;
+			if (token) {
+				return { ...rest, token: token.replaceAll(/./g, '*') };
+			}
+			return { ...rest };
+		},
 		storeConfig: {
 			name: 'client',
 			defaults: emptyConfig,
