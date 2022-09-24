@@ -16,7 +16,7 @@ export const errorHandler: (logger: ILogger) => CatchErrorsOptions['onError'] =
 				if (result.response === 1) {
 					const body = generateReport(error, versions);
 
-					submitIssue?.('https://github.com/AHDesigns/pancake-electron/issues/new', {
+					submitIssue?.('https://github.com/codethread/pancake-electron/issues/new', {
 						title: 'Error report',
 						body,
 						labels: 'to refine, bug',

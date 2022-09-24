@@ -14,7 +14,6 @@ export const usePage = (): UsePage => {
 
 	const setPage = useCallback(
 		(page: ISetablePage) => {
-			console.log({ called: page });
 			send({ page, type: 'navigate' });
 		},
 		[send]

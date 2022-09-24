@@ -149,10 +149,8 @@ export type RepoUnSend = RepoUnActorRef['send'];
 async function addToStore({ ctx, bridge }: { bridge: IBridge; ctx: RepoCtx }): Promise<void> {
 	const res = await bridge.storeRead();
 	const { repos } = res.unwrap();
-	console.log('creating');
 	const existingRepo = repos.find((r) => r.id === ctx.githubVars.id);
 	if (existingRepo) {
-		console.log('exists');
 		bridge.storeUpdate({
 			repos: repos.map((r) =>
 				r.id === ctx.githubVars.id
@@ -166,7 +164,6 @@ async function addToStore({ ctx, bridge }: { bridge: IBridge; ctx: RepoCtx }): P
 			),
 		});
 	} else {
-		console.log('does not exist');
 		bridge.storeUpdate({
 			repos: repos.concat({
 				id: ctx.githubVars.id,

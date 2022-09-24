@@ -4,6 +4,7 @@ import { useBridge, usePage } from '@client/hooks';
 import { CodeIcon, CogIcon, ExclamationIcon, UserIcon } from '@heroicons/react/outline';
 import React, { ComponentProps } from 'react';
 import { not } from '@shared/utils';
+import { errorUrl } from '@shared/constants';
 
 export function Nav(): JSX.Element {
 	const { openExternal } = useBridge();
@@ -39,9 +40,7 @@ export function Nav(): JSX.Element {
 				<Tooltip Tip="Report an Issue">
 					<NavButton
 						onClick={() => {
-							openExternal(
-								'https://github.com/codethread/pancake-electron/issues/new?assignees=&labels=bug%2C+to+refine&template=bug_report.md&title='
-							);
+							openExternal(errorUrl());
 						}}
 						Icon={ExclamationIcon}
 						iconStyles="text-thmWarn"

@@ -7,7 +7,7 @@ export { InputPassword } from './Inputs';
 export * as Icons from './Icons';
 export * from './Box';
 export * from './Checkbox/Checkbox';
-export { default as ErrorBoundary } from './ErrorBoundary/ErrorBoundary';
+export { ErrorBoundary } from './ErrorBoundary/ErrorBoundary';
 export * from './Inspector';
 export * from './Button/Button';
 export * from './Form';
