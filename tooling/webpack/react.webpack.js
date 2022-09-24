@@ -5,6 +5,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { shared, client } = require('./alias');
 
 const rootPath = process.cwd();
+const csp =
+	"default-src 'self'; connect-src https://api.github.com; style-src 'unsafe-inline'; img-src https://avatars.githubusercontent.com";
 
 module.exports = (_, options = {}) => {
 	const isDev = options.mode === 'development';
@@ -19,7 +21,7 @@ module.exports = (_, options = {}) => {
 		},
 		entry: path.resolve(rootPath, 'client', 'index.tsx'),
 		target: 'web',
-		devtool: 'cheap-module-eval-source-map',
+		...(isDev && { devtool: 'cheap-module-eval-source-map' }),
 		module: {
 			rules: [
 				{
@@ -49,6 +51,7 @@ module.exports = (_, options = {}) => {
 				},
 				{
 					test: /\.css$/i,
+					include: path.resolve(__dirname, '../../client'),
 					use: [
 						'style-loader',
 						'css-loader',
@@ -56,7 +59,7 @@ module.exports = (_, options = {}) => {
 							loader: 'postcss-loader',
 							options: {
 								postcssOptions: {
-									plugins: ['tailwindcss', 'autoprefixer'],
+									plugins: ['tailwindcss', 'autoprefixer', !isDev && 'cssnano'].filter(Boolean),
 								},
 							},
 						},
@@ -85,6 +88,12 @@ module.exports = (_, options = {}) => {
 				title: 'Pancake',
 				meta: {
 					viewport: 'width=device-width, initial-scale=1.0',
+					...(!isDev && {
+						'Content-Security-Policy': {
+							'http-equiv': 'Content-Security-Policy',
+							content: csp,
+						},
+					}),
 				},
 			}),
 		].filter(Boolean),
