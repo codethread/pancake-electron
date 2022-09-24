@@ -4,7 +4,6 @@ import { createRepos } from '@electron/repositories';
 import { checkForUpdates, createLogger, setUpDevtools } from '@electron/services';
 
 import log from 'electron-log';
-import { errorHandler } from './services/logger/errorHandler';
 import { createMain } from './windows/createMain';
 
 let mainWindow: BrowserWindow | null;
