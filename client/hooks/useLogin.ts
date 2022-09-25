@@ -1,13 +1,9 @@
 import { LoginActorRef, LoginSend } from '@client/machines';
 import { useActor } from '@xstate/react';
 import { useActorService } from './useMachines';
+
 type UseLogin =
-	| {
-			send: LoginSend;
-			loading: true;
-			data: null;
-	  }
-	| {
+	{
 			send: LoginSend;
 			loading: false;
 			data: {
@@ -15,6 +11,10 @@ type UseLogin =
 				token?: string;
 				rememberMe: boolean;
 			};
+	  } | {
+			send: LoginSend;
+			loading: true;
+			data: null;
 	  };
 
 export const useLogin = (): UseLogin => {

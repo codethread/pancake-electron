@@ -1,9 +1,8 @@
-import { Box, Button, Page } from '@client/components';
-import { useBridge, usePage } from '@client/hooks';
+import { Box, Page } from '@client/components';
+import { usePage } from '@client/hooks';
 import { IPage } from '@client/machines';
 import { DocumentDownloadIcon } from '@heroicons/react/outline';
-import { errorUrl } from '@shared/constants';
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 import { Login } from './Login';
 import { Nav } from './Nav';
 import { PullRequests } from './PullRequests';
@@ -21,7 +20,6 @@ const pages: Record<IPage, FC> = {
 export function Main(): JSX.Element {
 	const { page } = usePage();
 
-	throw new Error('poop');
 	const View = pages[page];
 	return (
 		<Page>
